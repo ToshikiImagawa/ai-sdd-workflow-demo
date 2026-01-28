@@ -78,3 +78,33 @@
 .line-default {
     color: #a6adc8;
 }
+
+/* アニメーション: 行の表示状態 */
+.line-hidden {
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    line-height: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.line-visible {
+    opacity: 1;
+    transition: opacity 0.15s ease-in;
+}
+
+/* アニメーション: 点滅カーソル */
+.cursor {
+    display: inline-block;
+    width: 8px;
+    height: 1.1em;
+    background-color: #cdd6f4;
+    vertical-align: text-bottom;
+    animation: blink 0.7s step-end infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
