@@ -70,6 +70,18 @@ body {
     display: none;
 }
 
+.backgrounds::after {
+    content: '';
+    position: absolute;
+    bottom: 20px;
+    left: 30px;
+    width: 120px;
+    height: 40px;
+    background: url('../../assets/logo.png') no-repeat center / contain;
+    z-index: 10;
+    pointer-events: none;
+}
+
 .slide-container > * {
     position: relative;
     z-index: 1;
@@ -396,7 +408,15 @@ code {
 }
 
 .reveal .slides section.slide-container::after {
-    display: none;
+    content: '';
+    position: absolute;
+    bottom: 20px;
+    left: 30px;
+    width: 120px;
+    height: 40px;
+    background: url('../../assets/logo.png') no-repeat center / contain;
+    z-index: 10;
+    pointer-events: none;
 }
 
 .reveal .slide-number {
