@@ -1,36 +1,29 @@
-import type { SyntheticEvent } from 'react';
-
-function handleImageError(e: SyntheticEvent<HTMLImageElement>) {
-    const parent = e.currentTarget.parentElement;
-    if (parent) {
-        parent.innerHTML =
-            '<div style="text-align:center;color:#64748b;"><i class="fa-solid fa-database" style="font-size:120px;"></i><br><br>Persistence Diagram</div>';
-    }
-}
-
 export function PersistenceSlide() {
     return (
         <section className="slide-container" id="slide7">
             <h2 className="slide-title">知識財産の永続化</h2>
             <div className="content-area">
                 <div className="two-column">
-                    <div
-                        className="image-wrapper"
-                        style={{
-                            border: 'none',
-                            boxShadow: 'none',
-                            background: 'transparent',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}
-                    >
-                        <img
-                            src="http://googleusercontent.com/image_collection/image_retrieval/22249922113068707"
-                            alt="Workflow data persistence diagram"
-                            style={{ objectFit: 'contain', maxHeight: '400px' }}
-                            onError={handleImageError}
-                        />
+                    <div className="persistence-visual-wrapper">
+                        <div className="repo-base">
+                            <i className="fa-solid fa-server" />
+                            <div className="repo-label">Git Repository</div>
+                            <div className="stored-doc-icon">
+                                <i className="fa-solid fa-file-circle-check" /> Updated!
+                            </div>
+                        </div>
+
+                        <div className="data-stream-item item-task">
+                            <i className="fa-solid fa-list-check" /> Task #101
+                        </div>
+                        <div className="data-stream-item item-log">
+                            <i className="fa-solid fa-terminal" /> temp.log
+                        </div>
+
+                        <div className="persistence-session-label">
+                            <i className="fa-solid fa-arrow-down" /> Development Session{' '}
+                            <i className="fa-solid fa-arrow-down" />
+                        </div>
                     </div>
                     <div>
                         <h3>Knowledge vs Ephemeral</h3>
