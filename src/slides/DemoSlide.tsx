@@ -1,11 +1,18 @@
-import type { SyntheticEvent } from 'react';
+import logText from '../../assets/demo-log.txt?raw';
+import styles from './DemoSlide.module.css';
 
-function handleImageError(e: SyntheticEvent<HTMLImageElement>) {
-    e.currentTarget.onerror = null;
-    e.currentTarget.src = 'https://placehold.co/600x720/f5f5f5/1a1a1a?text=Terminal+Demo';
+function getLineClassName(line: string): string {
+    if (line.startsWith('$')) return styles['line-command'];
+    if (line.startsWith('\u2713')) return styles['line-success'];
+    if (line.startsWith('\u26A0')) return styles['line-warning'];
+    if (line.startsWith('\u2717')) return styles['line-error'];
+    if (line.startsWith('>')) return styles['line-accent'];
+    return styles['line-default'];
 }
 
 export function DemoSlide() {
+    const lines = logText.split('\n');
+
     return (
         <section className="slide-container bleed-image-layout" id="slide9">
             <div className="bleed-content">
@@ -19,12 +26,21 @@ export function DemoSlide() {
                     <li style={{ color: '#1a1a1a' }}>$ /implement</li>
                 </ul>
             </div>
-            <img
-                className="bleed-image"
-                src="http://googleusercontent.com/image_collection/image_retrieval/9800985785940806365"
-                alt="Terminal command line interface"
-                onError={handleImageError}
-            />
+            <div className={styles['terminal-window']}>
+                <div className={styles['terminal-titlebar']}>
+                    <span className={`${styles['terminal-dot']} ${styles['terminal-dot-red']}`} />
+                    <span className={`${styles['terminal-dot']} ${styles['terminal-dot-yellow']}`} />
+                    <span className={`${styles['terminal-dot']} ${styles['terminal-dot-green']}`} />
+                    <span className={styles['terminal-title']}>Terminal</span>
+                </div>
+                <div className={styles['terminal-body']}>
+                    {lines.map((line, i) => (
+                        <div key={i} className={`${styles['terminal-line']} ${getLineClassName(line)}`}>
+                            {line || '\u00A0'}
+                        </div>
+                    ))}
+                </div>
+            </div>
         </section>
     );
 }
