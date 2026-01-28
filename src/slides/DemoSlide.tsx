@@ -24,9 +24,17 @@ function isCommandLine(line: string): boolean {
 export function DemoSlide() {
     const lines = logText.split('\n');
     const sectionRef = useRef<HTMLElement>(null);
+    const terminalBodyRef = useRef<HTMLDivElement>(null);
     const [visible, setVisible] = useState(false);
     const [lineIndex, setLineIndex] = useState(0);
     const [charIndex, setCharIndex] = useState(0);
+
+    // lineIndex が変わるたびに terminal-body を最下部にスクロール
+    useEffect(() => {
+        if (terminalBodyRef.current) {
+            terminalBodyRef.current.scrollTop = terminalBodyRef.current.scrollHeight;
+        }
+    }, [lineIndex]);
 
     // IntersectionObserver でスライド可視性を監視
     useEffect(() => {
@@ -106,7 +114,7 @@ export function DemoSlide() {
                     <span className={`${styles['terminal-dot']} ${styles['terminal-dot-green']}`} />
                     <span className={styles['terminal-title']}>Terminal</span>
                 </div>
-                <div className={styles['terminal-body']}>
+                <div ref={terminalBodyRef} className={styles['terminal-body']}>
                     {lines.map((line, i) => {
                         // 未到達の行は非表示
                         if (i > lineIndex) {

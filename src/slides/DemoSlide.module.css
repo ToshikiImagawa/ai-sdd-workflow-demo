@@ -48,6 +48,24 @@
     padding: 20px;
     overflow-y: auto;
     flex: 1;
+    scroll-behavior: smooth;
+}
+
+.terminal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.terminal-body::-webkit-scrollbar-track {
+    background: #1e1e2e;
+}
+
+.terminal-body::-webkit-scrollbar-thumb {
+    background: #313244;
+    border-radius: 4px;
+}
+
+.terminal-body::-webkit-scrollbar-thumb:hover {
+    background: #45475a;
 }
 
 .terminal-line {
