@@ -1,26 +1,28 @@
+import styles from './PersistenceSlide.module.css';
+
 export function PersistenceSlide() {
     return (
         <section className="slide-container" id="slide7">
             <h2 className="slide-title">知識財産の永続化</h2>
             <div className="content-area">
                 <div className="two-column">
-                    <div className="persistence-visual-wrapper">
-                        <div className="repo-base">
+                    <div className={styles['persistence-visual-wrapper']}>
+                        <div className={styles['repo-base']}>
                             <i className="fa-solid fa-server" />
-                            <div className="repo-label">Git Repository</div>
-                            <div className="stored-doc-icon">
+                            <div className={styles['repo-label']}>Git Repository</div>
+                            <div className={styles['stored-doc-icon']}>
                                 <i className="fa-solid fa-file-circle-check" /> Updated!
                             </div>
                         </div>
 
-                        <div className="data-stream-item item-task">
+                        <div className={`${styles['data-stream-item']} ${styles['item-task']}`}>
                             <i className="fa-solid fa-list-check" /> Task #101
                         </div>
-                        <div className="data-stream-item item-log">
+                        <div className={`${styles['data-stream-item']} ${styles['item-log']}`}>
                             <i className="fa-solid fa-terminal" /> temp.log
                         </div>
 
-                        <div className="persistence-session-label">
+                        <div className={styles['persistence-session-label']}>
                             <i className="fa-solid fa-arrow-down" /> Development Session{' '}
                             <i className="fa-solid fa-arrow-down" />
                         </div>

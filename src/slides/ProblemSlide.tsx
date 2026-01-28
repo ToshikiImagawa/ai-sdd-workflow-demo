@@ -1,3 +1,5 @@
+import styles from './ProblemSlide.module.css';
+
 export function ProblemSlide() {
     return (
         <section className="slide-container" id="slide2">
@@ -19,14 +21,14 @@ export function ProblemSlide() {
                             </li>
                         </ul>
                     </div>
-                    <div className="vibe-demo-wrapper">
-                        <div className="vibe-chat-bubble">"Make a cool button!"</div>
-                        <div className="vibe-ai-thinking">
+                    <div className={styles['vibe-demo-wrapper']}>
+                        <div className={styles['vibe-chat-bubble']}>"Make a cool button!"</div>
+                        <div className={styles['vibe-ai-thinking']}>
                             <i className="fa-solid fa-robot"></i> Thinking...
                         </div>
-                        <div className="vibe-generated-result">
-                            <button className="vibe-glitch-button">Click Me?</button>
-                            <div className="vibe-error-popup">
+                        <div className={styles['vibe-generated-result']}>
+                            <button className={styles['vibe-glitch-button']}>Click Me?</button>
+                            <div className={styles['vibe-error-popup']}>
                                 <i className="fa-solid fa-triangle-exclamation"></i> Style Error
                             </div>
                         </div>

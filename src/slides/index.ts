@@ -1,0 +1,10 @@
+export { TitleSlide } from './TitleSlide';
+export { ProblemSlide } from './ProblemSlide';
+export { SolutionSlide } from './SolutionSlide';
+export { ConstitutionSlide } from './ConstitutionSlide';
+export { WorkflowSlide } from './WorkflowSlide';
+export { AutomationSlide } from './AutomationSlide';
+export { PersistenceSlide } from './PersistenceSlide';
+export { FeaturesSlide } from './FeaturesSlide';
+export { DemoSlide } from './DemoSlide';
+export { SummarySlide } from './SummarySlide';
