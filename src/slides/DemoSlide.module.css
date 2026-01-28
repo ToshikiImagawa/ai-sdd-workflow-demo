@@ -3,11 +3,12 @@
     border-radius: 12px;
     border: 1px solid #313244;
     overflow: hidden;
-    width: 85%;
+    width: 90%;
     height: 100%;
     display: flex;
     flex-direction: column;
     font-family: 'Roboto Mono', monospace;
+    margin: 5% auto;
 }
 
 .terminal-titlebar {
