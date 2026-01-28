@@ -408,15 +408,7 @@ code {
 }
 
 .reveal .slides section.slide-container::after {
-    content: '';
-    position: absolute;
-    bottom: 20px;
-    left: 30px;
-    width: 120px;
-    height: 40px;
-    background: url('../../assets/logo.png') no-repeat center / contain;
-    z-index: 10;
-    pointer-events: none;
+    display: none;
 }
 
 .reveal .slide-number {
