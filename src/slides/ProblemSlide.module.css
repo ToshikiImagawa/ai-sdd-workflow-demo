@@ -41,8 +41,8 @@
 }
 
 .vibe-demo-wrapper {
-    background-color: #0f172a;
-    border: 1px solid #334155;
+    background-color: #f5f5f5;
+    border: 1px solid #e0e0e0;
     border-radius: 12px;
     padding: 30px;
     height: 100%;
@@ -53,12 +53,11 @@
     align-items: center;
     position: relative;
     overflow: hidden;
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
 .vibe-chat-bubble {
-    background-color: #38bdf8;
-    color: #0f172a;
+    background-color: #e60012;
+    color: #ffffff;
     padding: 12px 24px;
     border-radius: 20px 20px 0 20px;
     font-weight: bold;
@@ -70,7 +69,7 @@
 }
 
 .vibe-ai-thinking {
-    color: #94a3b8;
+    color: #666666;
     margin-bottom: 25px;
     font-size: 16px;
     opacity: 0;

@@ -42,7 +42,7 @@ export function PersistenceSlide() {
                                 で削除される。
                             </li>
                         </ul>
-                        <p style={{ marginTop: '20px', color: '#38bdf8' }}>
+                        <p style={{ marginTop: '20px', color: '#e60012' }}>
                             → セッションを跨いでも、コンテキストが失われない。
                         </p>
                     </div>

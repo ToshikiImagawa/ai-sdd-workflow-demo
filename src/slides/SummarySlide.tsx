@@ -13,11 +13,12 @@ export function SummarySlide() {
                 {/* QR Code Container */}
                 <div
                     style={{
-                        background: 'white',
+                        background: '#ffffff',
                         padding: '20px',
                         borderRadius: '12px',
                         marginBottom: '30px',
-                        boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.5)',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+                        border: '1px solid #e0e0e0',
                     }}
                 >
                     <img
@@ -27,7 +28,7 @@ export function SummarySlide() {
                     />
                 </div>
 
-                <p style={{ marginTop: '10px', fontSize: '24px', color: '#38bdf8', fontFamily: "'Roboto Mono'" }}>
+                <p style={{ marginTop: '10px', fontSize: '24px', color: '#e60012', fontFamily: "'Roboto Mono'" }}>
                     <i className="fa-brands fa-github"></i> github.com/ToshikiImagawa/ai-sdd-workflow
                 </p>
             </div>
