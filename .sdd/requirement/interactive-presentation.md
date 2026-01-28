@@ -139,10 +139,10 @@ requirementDiagram
         verifymethod: demonstration
     }
 
-    UR_001 - contains -> FR_001
-    UR_001 - contains -> FR_002
-    UR_001 - contains -> FR_003
-    UR_001 - contains -> FR_004
+    InteractivePresentation - contains -> SlideNavigation
+    InteractivePresentation - contains -> AnimationEnhancement
+    InteractivePresentation - contains -> AudienceInteraction
+    InteractivePresentation - contains -> PresenterTools
 ```
 
 ## 3.2. スライドナビゲーション要求図
@@ -191,11 +191,11 @@ requirementDiagram
         verifymethod: test
     }
 
-    FR_001 - contains -> FR_001_01
-    FR_001 - contains -> FR_001_02
-    FR_001 - contains -> FR_001_03
-    FR_001 - contains -> FR_001_04
-    FR_001 - contains -> FR_001_05
+    SlideNavigation - contains -> KeyboardNavigation
+    SlideNavigation - contains -> TouchNavigation
+    SlideNavigation - contains -> ProgressIndicator
+    SlideNavigation - contains -> SlideOverview
+    SlideNavigation - contains -> URLHashSync
 ```
 
 ## 3.3. アニメーション・演出強化要求図
@@ -237,10 +237,10 @@ requirementDiagram
         verifymethod: demonstration
     }
 
-    FR_002 - contains -> FR_002_01
-    FR_002 - contains -> FR_002_02
-    FR_002 - contains -> FR_002_03
-    FR_002 - contains -> FR_002_04
+    AnimationEnhancement - contains -> FragmentDisplay
+    AnimationEnhancement - contains -> SlideTransition
+    AnimationEnhancement - contains -> ContentAnimation
+    AnimationEnhancement - contains -> SlideSpecificEffects
 ```
 
 ## 3.4. 聴衆参加型インタラクション要求図
@@ -275,9 +275,9 @@ requirementDiagram
         verifymethod: demonstration
     }
 
-    FR_003 - contains -> FR_003_01
-    FR_003 - contains -> FR_003_02
-    FR_003 - contains -> FR_003_03
+    AudienceInteraction - contains -> RealtimePolling
+    AudienceInteraction - contains -> QAFeature
+    AudienceInteraction - contains -> ReactionFeature
 ```
 
 ## 3.5. プレゼンター操作ツール要求図
@@ -319,10 +319,10 @@ requirementDiagram
         verifymethod: demonstration
     }
 
-    FR_004 - contains -> FR_004_01
-    FR_004 - contains -> FR_004_02
-    FR_004 - contains -> FR_004_03
-    FR_004 - contains -> FR_004_04
+    PresenterTools - contains -> SpeakerNotes
+    PresenterTools - contains -> PresentationTimer
+    PresenterTools - contains -> LaserPointer
+    PresenterTools - contains -> SlideZoom
 ```
 
 ## 3.6. 非機能要求図
@@ -390,8 +390,8 @@ requirementDiagram
         verifymethod: demonstration
     }
 
-    UR_001 - derives -> NFR_004
-    UR_001 - contains -> FR_003
+    InteractivePresentation - derives -> RevealJSCompatibility
+    InteractivePresentation - contains -> AudienceInteraction
 ```
 
 ---

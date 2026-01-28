@@ -150,11 +150,11 @@ requirementDiagram
         verifymethod: test
     }
 
-    UR_100 - contains -> FR_100
-    UR_100 - contains -> FR_200
-    UR_100 - contains -> FR_300
-    UR_100 - contains -> FR_400
-    UR_100 - contains -> FR_500
+    SlideContentCustomization - contains -> DataDrivenContent
+    SlideContentCustomization - contains -> ThemeCustomization
+    SlideContentCustomization - contains -> ComponentExtension
+    SlideContentCustomization - contains -> DefaultTemplate
+    SlideContentCustomization - contains -> DataValidation
 ```
 
 ## 3.2. データ駆動型コンテンツ要求図
@@ -196,10 +196,10 @@ requirementDiagram
         verifymethod: test
     }
 
-    FR_100 - contains -> FR_101
-    FR_100 - contains -> FR_102
-    FR_100 - contains -> FR_103
-    FR_100 - contains -> FR_104
+    DataDrivenContent - contains -> SlideStructureDefinition
+    DataDrivenContent - contains -> TextContentDefinition
+    DataDrivenContent - contains -> MetaInfoDefinition
+    DataDrivenContent - contains -> DataFileLoading
 ```
 
 ## 3.3. テーマ・デザインカスタマイズ要求図
@@ -241,10 +241,10 @@ requirementDiagram
         verifymethod: demonstration
     }
 
-    FR_200 - contains -> FR_201
-    FR_200 - contains -> FR_202
-    FR_200 - contains -> FR_203
-    FR_200 - contains -> FR_204
+    ThemeCustomization - contains -> ColorPaletteDefinition
+    ThemeCustomization - contains -> FontDefinition
+    ThemeCustomization - contains -> LayoutSelection
+    ThemeCustomization - contains -> CustomCSS
 ```
 
 ## 3.4. コンポーネント拡張要求図
@@ -279,9 +279,9 @@ requirementDiagram
         verifymethod: test
     }
 
-    FR_300 - contains -> FR_301
-    FR_300 - contains -> FR_302
-    FR_300 - contains -> FR_303
+    ComponentExtension - contains -> ComponentRegistration
+    ComponentExtension - contains -> ComponentOverride
+    ComponentExtension - contains -> ComponentProps
 ```
 
 ## 3.5. デフォルトテンプレートおよびバリデーション要求図
@@ -330,10 +330,10 @@ requirementDiagram
         verifymethod: demonstration
     }
 
-    FR_400 - contains -> FR_401
-    FR_400 - contains -> FR_402
-    FR_500 - contains -> FR_501
-    FR_500 - contains -> FR_502
+    DefaultTemplate - contains -> DefaultData
+    DefaultTemplate - contains -> FallbackBehavior
+    DataValidation - contains -> SchemaValidation
+    DataValidation - contains -> ErrorDisplay
 ```
 
 ## 3.6. 非機能要求図
@@ -401,8 +401,8 @@ requirementDiagram
         verifymethod: test
     }
 
-    UR_100 - derives -> NFR_103
-    UR_100 - derives -> NFR_102
+    SlideContentCustomization - derives -> RevealJSCompatibility
+    SlideContentCustomization - derives -> BackwardCompatibility
 ```
 
 ---
