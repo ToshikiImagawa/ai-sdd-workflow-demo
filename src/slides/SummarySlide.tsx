@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider'
 import Typography from '@mui/material/Typography'
+import {FallbackImage} from '../components/FallbackImage'
 import {SectionLayout} from '../layouts'
 
 const GitHubIcon = () => (
@@ -39,10 +40,11 @@ export function SummarySlide() {
           border: '1px solid var(--theme-border)',
         }}
       >
-        <img
+        <FallbackImage
           src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://github.com/ToshikiImagawa/ai-sdd-workflow"
           alt="GitHub Repository QR Code"
-          style={{display: 'block', width: '200px', height: '200px'}}
+          width={200}
+          height={200}
         />
       </Box>
 
