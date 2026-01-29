@@ -167,32 +167,6 @@ code {
 }
 
 /* Timeline */
-.timeline-layout {
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-  width: calc(100% + 200px);
-  margin: 40px -100px 0;
-}
-
-.timeline-line {
-  position: absolute;
-  top: 24px;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: var(--theme-border);
-  z-index: 0;
-}
-
-.timeline-item {
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  flex: 1;
-  padding: 0 15px;
-}
-
 /* Bleed Image */
 .slide-container.bleed-image-layout {
   padding: 0 !important;
