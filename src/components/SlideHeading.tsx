@@ -4,16 +4,17 @@ import Typography from '@mui/material/Typography'
 
 type Props = {
   title: string
+  variant?: 'h2' | 'h3'
   description?: ReactNode | ReactNode[]
   sx?: SxProps<Theme>
 }
 
-export function SlideHeading({title, description, sx}: Props) {
+export function SlideHeading({title, variant = 'h2', description, sx}: Props) {
   const items = Array.isArray(description) ? description : description != null ? [description] : []
 
   return (
     <>
-      <Typography variant="h2" sx={{mb: '20px', ...sx}}>
+      <Typography variant={variant} sx={{mb: variant === 'h2' ? '20px' : '12px', ...sx}}>
         {title}
       </Typography>
       {items.map((item, i) => (

@@ -1,24 +1,18 @@
 import type {ReactNode} from 'react'
-import List from '@mui/material/List'
-import Typography from '@mui/material/Typography'
-import {BulletListItem} from './BulletListItem'
+import {BulletList} from './BulletList'
+import {SlideHeading} from './SlideHeading'
 
 type Props = {
   title: string
+  description?: ReactNode
   items: ReactNode[]
 }
 
-export function TitledBulletList({title, items}: Props) {
+export function TitledBulletList({title, description, items}: Props) {
   return (
     <>
-      <Typography variant="h3" sx={{mb: '12px'}}>
-        {title}
-      </Typography>
-      <List disablePadding>
-        {items.map((item, i) => (
-          <BulletListItem key={i} primary={item} />
-        ))}
-      </List>
+      <SlideHeading title={title} variant="h3" description={description} />
+      <BulletList items={items} />
     </>
   )
 }

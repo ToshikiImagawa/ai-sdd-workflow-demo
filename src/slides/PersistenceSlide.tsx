@@ -1,4 +1,4 @@
-import Typography from '@mui/material/Typography'
+import {AccentText} from '../components/AccentText'
 import {TitledBulletList} from '../components/TitledBulletList'
 import {TwoColumnGrid} from '../components/TwoColumnGrid'
 import {PersistenceVisual} from '../visuals/PersistenceVisual'
@@ -27,9 +27,7 @@ export function PersistenceSlide() {
                 </>,
               ]}
             />
-            <Typography variant="body1" sx={{mt: '20px', color: 'var(--theme-primary)'}}>
-              → セッションを跨いでも、コンテキストが失われない。
-            </Typography>
+            <AccentText sx={{mt: '20px'}}>→ セッションを跨いでも、コンテキストが失われない。</AccentText>
           </>
         }
       />
