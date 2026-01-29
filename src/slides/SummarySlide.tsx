@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
+import {SectionLayout} from '../layouts';
 
 const GitHubIcon = () => (
     <svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" style={{verticalAlign: 'middle'}}>
@@ -11,53 +12,51 @@ const GitHubIcon = () => (
 
 export function SummarySlide() {
     return (
-        <section className="slide-container" id="slide10">
-            <Box className="section-title-layout">
-                <Typography variant="h2" sx={{fontSize: '64px', color: 'var(--theme-text-heading)'}}>
-                    Start SDD Today
-                </Typography>
-                <Divider
-                    sx={{
-                        width: '100px',
-                        borderWidth: '1.5px',
-                        borderColor: 'var(--theme-primary)',
-                        my: '30px',
-                    }}
+        <SectionLayout id="slide10">
+            <Typography variant="h2" sx={{fontSize: '64px', color: 'var(--theme-text-heading)'}}>
+                Start SDD Today
+            </Typography>
+            <Divider
+                sx={{
+                    width: '100px',
+                    borderWidth: '1.5px',
+                    borderColor: 'var(--theme-primary)',
+                    my: '30px',
+                }}
+            />
+            <Typography variant="body1" sx={{fontSize: '24px', maxWidth: '800px', mb: '40px'}}>
+                AI開発に「確実性」と「持続可能性」を。
+                <br/>
+                最新の導入手順とドキュメントはGitHubをご覧ください。
+            </Typography>
+
+            <Box
+                sx={{
+                    background: 'var(--theme-background)',
+                    p: '20px',
+                    borderRadius: '12px',
+                    mb: '30px',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+                    border: '1px solid var(--theme-border)',
+                }}
+            >
+                <img
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://github.com/ToshikiImagawa/ai-sdd-workflow"
+                    alt="GitHub Repository QR Code"
+                    style={{display: 'block', width: '200px', height: '200px'}}
                 />
-                <Typography variant="body1" sx={{fontSize: '24px', maxWidth: '800px', mb: '40px'}}>
-                    AI開発に「確実性」と「持続可能性」を。
-                    <br/>
-                    最新の導入手順とドキュメントはGitHubをご覧ください。
-                </Typography>
-
-                <Box
-                    sx={{
-                        background: 'var(--theme-background)',
-                        p: '20px',
-                        borderRadius: '12px',
-                        mb: '30px',
-                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
-                        border: '1px solid var(--theme-border)',
-                    }}
-                >
-                    <img
-                        src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://github.com/ToshikiImagawa/ai-sdd-workflow"
-                        alt="GitHub Repository QR Code"
-                        style={{display: 'block', width: '200px', height: '200px'}}
-                    />
-                </Box>
-
-                <Typography
-                    sx={{
-                        mt: '10px',
-                        fontSize: '24px',
-                        color: 'var(--theme-primary)',
-                        fontFamily: "'Roboto Mono'",
-                    }}
-                >
-                    <GitHubIcon/> github.com/ToshikiImagawa/ai-sdd-workflow
-                </Typography>
             </Box>
-        </section>
+
+            <Typography
+                sx={{
+                    mt: '10px',
+                    fontSize: '24px',
+                    color: 'var(--theme-primary)',
+                    fontFamily: "'Roboto Mono'",
+                }}
+            >
+                <GitHubIcon/> github.com/ToshikiImagawa/ai-sdd-workflow
+            </Typography>
+        </SectionLayout>
     );
 }

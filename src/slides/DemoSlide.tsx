@@ -5,6 +5,7 @@ import ListItem from '@mui/material/ListItem';
 import Typography from '@mui/material/Typography';
 import logText from '../../assets/demo-log.txt?raw';
 import styles from './DemoSlide.module.css';
+import {BleedLayout} from '../layouts';
 
 const TYPING_SPEED = 40;
 const COMMAND_DONE_PAUSE = 400;
@@ -99,66 +100,72 @@ export function DemoSlide() {
     }, [visible, lineIndex, charIndex, lines]);
 
     return (
-        <section ref={sectionRef} className="slide-container bleed-image-layout" id="slide9">
-            <div className="bleed-content">
-                <Typography variant="h2" sx={{mb: '20px'}}>
-                    Demo Flow
-                </Typography>
-                <Typography variant="body1">
-                    わずか数コマンドで、要件定義から実装準備まで完了します。
-                </Typography>
-                <List disablePadding sx={{mt: '20px', fontFamily: "'Roboto Mono'", fontSize: '18px'}}>
-                    {commands.map((cmd) => (
-                        <ListItem key={cmd.text} disablePadding sx={{color: cmd.color, mb: '10px'}}>
-                            {cmd.text}
-                        </ListItem>
-                    ))}
-                </List>
-            </div>
-            <Box className={styles['terminal-window']}>
-                <Box className={styles['terminal-titlebar']}>
-                    <span className={`${styles['terminal-dot']} ${styles['terminal-dot-red']}`}/>
-                    <span className={`${styles['terminal-dot']} ${styles['terminal-dot-yellow']}`}/>
-                    <span className={`${styles['terminal-dot']} ${styles['terminal-dot-green']}`}/>
-                    <span className={styles['terminal-title']}>Terminal</span>
-                </Box>
-                <Box ref={terminalBodyRef} className={styles['terminal-body']}>
-                    {lines.map((line, i) => {
-                        if (i > lineIndex) {
-                            return (
-                                <div key={i} className={`${styles['terminal-line']} ${styles['line-hidden']}`}>
-                                    {line || '\u00A0'}
-                                </div>
-                            );
-                        }
+        <BleedLayout
+            id="slide9"
+            sectionRef={sectionRef}
+            left={
+                <>
+                    <Typography variant="h2" sx={{mb: '20px'}}>
+                        Demo Flow
+                    </Typography>
+                    <Typography variant="body1">
+                        わずか数コマンドで、要件定義から実装準備まで完了します。
+                    </Typography>
+                    <List disablePadding sx={{mt: '20px', fontFamily: "'Roboto Mono'", fontSize: '18px'}}>
+                        {commands.map((cmd) => (
+                            <ListItem key={cmd.text} disablePadding sx={{color: cmd.color, mb: '10px'}}>
+                                {cmd.text}
+                            </ListItem>
+                        ))}
+                    </List>
+                </>
+            }
+            right={
+                <Box className={styles['terminal-window']}>
+                    <Box className={styles['terminal-titlebar']}>
+                        <span className={`${styles['terminal-dot']} ${styles['terminal-dot-red']}`}/>
+                        <span className={`${styles['terminal-dot']} ${styles['terminal-dot-yellow']}`}/>
+                        <span className={`${styles['terminal-dot']} ${styles['terminal-dot-green']}`}/>
+                        <span className={styles['terminal-title']}>Terminal</span>
+                    </Box>
+                    <Box ref={terminalBodyRef} className={styles['terminal-body']}>
+                        {lines.map((line, i) => {
+                            if (i > lineIndex) {
+                                return (
+                                    <div key={i} className={`${styles['terminal-line']} ${styles['line-hidden']}`}>
+                                        {line || '\u00A0'}
+                                    </div>
+                                );
+                            }
 
-                        if (i === lineIndex && isCommandLine(line)) {
+                            if (i === lineIndex && isCommandLine(line)) {
+                                return (
+                                    <div key={i}
+                                         className={`${styles['terminal-line']} ${styles['line-visible']} ${getLineClassName(line)}`}>
+                                        {line.slice(0, charIndex)}
+                                        <span className={styles.cursor}/>
+                                    </div>
+                                );
+                            }
+
+                            if (i === lineIndex) {
+                                return (
+                                    <div key={i} className={`${styles['terminal-line']} ${styles['line-hidden']}`}>
+                                        {line || '\u00A0'}
+                                    </div>
+                                );
+                            }
+
                             return (
                                 <div key={i}
                                      className={`${styles['terminal-line']} ${styles['line-visible']} ${getLineClassName(line)}`}>
-                                    {line.slice(0, charIndex)}
-                                    <span className={styles.cursor}/>
-                                </div>
-                            );
-                        }
-
-                        if (i === lineIndex) {
-                            return (
-                                <div key={i} className={`${styles['terminal-line']} ${styles['line-hidden']}`}>
                                     {line || '\u00A0'}
                                 </div>
                             );
-                        }
-
-                        return (
-                            <div key={i}
-                                 className={`${styles['terminal-line']} ${styles['line-visible']} ${getLineClassName(line)}`}>
-                                {line || '\u00A0'}
-                            </div>
-                        );
-                    })}
+                        })}
+                    </Box>
                 </Box>
-            </Box>
-        </section>
+            }
+        />
     );
 }

@@ -1,6 +1,6 @@
 import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import {ContentLayout} from '../layouts';
 
 const steps = [
     {number: 1, title: 'Specify', description: 'PRD & 仕様策定', command: '/generate_prd'},
@@ -11,49 +11,44 @@ const steps = [
 
 export function WorkflowSlide() {
     return (
-        <section className="slide-container" id="slide5">
-            <Typography variant="h2" className="slide-title">
-                SDD Workflow Cycle
+        <ContentLayout id="slide5" title="SDD Workflow Cycle">
+            <div className="timeline-layout">
+                <div className="timeline-line"/>
+                {steps.map((step) => (
+                    <div key={step.number} className="timeline-item">
+                        <Avatar
+                            sx={{
+                                width: 50,
+                                height: 50,
+                                bgcolor: 'var(--theme-background)',
+                                border: '3px solid var(--theme-primary)',
+                                color: 'var(--theme-primary)',
+                                fontWeight: 700,
+                                fontSize: '20px',
+                                mx: 'auto',
+                                mb: '20px',
+                                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+                            }}
+                        >
+                            {step.number}
+                        </Avatar>
+                        <Typography variant="h3" sx={{fontSize: '22px', mb: '10px', color: 'var(--theme-primary)'}}>
+                            {step.title}
+                        </Typography>
+                        <Typography variant="body2">
+                            {step.description}
+                            <br/>
+                            <code>{step.command}</code>
+                        </Typography>
+                    </div>
+                ))}
+            </div>
+            <Typography
+                variant="body1"
+                sx={{textAlign: 'center', mt: '40px', fontStyle: 'italic'}}
+            >
+                AIとの対話を通じて、仕様を段階的に「育てて」いくフロー
             </Typography>
-            <Box className="content-area">
-                <div className="timeline-layout">
-                    <div className="timeline-line"/>
-                    {steps.map((step) => (
-                        <div key={step.number} className="timeline-item">
-                            <Avatar
-                                sx={{
-                                    width: 50,
-                                    height: 50,
-                                    bgcolor: 'var(--theme-background)',
-                                    border: '3px solid var(--theme-primary)',
-                                    color: 'var(--theme-primary)',
-                                    fontWeight: 700,
-                                    fontSize: '20px',
-                                    mx: 'auto',
-                                    mb: '20px',
-                                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-                                }}
-                            >
-                                {step.number}
-                            </Avatar>
-                            <Typography variant="h3" sx={{fontSize: '22px', mb: '10px', color: 'var(--theme-primary)'}}>
-                                {step.title}
-                            </Typography>
-                            <Typography variant="body2">
-                                {step.description}
-                                <br/>
-                                <code>{step.command}</code>
-                            </Typography>
-                        </div>
-                    ))}
-                </div>
-                <Typography
-                    variant="body1"
-                    sx={{textAlign: 'center', mt: '40px', fontStyle: 'italic'}}
-                >
-                    AIとの対話を通じて、仕様を段階的に「育てて」いくフロー
-                </Typography>
-            </Box>
-        </section>
+        </ContentLayout>
     );
 }
