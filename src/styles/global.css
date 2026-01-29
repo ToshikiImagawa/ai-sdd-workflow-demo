@@ -112,21 +112,15 @@ body {
     pointer-events: none;
 }
 
-.backgrounds::after {
-    content: '';
-    position: absolute;
+.slide-logo {
+    position: fixed;
     bottom: 20px;
     left: 30px;
-    width: 120px;
-    height: 40px;
-    background: url('/logo.png') no-repeat center / contain;
     z-index: 10;
     pointer-events: none;
 }
 
-.no-logo .backgrounds::after {
-    content: '120px × 40px';
-    background: none;
+.fallback-placeholder {
     border: 1px dashed var(--theme-border-light);
     border-radius: 4px;
     display: flex;
