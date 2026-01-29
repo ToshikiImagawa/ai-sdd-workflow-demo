@@ -1,4 +1,6 @@
 import {useState} from 'react';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
 type Props = {
     src: string;
@@ -13,12 +15,28 @@ export function FallbackImage({src, width, height, alt = '', className}: Props) 
 
     if (status === 'error') {
         return (
-            <div
-                className={`fallback-placeholder ${className ?? ''}`}
-                style={{width, height}}
+            <Box
+                className={className}
+                sx={{
+                    width,
+                    height,
+                    border: '1px dashed var(--theme-border-light)',
+                    borderRadius: '4px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
             >
-                {width}px &times; {height}px
-            </div>
+                <Typography
+                    sx={{
+                        fontSize: '11px',
+                        fontFamily: "'Roboto Mono', monospace",
+                        color: 'var(--theme-text-muted)',
+                    }}
+                >
+                    {width}px &times; {height}px
+                </Typography>
+            </Box>
         );
     }
 

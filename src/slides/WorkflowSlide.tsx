@@ -1,52 +1,59 @@
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+
+const steps = [
+    {number: 1, title: 'Specify', description: 'PRD & 仕様策定', command: '/generate_prd'},
+    {number: 2, title: 'Plan', description: '設計詳細化', command: '/generate_spec'},
+    {number: 3, title: 'Task', description: 'タスク分解', command: '/task_breakdown'},
+    {number: 4, title: 'Implement', description: '実装 & レビュー', command: '/implement'},
+];
+
 export function WorkflowSlide() {
     return (
         <section className="slide-container" id="slide5">
-            <h2 className="slide-title">SDD Workflow Cycle</h2>
-            <div className="content-area">
+            <Typography variant="h2" className="slide-title">
+                SDD Workflow Cycle
+            </Typography>
+            <Box className="content-area">
                 <div className="timeline-layout">
-                    <div className="timeline-line"></div>
-
-                    <div className="timeline-item">
-                        <div className="timeline-dot">1</div>
-                        <h3>Specify</h3>
-                        <p>
-                            PRD &amp; 仕様策定
-                            <br/>
-                            <code>/generate_prd</code>
-                        </p>
-                    </div>
-                    <div className="timeline-item">
-                        <div className="timeline-dot">2</div>
-                        <h3>Plan</h3>
-                        <p>
-                            設計詳細化
-                            <br/>
-                            <code>/generate_spec</code>
-                        </p>
-                    </div>
-                    <div className="timeline-item">
-                        <div className="timeline-dot">3</div>
-                        <h3>Task</h3>
-                        <p>
-                            タスク分解
-                            <br/>
-                            <code>/task_breakdown</code>
-                        </p>
-                    </div>
-                    <div className="timeline-item">
-                        <div className="timeline-dot">4</div>
-                        <h3>Implement</h3>
-                        <p>
-                            実装 &amp; レビュー
-                            <br/>
-                            <code>/implement</code>
-                        </p>
-                    </div>
+                    <div className="timeline-line"/>
+                    {steps.map((step) => (
+                        <div key={step.number} className="timeline-item">
+                            <Avatar
+                                sx={{
+                                    width: 50,
+                                    height: 50,
+                                    bgcolor: 'var(--theme-background)',
+                                    border: '3px solid var(--theme-primary)',
+                                    color: 'var(--theme-primary)',
+                                    fontWeight: 700,
+                                    fontSize: '20px',
+                                    mx: 'auto',
+                                    mb: '20px',
+                                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+                                }}
+                            >
+                                {step.number}
+                            </Avatar>
+                            <Typography variant="h3" sx={{fontSize: '22px', mb: '10px', color: 'var(--theme-primary)'}}>
+                                {step.title}
+                            </Typography>
+                            <Typography variant="body2">
+                                {step.description}
+                                <br/>
+                                <code>{step.command}</code>
+                            </Typography>
+                        </div>
+                    ))}
                 </div>
-                <p style={{textAlign: 'center', marginTop: '40px', fontStyle: 'italic'}}>
+                <Typography
+                    variant="body1"
+                    sx={{textAlign: 'center', mt: '40px', fontStyle: 'italic'}}
+                >
                     AIとの対話を通じて、仕様を段階的に「育てて」いくフロー
-                </p>
-            </div>
+                </Typography>
+            </Box>
         </section>
     );
 }

@@ -1,4 +1,8 @@
 import {useEffect, useRef, useState} from 'react';
+import Box from '@mui/material/Box';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Typography from '@mui/material/Typography';
 import logText from '../../assets/demo-log.txt?raw';
 import styles from './DemoSlide.module.css';
 
@@ -21,6 +25,14 @@ function isCommandLine(line: string): boolean {
     return line.startsWith('$');
 }
 
+const commands = [
+    {text: '$ /sdd_init', color: 'var(--theme-text-heading)'},
+    {text: '$ /generate_prd "To-Do App"', color: 'var(--theme-text-heading)'},
+    {text: '$ /generate_spec', color: 'var(--theme-text-heading)'},
+    {text: '$ /task_breakdown', color: 'var(--theme-primary)'},
+    {text: '$ /implement', color: 'var(--theme-text-heading)'},
+];
+
 export function DemoSlide() {
     const lines = logText.split('\n');
     const sectionRef = useRef<HTMLElement>(null);
@@ -29,14 +41,12 @@ export function DemoSlide() {
     const [lineIndex, setLineIndex] = useState(0);
     const [charIndex, setCharIndex] = useState(0);
 
-    // lineIndex が変わるたびに terminal-body を最下部にスクロール
     useEffect(() => {
         if (terminalBodyRef.current) {
             terminalBodyRef.current.scrollTop = terminalBodyRef.current.scrollHeight;
         }
     }, [lineIndex]);
 
-    // IntersectionObserver でスライド可視性を監視
     useEffect(() => {
         const el = sectionRef.current;
         if (!el) return;
@@ -48,7 +58,6 @@ export function DemoSlide() {
         return () => observer.disconnect();
     }, []);
 
-    // 非表示になったらリセット
     useEffect(() => {
         if (!visible) {
             setLineIndex(0);
@@ -56,11 +65,9 @@ export function DemoSlide() {
         }
     }, [visible]);
 
-    // アニメーション駆動
     useEffect(() => {
         if (!visible) return;
 
-        // 全行完了 → リスタート
         if (lineIndex >= lines.length) {
             const timer = setTimeout(() => {
                 setLineIndex(0);
@@ -72,12 +79,10 @@ export function DemoSlide() {
         const currentLine = lines[lineIndex];
 
         if (isCommandLine(currentLine)) {
-            // コマンド行: タイプライター
             if (charIndex < currentLine.length) {
                 const timer = setTimeout(() => setCharIndex((c) => c + 1), TYPING_SPEED);
                 return () => clearTimeout(timer);
             }
-            // タイプ完了 → 次の行へ
             const timer = setTimeout(() => {
                 setLineIndex((l) => l + 1);
                 setCharIndex(0);
@@ -85,7 +90,6 @@ export function DemoSlide() {
             return () => clearTimeout(timer);
         }
 
-        // 出力行 / 空行
         const delay = currentLine.trim() === '' ? EMPTY_LINE_INTERVAL : OUTPUT_LINE_INTERVAL;
         const timer = setTimeout(() => {
             setLineIndex((l) => l + 1);
@@ -97,27 +101,29 @@ export function DemoSlide() {
     return (
         <section ref={sectionRef} className="slide-container bleed-image-layout" id="slide9">
             <div className="bleed-content">
-                <h2>Demo Flow</h2>
-                <p>わずか数コマンドで、要件定義から実装準備まで完了します。</p>
-                <ul style={{marginTop: '20px', fontFamily: "'Roboto Mono'", fontSize: '18px'}}>
-                    <li style={{color: 'var(--theme-text-heading)', marginBottom: '10px'}}>$ /sdd_init</li>
-                    <li style={{color: 'var(--theme-text-heading)', marginBottom: '10px'}}>$ /generate_prd "To-Do App"
-                    </li>
-                    <li style={{color: 'var(--theme-text-heading)', marginBottom: '10px'}}>$ /generate_spec</li>
-                    <li style={{color: 'var(--theme-primary)', marginBottom: '10px'}}>$ /task_breakdown</li>
-                    <li style={{color: 'var(--theme-text-heading)'}}>$ /implement</li>
-                </ul>
+                <Typography variant="h2" sx={{mb: '20px'}}>
+                    Demo Flow
+                </Typography>
+                <Typography variant="body1">
+                    わずか数コマンドで、要件定義から実装準備まで完了します。
+                </Typography>
+                <List disablePadding sx={{mt: '20px', fontFamily: "'Roboto Mono'", fontSize: '18px'}}>
+                    {commands.map((cmd) => (
+                        <ListItem key={cmd.text} disablePadding sx={{color: cmd.color, mb: '10px'}}>
+                            {cmd.text}
+                        </ListItem>
+                    ))}
+                </List>
             </div>
-            <div className={styles['terminal-window']}>
-                <div className={styles['terminal-titlebar']}>
+            <Box className={styles['terminal-window']}>
+                <Box className={styles['terminal-titlebar']}>
                     <span className={`${styles['terminal-dot']} ${styles['terminal-dot-red']}`}/>
                     <span className={`${styles['terminal-dot']} ${styles['terminal-dot-yellow']}`}/>
                     <span className={`${styles['terminal-dot']} ${styles['terminal-dot-green']}`}/>
                     <span className={styles['terminal-title']}>Terminal</span>
-                </div>
-                <div ref={terminalBodyRef} className={styles['terminal-body']}>
+                </Box>
+                <Box ref={terminalBodyRef} className={styles['terminal-body']}>
                     {lines.map((line, i) => {
-                        // 未到達の行は非表示
                         if (i > lineIndex) {
                             return (
                                 <div key={i} className={`${styles['terminal-line']} ${styles['line-hidden']}`}>
@@ -126,7 +132,6 @@ export function DemoSlide() {
                             );
                         }
 
-                        // 現在の行（コマンド行ならタイプ中）
                         if (i === lineIndex && isCommandLine(line)) {
                             return (
                                 <div key={i}
@@ -137,7 +142,6 @@ export function DemoSlide() {
                             );
                         }
 
-                        // 現在の行（出力行）はまだ表示前なので非表示
                         if (i === lineIndex) {
                             return (
                                 <div key={i} className={`${styles['terminal-line']} ${styles['line-hidden']}`}>
@@ -146,7 +150,6 @@ export function DemoSlide() {
                             );
                         }
 
-                        // 完了済みの行
                         return (
                             <div key={i}
                                  className={`${styles['terminal-line']} ${styles['line-visible']} ${getLineClassName(line)}`}>
@@ -154,8 +157,8 @@ export function DemoSlide() {
                             </div>
                         );
                     })}
-                </div>
-            </div>
+                </Box>
+            </Box>
         </section>
     );
 }
