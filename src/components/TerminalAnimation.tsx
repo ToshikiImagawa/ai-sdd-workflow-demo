@@ -108,10 +108,7 @@ export function TerminalAnimation({logText, title = 'Terminal'}: Props) {
 
           if (i === lineIndex && isCommandLine(line)) {
             return (
-              <div
-                key={i}
-                className={`${styles['terminal-line']} ${styles['line-visible']} ${getLineClassName(line)}`}
-              >
+              <div key={i} className={`${styles['terminal-line']} ${styles['line-visible']} ${getLineClassName(line)}`}>
                 {line.slice(0, charIndex)}
                 <span className={styles.cursor} />
               </div>
@@ -127,10 +124,7 @@ export function TerminalAnimation({logText, title = 'Terminal'}: Props) {
           }
 
           return (
-            <div
-              key={i}
-              className={`${styles['terminal-line']} ${styles['line-visible']} ${getLineClassName(line)}`}
-            >
+            <div key={i} className={`${styles['terminal-line']} ${styles['line-visible']} ${getLineClassName(line)}`}>
               {line || '\u00A0'}
             </div>
           )

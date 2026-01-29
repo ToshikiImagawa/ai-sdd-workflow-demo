@@ -4,6 +4,21 @@ import {TitledBulletList} from '../components/TitledBulletList'
 import {TwoColumnGrid} from '../components/TwoColumnGrid'
 import {ContentLayout} from '../layouts'
 
+const items = [
+  <>
+    1. <strong>PRD</strong> (Why & What)
+  </>,
+  <>
+    2. <strong>Specification</strong> (How structured)
+  </>,
+  <>
+    3. <strong>Design</strong> (Implementation details)
+  </>,
+  <>
+    4. <strong>Tasks</strong> (Actionable steps)
+  </>,
+]
+
 export function ConstitutionSlide() {
   return (
     <ContentLayout id="slide4" title="CONSTITUTION.md: プロジェクト原則">
@@ -13,23 +28,7 @@ export function ConstitutionSlide() {
             <Typography variant="body1">
               プロジェクトのルートに配置される「非交渉の原則」。全ての開発プロセスはこのファイルに従います。
             </Typography>
-            <CodeBlockPanel
-              header={<>&gt; Hierarchy of Truth</>}
-              items={[
-                <>
-                  1. <strong>PRD</strong> (Why & What)
-                </>,
-                <>
-                  2. <strong>Specification</strong> (How structured)
-                </>,
-                <>
-                  3. <strong>Design</strong> (Implementation details)
-                </>,
-                <>
-                  4. <strong>Tasks</strong> (Actionable steps)
-                </>,
-              ]}
-            />
+            <CodeBlockPanel header={<>&gt; Hierarchy of Truth</>} items={items} />
           </>
         }
         right={
