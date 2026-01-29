@@ -12,18 +12,44 @@ AI-SDDワークフロープラグインのデモ用プレゼンテーション�
 npm run dev      # 開発サーバー起動（Vite HMR）
 npm run build    # プロダクションビルド（dist/ に出力）
 npm run preview  # ビルド済みファイルのプレビュー
+npm run format   # Prettier でコード整形（src/**/*.{ts,tsx,css}）
 ```
 
 ## アーキテクチャ
 
 React コンポーネントで各スライドを定義し、Reveal.js でプレゼンテーションとして描画する構成。
 
-- `src/App.tsx` — Reveal.js の初期化とスライド配置を管理するルートコンポーネント
-- `src/slides/*.tsx` — 各スライドが独立した React コンポーネント（TitleSlide〜SummarySlide の10枚）
-- `src/styles/style.css` — アニメーション、レイアウトシステム、Reveal.js のスタイルオーバーライドを集約
-- `src/reveal.d.ts` — Reveal.js の TypeScript 型定義
+```
+src/
+├── App.tsx          # Reveal.js 初期化とスライド配置（ルート）
+├── main.tsx         # エントリポイント
+├── slides/          # 各スライド（独立した React コンポーネント、10枚）
+├── components/      # 再利用可能な UI パーツ
+├── layouts/         # スライド構造のラッパー（4種）
+├── visuals/         # 複雑なアニメーション付きビジュアル
+├── hooks/           # カスタムフック（useReveal）
+├── styles/          # グローバル CSS（変数、アニメーション、Reveal.js オーバーライド）
+├── theme.ts         # MUI テーマ設定
+└── reveal.d.ts      # Reveal.js の TypeScript 型定義
+```
 
-スライドの追加・削除は `App.tsx` の `<div className="slides">` 内でコンポーネントの追加・削除を行う。スライドの順序はここでの並び順で決まる。
+### スライドの追加・削除
+
+`App.tsx` の `<div className="slides">` 内でコンポーネントの追加・削除を行う。並び順がスライドの順序になる。
+
+### コンポーネント設計パターン
+
+- **slides/** — コンテナコンポーネント。レイアウトと共通コンポーネントを組み合わせてスライドを構成する
+- **layouts/** — 構造ラッパー。`ContentLayout`（タイトル付き左寄せ）、`TitleLayout`（中央寄せ）、`SectionLayout`（セクション区切り）、`BleedLayout`（2カラム全幅）の4種
+- **components/** — 再利用可能な UI パーツ（`SlideHeading`, `BulletList`, `TwoColumnGrid`, `FeatureTileGrid`, `CodeBlockPanel`, `Timeline` 等）
+- **visuals/** — アニメーション付き複合ビジュアル（`HierarchyFlowVisual`, `PersistenceVisual`, `VibeCodingDemo`, `TerminalAnimation`）
+
+### スタイリング規約
+
+- **CSS 変数**（`src/styles/global.css`）: テーマカラー定義（`--theme-primary`, `--theme-background` 等）。全色に `-rgb` 変数もあり `rgba()` で使用可能
+- **グローバル CSS**: レイアウトシステム、アニメーション（`fadeInUp`）、Reveal.js オーバーライド
+- **CSS Modules**: 複雑なコンポーネント固有のスタイル（`Timeline.module.css` 等）
+- **MUI `sx` prop**: インラインの微調整やレスポンシブ対応
 
 ## AI-SDD Instructions (v2.4.2)
 <!-- sdd-workflow version: "2.4.2" -->
