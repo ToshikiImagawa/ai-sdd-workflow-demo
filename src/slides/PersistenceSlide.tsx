@@ -1,6 +1,6 @@
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import {PersistenceVisual} from '../components/PersistenceVisual'
+import {PersistenceVisual} from '../visuals/PersistenceVisual'
 import {TitledBulletList} from '../components/TitledBulletList'
 import {ContentLayout} from '../layouts'
 

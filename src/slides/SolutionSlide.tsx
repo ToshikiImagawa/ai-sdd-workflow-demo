@@ -1,5 +1,5 @@
 import Typography from '@mui/material/Typography'
-import {HierarchyFlowVisual} from '../components/HierarchyFlowVisual'
+import {HierarchyFlowVisual} from '../visuals/HierarchyFlowVisual'
 import {BleedLayout} from '../layouts'
 
 export function SolutionSlide() {

@@ -2,7 +2,7 @@ import Grid from '@mui/material/Grid'
 import List from '@mui/material/List'
 import Typography from '@mui/material/Typography'
 import {BulletListItem} from '../components/BulletListItem'
-import {VibeCodingDemo} from '../components/VibeCodingDemo'
+import {VibeCodingDemo} from '../visuals/VibeCodingDemo'
 import {ContentLayout} from '../layouts'
 
 export function ProblemSlide() {
