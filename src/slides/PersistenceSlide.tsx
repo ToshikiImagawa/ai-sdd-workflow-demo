@@ -1,15 +1,12 @@
 import Grid from '@mui/material/Grid'
 import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemIcon from '@mui/material/ListItemIcon'
-import ListItemText from '@mui/material/ListItemText'
 import Typography from '@mui/material/Typography'
-import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import StorageIcon from '@mui/icons-material/Storage'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck'
 import TerminalIcon from '@mui/icons-material/Terminal'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
+import {BulletListItem} from '../components/BulletListItem'
 import styles from './PersistenceSlide.module.css'
 import {ContentLayout} from '../layouts'
 
@@ -45,52 +42,25 @@ export function PersistenceSlide() {
             Knowledge vs Ephemeral
           </Typography>
           <List disablePadding>
-            {[
-              {
-                primary: (
-                  <>
-                    <strong>PRD / Spec / Design:</strong>
-                    <br />
-                    永続的な知識資産としてリポジトリに残る。
-                  </>
-                ),
-              },
-              {
-                primary: (
-                  <>
-                    <strong>Tasks / Logs:</strong>
-                    <br />
-                    一時的なデータ。実装完了後に設計書へ統合され、<code>/task_cleanup</code>
-                    で削除される。
-                  </>
-                ),
-              },
-            ].map((item, i) => (
-              <ListItem key={i} disablePadding sx={{mb: '20px', pl: '30px', position: 'relative'}}>
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    position: 'absolute',
-                    left: 0,
-                    color: 'var(--theme-primary)',
-                  }}
-                >
-                  <ChevronRightIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText
-                  primary={item.primary}
-                  slotProps={{
-                    primary: {
-                      sx: {
-                        fontSize: '20px',
-                        lineHeight: 1.6,
-                        color: 'var(--theme-text-body)',
-                      },
-                    },
-                  }}
-                />
-              </ListItem>
-            ))}
+            <BulletListItem
+              primary={
+                <>
+                  <strong>PRD / Spec / Design:</strong>
+                  <br />
+                  永続的な知識資産としてリポジトリに残る。
+                </>
+              }
+            />
+            <BulletListItem
+              primary={
+                <>
+                  <strong>Tasks / Logs:</strong>
+                  <br />
+                  一時的なデータ。実装完了後に設計書へ統合され、<code>/task_cleanup</code>
+                  で削除される。
+                </>
+              }
+            />
           </List>
           <Typography variant="body1" sx={{mt: '20px', color: 'var(--theme-primary)'}}>
             → セッションを跨いでも、コンテキストが失われない。

@@ -1,11 +1,10 @@
 import Grid from '@mui/material/Grid'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
-import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
-import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+import {BulletListItem} from '../components/BulletListItem'
 import {ContentLayout} from '../layouts'
 
 export function ConstitutionSlide() {
@@ -73,36 +72,9 @@ export function ConstitutionSlide() {
             厳格な依存関係
           </Typography>
           <List disablePadding>
-            {[
-              '下位ドキュメントは上位ドキュメントに矛盾してはならない',
-              '実装（Task）は必ず設計（Design）に基づく',
-              '「なんとなく実装」を許さないガードレール',
-            ].map((text) => (
-              <ListItem key={text} disablePadding sx={{mb: '20px', pl: '30px', position: 'relative'}}>
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    position: 'absolute',
-                    left: 0,
-                    color: 'var(--theme-primary)',
-                  }}
-                >
-                  <ChevronRightIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText
-                  primary={text}
-                  slotProps={{
-                    primary: {
-                      sx: {
-                        fontSize: '20px',
-                        lineHeight: 1.6,
-                        color: 'var(--theme-text-body)',
-                      },
-                    },
-                  }}
-                />
-              </ListItem>
-            ))}
+            <BulletListItem primary="下位ドキュメントは上位ドキュメントに矛盾してはならない" />
+            <BulletListItem primary="実装（Task）は必ず設計（Design）に基づく" />
+            <BulletListItem primary="「なんとなく実装」を許さないガードレール" />
           </List>
         </Grid>
       </Grid>

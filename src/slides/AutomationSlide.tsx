@@ -1,11 +1,7 @@
-import Avatar from '@mui/material/Avatar'
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
 import DescriptionIcon from '@mui/icons-material/Description'
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck'
 import TrafficIcon from '@mui/icons-material/Traffic'
+import {FeatureTileGrid} from '../components/FeatureTileGrid'
 import {ContentLayout} from '../layouts'
 
 const tiles = [
@@ -29,32 +25,7 @@ const tiles = [
 export function AutomationSlide() {
   return (
     <ContentLayout id="slide6" title="Powerful Automation">
-      <Stack direction="row" spacing="30px" sx={{width: '100%'}}>
-        {tiles.map((tile) => (
-          <Card key={tile.title} sx={{flex: 1, p: '30px'}}>
-            <CardContent sx={{p: 0, '&:last-child': {pb: 0}}}>
-              <Avatar
-                sx={{
-                  width: 62,
-                  height: 62,
-                  mb: '20px',
-                  bgcolor: 'rgba(var(--theme-primary-rgb), 0.06)',
-                  border: '1px solid rgba(var(--theme-primary-rgb), 0.12)',
-                  borderRadius: '14px',
-                  color: 'var(--theme-primary)',
-                }}
-                variant="rounded"
-              >
-                {tile.icon}
-              </Avatar>
-              <Typography variant="h3" sx={{mb: '12px'}}>
-                {tile.title}
-              </Typography>
-              <Typography variant="body2">{tile.description}</Typography>
-            </CardContent>
-          </Card>
-        ))}
-      </Stack>
+      <FeatureTileGrid tiles={tiles} />
     </ContentLayout>
   )
 }
