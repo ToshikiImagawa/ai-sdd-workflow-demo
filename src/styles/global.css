@@ -1,27 +1,27 @@
 /* CSS variable fallbacks (overridden at runtime by applyTheme) */
 :root {
-    --theme-primary: #6c5ce7;
-    --theme-primary-rgb: 108, 92, 231;
-    --theme-background: #1a1a2e;
-    --theme-background-rgb: 26, 26, 46;
-    --theme-background-alt: #16213e;
-    --theme-background-alt-rgb: 22, 33, 62;
-    --theme-background-grid: #232946;
-    --theme-background-grid-rgb: 35, 41, 70;
-    --theme-text-heading: #eaeaea;
-    --theme-text-heading-rgb: 234, 234, 234;
-    --theme-text-body: #a0a0b8;
-    --theme-text-body-rgb: 160, 160, 184;
-    --theme-text-subtitle: #c0c0d0;
-    --theme-text-subtitle-rgb: 192, 192, 208;
-    --theme-text-muted: #6c6c80;
-    --theme-text-muted-rgb: 108, 108, 128;
-    --theme-border: #2e2e48;
-    --theme-border-rgb: 46, 46, 72;
-    --theme-border-light: #3a3a58;
-    --theme-border-light-rgb: 58, 58, 88;
-    --theme-code-text: #a78bfa;
-    --theme-code-text-rgb: 167, 139, 250;
+    --theme-primary: #e07a5f;
+    --theme-primary-rgb: 224, 122, 95;
+    --theme-background: #1c1917;
+    --theme-background-rgb: 28, 25, 23;
+    --theme-background-alt: #292524;
+    --theme-background-alt-rgb: 41, 37, 36;
+    --theme-background-grid: #33302e;
+    --theme-background-grid-rgb: 51, 48, 46;
+    --theme-text-heading: #faf8f5;
+    --theme-text-heading-rgb: 250, 248, 245;
+    --theme-text-body: #a8a29e;
+    --theme-text-body-rgb: 168, 162, 158;
+    --theme-text-subtitle: #d6d3d1;
+    --theme-text-subtitle-rgb: 214, 211, 209;
+    --theme-text-muted: #78716c;
+    --theme-text-muted-rgb: 120, 113, 108;
+    --theme-border: #3d3835;
+    --theme-border-rgb: 61, 56, 53;
+    --theme-border-light: #4a4543;
+    --theme-border-light-rgb: 74, 69, 67;
+    --theme-code-text: #fb923c;
+    --theme-code-text-rgb: 251, 146, 60;
 }
 
 /* 0. KEYFRAMES */
@@ -420,6 +420,10 @@ code {
 }
 
 /* 4. REVEAL.JS OVERRIDES */
+.reveal-viewport {
+    background-color: var(--theme-background);
+}
+
 .reveal {
     font-family: 'Noto Sans JP', 'Inter', sans-serif;
     background-color: transparent;
