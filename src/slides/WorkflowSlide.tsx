@@ -11,7 +11,7 @@ export function WorkflowSlide() {
                         <h3>Specify</h3>
                         <p>
                             PRD &amp; 仕様策定
-                            <br />
+                            <br/>
                             <code>/generate_prd</code>
                         </p>
                     </div>
@@ -20,7 +20,7 @@ export function WorkflowSlide() {
                         <h3>Plan</h3>
                         <p>
                             設計詳細化
-                            <br />
+                            <br/>
                             <code>/generate_spec</code>
                         </p>
                     </div>
@@ -29,7 +29,7 @@ export function WorkflowSlide() {
                         <h3>Task</h3>
                         <p>
                             タスク分解
-                            <br />
+                            <br/>
                             <code>/task_breakdown</code>
                         </p>
                     </div>
@@ -38,12 +38,12 @@ export function WorkflowSlide() {
                         <h3>Implement</h3>
                         <p>
                             実装 &amp; レビュー
-                            <br />
+                            <br/>
                             <code>/implement</code>
                         </p>
                     </div>
                 </div>
-                <p style={{ textAlign: 'center', marginTop: '40px', fontStyle: 'italic' }}>
+                <p style={{textAlign: 'center', marginTop: '40px', fontStyle: 'italic'}}>
                     AIとの対話を通じて、仕様を段階的に「育てて」いくフロー
                 </p>
             </div>

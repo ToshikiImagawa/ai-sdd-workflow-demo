@@ -8,23 +8,23 @@ export function PersistenceSlide() {
                 <div className="two-column">
                     <div className={styles['persistence-visual-wrapper']}>
                         <div className={styles['repo-base']}>
-                            <i className="fa-solid fa-server" />
+                            <i className="fa-solid fa-server"/>
                             <div className={styles['repo-label']}>Git Repository</div>
                             <div className={styles['stored-doc-icon']}>
-                                <i className="fa-solid fa-file-circle-check" /> Updated!
+                                <i className="fa-solid fa-file-circle-check"/> Updated!
                             </div>
                         </div>
 
                         <div className={`${styles['data-stream-item']} ${styles['item-task']}`}>
-                            <i className="fa-solid fa-list-check" /> Task #101
+                            <i className="fa-solid fa-list-check"/> Task #101
                         </div>
                         <div className={`${styles['data-stream-item']} ${styles['item-log']}`}>
-                            <i className="fa-solid fa-terminal" /> temp.log
+                            <i className="fa-solid fa-terminal"/> temp.log
                         </div>
 
                         <div className={styles['persistence-session-label']}>
-                            <i className="fa-solid fa-arrow-down" /> Development Session{' '}
-                            <i className="fa-solid fa-arrow-down" />
+                            <i className="fa-solid fa-arrow-down"/> Development Session{' '}
+                            <i className="fa-solid fa-arrow-down"/>
                         </div>
                     </div>
                     <div>
@@ -32,17 +32,17 @@ export function PersistenceSlide() {
                         <ul>
                             <li>
                                 <strong>PRD / Spec / Design:</strong>
-                                <br />
+                                <br/>
                                 永続的な知識資産としてリポジトリに残る。
                             </li>
                             <li>
                                 <strong>Tasks / Logs:</strong>
-                                <br />
+                                <br/>
                                 一時的なデータ。実装完了後に設計書へ統合され、<code>/task_cleanup</code>
                                 で削除される。
                             </li>
                         </ul>
-                        <p style={{ marginTop: '20px', color: '#e60012' }}>
+                        <p style={{marginTop: '20px', color: 'var(--theme-primary)'}}>
                             → セッションを跨いでも、コンテキストが失われない。
                         </p>
                     </div>

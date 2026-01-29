@@ -1,0 +1,13 @@
+{
+  "primary": "#e60012",
+  "background": "#ffffff",
+  "backgroundAlt": "#f5f5f5",
+  "backgroundGrid": "#e8e8e8",
+  "textHeading": "#1a1a1a",
+  "textBody": "#666666",
+  "textSubtitle": "#444444",
+  "textMuted": "#999999",
+  "border": "#e0e0e0",
+  "borderLight": "#cccccc",
+  "codeText": "#d63384"
+}

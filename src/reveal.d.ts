@@ -18,7 +18,9 @@ declare module 'reveal.js' {
 
     class Reveal {
         constructor(element: HTMLElement, options?: RevealOptions);
+
         initialize(): Promise<void>;
+
         destroy(): void;
     }
 

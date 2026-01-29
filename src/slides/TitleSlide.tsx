@@ -4,7 +4,7 @@ export function TitleSlide() {
             <div className="title-layout">
                 <h1>AI-SDD-Workflow</h1>
                 <p className="subtitle">
-                    脱・Vibe Coding。<br />
+                    脱・Vibe Coding。<br/>
                     仕様駆動で実現する、確実なAIソフトウェア開発。
                 </p>
             </div>

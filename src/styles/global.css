@@ -1,3 +1,29 @@
+/* CSS variable fallbacks (overridden at runtime by applyTheme) */
+:root {
+    --theme-primary: #e60012;
+    --theme-primary-rgb: 230, 0, 18;
+    --theme-background: #ffffff;
+    --theme-background-rgb: 255, 255, 255;
+    --theme-background-alt: #f5f5f5;
+    --theme-background-alt-rgb: 245, 245, 245;
+    --theme-background-grid: #e8e8e8;
+    --theme-background-grid-rgb: 232, 232, 232;
+    --theme-text-heading: #1a1a1a;
+    --theme-text-heading-rgb: 26, 26, 26;
+    --theme-text-body: #666666;
+    --theme-text-body-rgb: 102, 102, 102;
+    --theme-text-subtitle: #444444;
+    --theme-text-subtitle-rgb: 68, 68, 68;
+    --theme-text-muted: #999999;
+    --theme-text-muted-rgb: 153, 153, 153;
+    --theme-border: #e0e0e0;
+    --theme-border-rgb: 224, 224, 224;
+    --theme-border-light: #cccccc;
+    --theme-border-light-rgb: 204, 204, 204;
+    --theme-code-text: #d63384;
+    --theme-code-text-rgb: 214, 51, 132;
+}
+
 /* 0. KEYFRAMES */
 @keyframes fadeInUp {
     from {
@@ -31,10 +57,9 @@ body,
 }
 
 body {
-    background-color: #ffffff;
-    background-image:
-        linear-gradient(#e8e8e8 1px, transparent 1px),
-        linear-gradient(90deg, #e8e8e8 1px, transparent 1px);
+    background-color: var(--theme-background);
+    background-image: linear-gradient(var(--theme-background-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--theme-background-grid) 1px, transparent 1px);
     background-size: 40px 40px;
     margin: 0;
     font-family: 'Noto Sans JP', 'Inter', sans-serif;
@@ -62,7 +87,7 @@ body {
     left: 0;
     right: 0;
     height: 4px;
-    background: #e60012;
+    background: var(--theme-primary);
     z-index: 10;
 }
 
@@ -78,10 +103,10 @@ body {
     width: 100%;
     height: 100%;
     background: linear-gradient(
-        to bottom,
-        #ffffff 0%,
-        transparent 50%,
-        #ffffff 100%
+            to bottom,
+            var(--theme-background) 0%,
+            transparent 50%,
+            var(--theme-background) 100%
     );
     z-index: 5;
     pointer-events: none;
@@ -119,7 +144,7 @@ body {
 
 /* 2. TYPOGRAPHY */
 h1, h2, h3, h4 {
-    color: #1a1a1a;
+    color: var(--theme-text-heading);
     margin: 0;
     font-weight: 700;
     line-height: 1.2;
@@ -135,36 +160,36 @@ h1 {
     margin-bottom: 40px;
     width: 100%;
     text-align: left;
-    border-left: 6px solid #e60012;
+    border-left: 6px solid var(--theme-primary);
     padding-left: 20px;
 }
 
 p, li, .subtitle {
-    color: #666666;
+    color: var(--theme-text-body);
     font-size: 20px;
     line-height: 1.6;
 }
 
 strong {
-    color: #e60012;
+    color: var(--theme-primary);
     font-weight: 600;
 }
 
 .subtitle {
     font-size: 28px;
     margin-top: 20px;
-    color: #444444;
+    color: var(--theme-text-subtitle);
     font-weight: 400;
 }
 
 code {
     font-family: 'Roboto Mono', monospace;
-    background: #f5f5f5;
+    background: var(--theme-background-alt);
     padding: 4px 8px;
     border-radius: 6px;
-    color: #d63384;
+    color: var(--theme-code-text);
     font-size: 0.9em;
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--theme-border);
 }
 
 /* 3. LAYOUTS */
@@ -185,7 +210,7 @@ code {
 
 .title-layout h1 {
     margin-bottom: 20px;
-    color: #1a1a1a;
+    color: var(--theme-text-heading);
 }
 
 /* Two Column */
@@ -214,7 +239,7 @@ code {
     font-weight: 900;
     position: absolute;
     left: 0;
-    color: #e60012;
+    color: var(--theme-primary);
 }
 
 .image-wrapper {
@@ -222,8 +247,8 @@ code {
     overflow: hidden;
     box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08),
     0 10px 15px -3px rgba(0, 0, 0, 0.05);
-    border: 1px solid #e0e0e0;
-    background: #ffffff;
+    border: 1px solid var(--theme-border);
+    background: var(--theme-background);
 }
 
 .image-wrapper img {
@@ -242,8 +267,8 @@ code {
 }
 
 .tile {
-    background: #ffffff;
-    border: 1px solid #e0e0e0;
+    background: var(--theme-background);
+    border: 1px solid var(--theme-border);
     border-radius: 16px;
     padding: 30px;
     flex: 1;
@@ -256,23 +281,23 @@ code {
 
 .tile .icon {
     font-size: 32px;
-    color: #e60012;
+    color: var(--theme-primary);
     margin-bottom: 20px;
-    background: rgba(230, 0, 18, 0.06);
+    background: rgba(var(--theme-primary-rgb), 0.06);
     padding: 15px;
     border-radius: 14px;
-    border: 1px solid rgba(230, 0, 18, 0.12);
+    border: 1px solid rgba(var(--theme-primary-rgb), 0.12);
 }
 
 .tile h3 {
     font-size: 24px;
     margin-bottom: 12px;
-    color: #1a1a1a;
+    color: var(--theme-text-heading);
 }
 
 .tile p {
     font-size: 16px;
-    color: #666666;
+    color: var(--theme-text-body);
 }
 
 /* Timeline */
@@ -290,7 +315,7 @@ code {
     left: 0;
     right: 0;
     height: 4px;
-    background: #e0e0e0;
+    background: var(--theme-border);
     z-index: 0;
 }
 
@@ -305,14 +330,14 @@ code {
 .timeline-dot {
     width: 50px;
     height: 50px;
-    background: #ffffff;
-    border: 3px solid #e60012;
+    background: var(--theme-background);
+    border: 3px solid var(--theme-primary);
     border-radius: 50%;
     margin: 0 auto 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #e60012;
+    color: var(--theme-primary);
     font-weight: 700;
     font-size: 20px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
@@ -321,7 +346,7 @@ code {
 .timeline-item h3 {
     font-size: 22px;
     margin-bottom: 10px;
-    color: #e60012;
+    color: var(--theme-primary);
 }
 
 .timeline-item p {
@@ -338,7 +363,7 @@ code {
 .highlight-numbers-layout .big-number {
     font-size: 160px;
     font-weight: 800;
-    color: #e60012;
+    color: var(--theme-primary);
     line-height: 1;
 }
 
@@ -384,14 +409,14 @@ code {
     width: 100px;
     border: none;
     height: 3px;
-    background: #e60012;
+    background: var(--theme-primary);
     margin-bottom: 30px;
     border-radius: 2px;
 }
 
 .section-title-layout h2 {
     font-size: 64px;
-    color: #1a1a1a;
+    color: var(--theme-text-heading);
 }
 
 /* 4. REVEAL.JS OVERRIDES */
@@ -420,7 +445,7 @@ code {
     left: 0;
     right: 0;
     height: 4px;
-    background: #e60012;
+    background: var(--theme-primary);
     z-index: 10;
 }
 
@@ -429,10 +454,10 @@ code {
 }
 
 .reveal .slide-number {
-    color: #999999;
-    background: rgba(255, 255, 255, 0.9);
+    color: var(--theme-text-muted);
+    background: rgba(var(--theme-background-rgb), 0.9);
     font-family: 'Roboto Mono', monospace;
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--theme-border);
     border-radius: 4px;
 }
 
@@ -440,9 +465,9 @@ code {
 .reveal .controls .navigate-right,
 .reveal .controls .navigate-up,
 .reveal .controls .navigate-down {
-    color: #e60012;
+    color: var(--theme-primary);
 }
 
 .reveal .progress span {
-    background: #e60012;
+    background: var(--theme-primary);
 }

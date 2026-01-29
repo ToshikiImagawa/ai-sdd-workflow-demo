@@ -10,17 +10,17 @@ export function ConstitutionSlide() {
                         </p>
                         <div
                             style={{
-                                background: '#f5f5f5',
+                                background: 'var(--theme-background-alt)',
                                 padding: '20px',
                                 borderRadius: '8px',
-                                border: '1px solid #e0e0e0',
+                                border: '1px solid var(--theme-border)',
                                 marginTop: '20px',
                             }}
                         >
-                            <code style={{ display: 'block', color: '#e60012', marginBottom: '10px' }}>
+                            <code style={{display: 'block', color: 'var(--theme-primary)', marginBottom: '10px'}}>
                                 &gt; Hierarchy of Truth
                             </code>
-                            <ul style={{ margin: 0, paddingLeft: '20px', color: '#1a1a1a' }}>
+                            <ul style={{margin: 0, paddingLeft: '20px', color: 'var(--theme-text-heading)'}}>
                                 <li>
                                     1. <strong>PRD</strong> (Why &amp; What)
                                 </li>

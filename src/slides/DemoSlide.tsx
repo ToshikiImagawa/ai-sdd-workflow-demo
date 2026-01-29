@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import {useEffect, useRef, useState} from 'react';
 import logText from '../../assets/demo-log.txt?raw';
 import styles from './DemoSlide.module.css';
 
@@ -42,7 +42,7 @@ export function DemoSlide() {
         if (!el) return;
         const observer = new IntersectionObserver(
             ([entry]) => setVisible(entry.isIntersecting),
-            { threshold: 0.5 },
+            {threshold: 0.5},
         );
         observer.observe(el);
         return () => observer.disconnect();
@@ -99,19 +99,20 @@ export function DemoSlide() {
             <div className="bleed-content">
                 <h2>Demo Flow</h2>
                 <p>わずか数コマンドで、要件定義から実装準備まで完了します。</p>
-                <ul style={{ marginTop: '20px', fontFamily: "'Roboto Mono'", fontSize: '18px' }}>
-                    <li style={{ color: '#1a1a1a', marginBottom: '10px' }}>$ /sdd_init</li>
-                    <li style={{ color: '#1a1a1a', marginBottom: '10px' }}>$ /generate_prd "To-Do App"</li>
-                    <li style={{ color: '#1a1a1a', marginBottom: '10px' }}>$ /generate_spec</li>
-                    <li style={{ color: '#e60012', marginBottom: '10px' }}>$ /task_breakdown</li>
-                    <li style={{ color: '#1a1a1a' }}>$ /implement</li>
+                <ul style={{marginTop: '20px', fontFamily: "'Roboto Mono'", fontSize: '18px'}}>
+                    <li style={{color: 'var(--theme-text-heading)', marginBottom: '10px'}}>$ /sdd_init</li>
+                    <li style={{color: 'var(--theme-text-heading)', marginBottom: '10px'}}>$ /generate_prd "To-Do App"
+                    </li>
+                    <li style={{color: 'var(--theme-text-heading)', marginBottom: '10px'}}>$ /generate_spec</li>
+                    <li style={{color: 'var(--theme-primary)', marginBottom: '10px'}}>$ /task_breakdown</li>
+                    <li style={{color: 'var(--theme-text-heading)'}}>$ /implement</li>
                 </ul>
             </div>
             <div className={styles['terminal-window']}>
                 <div className={styles['terminal-titlebar']}>
-                    <span className={`${styles['terminal-dot']} ${styles['terminal-dot-red']}`} />
-                    <span className={`${styles['terminal-dot']} ${styles['terminal-dot-yellow']}`} />
-                    <span className={`${styles['terminal-dot']} ${styles['terminal-dot-green']}`} />
+                    <span className={`${styles['terminal-dot']} ${styles['terminal-dot-red']}`}/>
+                    <span className={`${styles['terminal-dot']} ${styles['terminal-dot-yellow']}`}/>
+                    <span className={`${styles['terminal-dot']} ${styles['terminal-dot-green']}`}/>
                     <span className={styles['terminal-title']}>Terminal</span>
                 </div>
                 <div ref={terminalBodyRef} className={styles['terminal-body']}>
@@ -128,9 +129,10 @@ export function DemoSlide() {
                         // 現在の行（コマンド行ならタイプ中）
                         if (i === lineIndex && isCommandLine(line)) {
                             return (
-                                <div key={i} className={`${styles['terminal-line']} ${styles['line-visible']} ${getLineClassName(line)}`}>
+                                <div key={i}
+                                     className={`${styles['terminal-line']} ${styles['line-visible']} ${getLineClassName(line)}`}>
                                     {line.slice(0, charIndex)}
-                                    <span className={styles.cursor} />
+                                    <span className={styles.cursor}/>
                                 </div>
                             );
                         }
@@ -146,7 +148,8 @@ export function DemoSlide() {
 
                         // 完了済みの行
                         return (
-                            <div key={i} className={`${styles['terminal-line']} ${styles['line-visible']} ${getLineClassName(line)}`}>
+                            <div key={i}
+                                 className={`${styles['terminal-line']} ${styles['line-visible']} ${getLineClassName(line)}`}>
                                 {line || '\u00A0'}
                             </div>
                         );
