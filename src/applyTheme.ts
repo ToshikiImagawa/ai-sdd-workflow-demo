@@ -1,4 +1,4 @@
-import theme from './theme-colors.json';
+import theme from '../assets/theme-colors.json';
 
 function hexToRgb(hex: string): string {
     const r = parseInt(hex.slice(1, 3), 16);
