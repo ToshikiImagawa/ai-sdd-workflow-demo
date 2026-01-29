@@ -1,5 +1,3 @@
-import theme from '../assets/theme-colors.json';
-
 function hexToRgb(hex: string): string {
     const r = parseInt(hex.slice(1, 3), 16);
     const g = parseInt(hex.slice(3, 5), 16);
@@ -21,7 +19,15 @@ const keyToCssVar: Record<string, string> = {
     codeText: '--theme-code-text',
 };
 
-export function applyTheme() {
+export async function applyTheme() {
+    let theme: Record<string, string>;
+    try {
+        const res = await fetch('/theme-colors.json');
+        if (!res.ok) return;
+        theme = await res.json();
+    } catch {
+        return;
+    }
     const root = document.documentElement;
     for (const [key, value] of Object.entries(theme)) {
         const cssVar = keyToCssVar[key];

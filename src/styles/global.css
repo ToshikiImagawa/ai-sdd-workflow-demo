@@ -1,27 +1,27 @@
 /* CSS variable fallbacks (overridden at runtime by applyTheme) */
 :root {
-    --theme-primary: #e60012;
-    --theme-primary-rgb: 230, 0, 18;
-    --theme-background: #ffffff;
-    --theme-background-rgb: 255, 255, 255;
-    --theme-background-alt: #f5f5f5;
-    --theme-background-alt-rgb: 245, 245, 245;
-    --theme-background-grid: #e8e8e8;
-    --theme-background-grid-rgb: 232, 232, 232;
-    --theme-text-heading: #1a1a1a;
-    --theme-text-heading-rgb: 26, 26, 26;
-    --theme-text-body: #666666;
-    --theme-text-body-rgb: 102, 102, 102;
-    --theme-text-subtitle: #444444;
-    --theme-text-subtitle-rgb: 68, 68, 68;
-    --theme-text-muted: #999999;
-    --theme-text-muted-rgb: 153, 153, 153;
-    --theme-border: #e0e0e0;
-    --theme-border-rgb: 224, 224, 224;
-    --theme-border-light: #cccccc;
-    --theme-border-light-rgb: 204, 204, 204;
-    --theme-code-text: #d63384;
-    --theme-code-text-rgb: 214, 51, 132;
+    --theme-primary: #6c5ce7;
+    --theme-primary-rgb: 108, 92, 231;
+    --theme-background: #1a1a2e;
+    --theme-background-rgb: 26, 26, 46;
+    --theme-background-alt: #16213e;
+    --theme-background-alt-rgb: 22, 33, 62;
+    --theme-background-grid: #232946;
+    --theme-background-grid-rgb: 35, 41, 70;
+    --theme-text-heading: #eaeaea;
+    --theme-text-heading-rgb: 234, 234, 234;
+    --theme-text-body: #a0a0b8;
+    --theme-text-body-rgb: 160, 160, 184;
+    --theme-text-subtitle: #c0c0d0;
+    --theme-text-subtitle-rgb: 192, 192, 208;
+    --theme-text-muted: #6c6c80;
+    --theme-text-muted-rgb: 108, 108, 128;
+    --theme-border: #2e2e48;
+    --theme-border-rgb: 46, 46, 72;
+    --theme-border-light: #3a3a58;
+    --theme-border-light-rgb: 58, 58, 88;
+    --theme-code-text: #a78bfa;
+    --theme-code-text-rgb: 167, 139, 250;
 }
 
 /* 0. KEYFRAMES */
