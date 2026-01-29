@@ -1,7 +1,6 @@
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import Typography from '@mui/material/Typography'
 import logText from '../../assets/demo-log.txt?raw'
+import {CommandList} from '../components/CommandList'
+import {SlideHeading} from '../components/SlideHeading'
 import {TerminalAnimation} from '../components/TerminalAnimation'
 import {BleedLayout} from '../layouts'
 
@@ -19,17 +18,8 @@ export function DemoSlide() {
       id="slide9"
       left={
         <>
-          <Typography variant="h2" sx={{mb: '20px'}}>
-            Demo Flow
-          </Typography>
-          <Typography variant="body1">わずか数コマンドで、要件定義から実装準備まで完了します。</Typography>
-          <List disablePadding sx={{mt: '20px', fontFamily: "'Roboto Mono'", fontSize: '18px'}}>
-            {commands.map((cmd) => (
-              <ListItem key={cmd.text} disablePadding sx={{color: cmd.color, mb: '10px'}}>
-                {cmd.text}
-              </ListItem>
-            ))}
-          </List>
+          <SlideHeading title="Demo Flow" description="わずか数コマンドで、要件定義から実装準備まで完了します。" />
+          <CommandList commands={commands} sx={{mt: '20px'}} />
         </>
       }
       right={<TerminalAnimation logText={logText} />}
