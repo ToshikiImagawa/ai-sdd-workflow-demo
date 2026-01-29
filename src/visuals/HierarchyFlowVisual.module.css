@@ -1,4 +1,18 @@
 /* --- HIERARCHY VISUALIZATION --- */
+@keyframes nodePulse {
+  0%,
+  13%,
+  100% {
+    transform: scale(1);
+    box-shadow: none;
+  }
+  5%,
+  8% {
+    transform: scale(1.08);
+    box-shadow: 0 4px 16px rgba(var(--theme-primary-rgb), 0.25);
+  }
+}
+
 @keyframes hierarchyDropDown {
   0% {
     top: 18%;
@@ -68,6 +82,22 @@
   border-style: dashed;
   color: var(--theme-text-muted);
   opacity: 0.8;
+}
+
+.node-pulse-1 {
+  animation: nodePulse 3s infinite ease-in-out 0.3s;
+}
+
+.node-pulse-2 {
+  animation: nodePulse 3s infinite ease-in-out 1.1s;
+}
+
+.node-pulse-3 {
+  animation: nodePulse 3s infinite ease-in-out 1.9s;
+}
+
+.node-pulse-4 {
+  animation: nodePulse 3s infinite ease-in-out 2.5s;
 }
 
 .hierarchy-arrow {
