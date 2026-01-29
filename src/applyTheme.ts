@@ -19,7 +19,17 @@ const keyToCssVar: Record<string, string> = {
     codeText: '--theme-code-text',
 };
 
+function checkLogo() {
+    const img = new Image();
+    img.src = '/logo.png';
+    img.onerror = () => {
+        document.documentElement.classList.add('no-logo');
+    };
+}
+
 export async function applyTheme() {
+    checkLogo();
+
     let theme: Record<string, string>;
     try {
         const res = await fetch('/theme-colors.json');
