@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box'
-import Divider from '@mui/material/Divider'
 import Typography from '@mui/material/Typography'
 import {FallbackImage} from '../components/FallbackImage'
+import {UnderlinedHeading} from '../components/UnderlinedHeading'
 import {SectionLayout} from '../layouts'
 
 const GitHubIcon = () => (
@@ -13,17 +13,7 @@ const GitHubIcon = () => (
 export function SummarySlide() {
   return (
     <SectionLayout id="slide10">
-      <Typography variant="h2" sx={{fontSize: '64px', color: 'var(--theme-text-heading)'}}>
-        Start SDD Today
-      </Typography>
-      <Divider
-        sx={{
-          width: '100px',
-          borderWidth: '1.5px',
-          borderColor: 'var(--theme-primary)',
-          my: '30px',
-        }}
-      />
+      <UnderlinedHeading sx={{mb: '30px'}}>Start SDD Today</UnderlinedHeading>
       <Typography variant="body1" sx={{fontSize: '24px', maxWidth: '800px', mb: '40px'}}>
         AI開発に「確実性」と「持続可能性」を。
         <br />
