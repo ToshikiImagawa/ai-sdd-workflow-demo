@@ -12,6 +12,7 @@ export function QrCodeCard({ url, size = 200, sx }: Props) {
   return (
     <Box
       sx={{
+        width: 'fit-content',
         background: 'var(--theme-background)',
         p: '20px',
         borderRadius: '12px',
