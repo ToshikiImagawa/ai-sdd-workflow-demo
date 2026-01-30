@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import type { SlideData } from '../data'
 import { resolveComponent } from './ComponentRegistry'
@@ -175,13 +176,17 @@ function renderColumnContent(data: Record<string, unknown> | undefined): ReactNo
   // アクセントテキスト
   if (data.accentText) {
     elements.push(
-      <AccentText key="accentText" sx={{ mt: '20px' }}>
+      <AccentText key="accentText">
         {data.accentText as string}
       </AccentText>,
     )
   }
 
-  return elements.length === 1 ? elements[0] : <>{elements}</>
+  return elements.length === 1 ? (
+    elements[0]
+  ) : (
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>{elements}</Box>
+  )
 }
 
 /** contentスライドの子要素をレンダリング */

@@ -229,14 +229,14 @@
         },
         "right": {
           "titledBulletList": {
-            "title": "利用可能なアドオン",
+            "title": "アドオンの作り方",
             "items": [
-              "<strong>VibeCodingDemo</strong>\nAIのコード生成をユーモラスに表現",
-              "<strong>HierarchyFlowVisual</strong>\nドキュメント階層の流れを可視化",
-              "<strong>PersistenceVisual</strong>\nGit への永続化を表示"
+              "<strong>addons/src/{名前}/entry.ts</strong> を作成",
+              "<code>window.__ADDON_REGISTER__</code> でコンポーネントを登録",
+              "<code>npm run build:addons</code> でビルド"
             ]
           },
-          "accentText": "→ アドオン未ロード時はフォールバック UI を表示"
+          "accentText": "→ addons/ は gitignore 対象のためローカル環境でのみ動作"
         }
       }
     },
