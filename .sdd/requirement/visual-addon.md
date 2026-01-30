@@ -2,7 +2,22 @@
 
 ## 概要
 
-`src/visuals/` 配下のビジュアルコンポーネント（VibeCodingDemo, HierarchyFlowVisual, PersistenceVisual）を「アドオン」として本体コードから分離し、独立したモジュールとして管理可能にする。これにより、プレゼンテーション本体の変更なしにビジュアル要素の追加・削除が可能となり、拡張性と保守性を向上させる。
+`src/visuals/` 配下のビジュアルコンポーネント（VibeCodingDemo, HierarchyFlowVisual,
+PersistenceVisual）を「アドオン」として本体コードから分離し、独立したモジュールとして管理可能にする。これにより、プレゼンテーション本体の変更なしにビジュアル要素の追加・削除が可能となり、拡張性と保守性を向上させる。
+
+## 背景・目的
+
+### 現状の課題
+
+ビジュアルコンポーネントは `src/visuals/` に配置され、`registerDefaults.tsx` で本体のデフォルトコンポーネントとして登録されている。これらは
+AI-SDD デモ用の特化コンポーネントであり、本体の汎用コンポーネント（TerminalAnimation、MUI
+アイコン等）とは性質が異なるが、同じ登録経路で管理されている。この結合により、特定のビジュアル要素の追加・削除が本体コードの変更を伴う。
+
+### ビジネス価値
+
+- **カスタマイズ性向上**: 特定の聴衆や用途に応じてビジュアルセットを選択可能にする
+- **保守性の向上**: ビジュアル要素の変更が本体コードに影響しない
+- **拡張性の向上**: 新しいビジュアルアドオンの追加が import の1行追加で完結する
 
 ---
 
@@ -71,7 +86,6 @@ graph TB
 
 ```mermaid
 requirementDiagram
-
     requirement AddonSystem {
         id: UR_001
         text: "ビジュアルコンポーネントをアドオンとして分離し独立管理できること"
@@ -139,7 +153,8 @@ requirementDiagram
 
 ### UR-001: ビジュアルコンポーネントのアドオン化
 
-開発者がビジュアルコンポーネントをプレゼンテーション本体から独立して管理でき、アドオンの追加・削除がシンプルな操作（import の変更）で完結すること。
+開発者がビジュアルコンポーネントをプレゼンテーション本体から独立して管理でき、アドオンの追加・削除がシンプルな操作（import
+の変更）で完結すること。
 
 **検証方法:** デモンストレーションによる検証
 
@@ -147,7 +162,10 @@ requirementDiagram
 
 ### FR-001: AddonDefinition 型による構造統一
 
+**優先度**: Must
+
 アドオンは統一された型定義（AddonDefinition）に従い、以下の情報を持つ：
+
 - アドオン名（name）
 - 提供するコンポーネント一覧（components）— 各コンポーネントは登録名と React コンポーネントのペア
 
@@ -155,30 +173,56 @@ requirementDiagram
 
 ### FR-002: ComponentRegistry への登録
 
-アドオンが提供するコンポーネントは、既存の ComponentRegistry の `registerComponent`（custom 側）を使用して登録される。これにより、アドオンのコンポーネントはデフォルトコンポーネントを上書き可能となる。
+**優先度**: Must
+
+アドオンが提供するコンポーネントは、既存の ComponentRegistry の `registerComponent`（custom側）を使用して登録される。これにより、アドオンのコンポーネントはデフォルトコンポーネントを上書き可能となる。
 
 **検証方法:** テストによる検証
-
 ### FR-003: import による有効/無効管理
 
-`src/addons/index.ts` で有効なアドオンの一覧を配列としてエクスポートし、アドオンの有効/無効は該当する import 行の追加/削除のみで切り替え可能とする。
+**優先度**: Must
+
+`src/addons/index.ts` で有効なアドオンの一覧を配列としてエクスポートし、アドオンの有効/無効は該当する
+import行の追加/削除のみで切り替え可能とする。
 
 **検証方法:** コードレビュー（インスペクション）による検証
 
 ### FR-004: 既存ビジュアルの移動
 
+**優先度**: Must
+
 以下の3つのビジュアルコンポーネントを `src/visuals/` から `src/addons/ai-sdd-visuals/` に移動し、アドオンとして再構成する：
+
 - VibeCodingDemo
 - HierarchyFlowVisual
 - PersistenceVisual
 
 **検証方法:** テスト（既存テストの通過）による検証
 
-## 4.3. 設計制約
+## 4.3. 非機能要求
+
+### NFR-001: ビルドサイズへの影響
+
+**優先度**: Should
+
+アドオン化によるプロダクションビルドサイズの増加は最小限（ファイル分割による overhead 程度）に抑えること。
+
+**検証方法:** テスト（ビルド前後のサイズ比較）による検証
+
+### NFR-002: 開発者体験
+
+**優先度**: Must
+
+アドオンの追加・削除は `src/addons/index.ts` の import 行の変更のみで完結し、他のファイルの修正を必要としないこと。
+
+**検証方法:** インスペクション（コードレビュー）による検証
+
+## 4.4. 設計制約
 
 ### DC-001: ComponentRegistry 互換性
 
-既存の ComponentRegistry の仕組み（default/custom の二層構造、resolveComponent の優先順位）は変更しない。アドオンは custom 側の登録 API を利用する。
+既存の ComponentRegistry の仕組み（default/custom の二層構造、resolveComponent の優先順位）は変更しない。アドオンは
+custom側の登録 API を利用する。
 
 **検証方法:** コードレビューによる検証
 
@@ -224,10 +268,10 @@ requirementDiagram
 
 # 8. 用語集
 
-| 用語 | 定義 |
-|------|------|
-| アドオン（Addon） | プレゼンテーション本体から独立したコンポーネントのパッケージ単位 |
-| AddonDefinition | アドオンの構造を定義する TypeScript 型 |
-| ComponentRegistry | コンポーネント名から実コンポーネントを解決するレジストリ機構 |
-| default コンポーネント | registerDefaults.tsx で登録される標準コンポーネント |
-| custom コンポーネント | registerComponent で登録され、default を上書き可能なコンポーネント |
+| 用語                | 定義                                             |
+|-------------------|------------------------------------------------|
+| アドオン（Addon）       | プレゼンテーション本体から独立したコンポーネントのパッケージ単位               |
+| AddonDefinition   | アドオンの構造を定義する TypeScript 型                      |
+| ComponentRegistry | コンポーネント名から実コンポーネントを解決するレジストリ機構                 |
+| default コンポーネント   | registerDefaults.tsx で登録される標準コンポーネント           |
+| custom コンポーネント    | registerComponent で登録され、default を上書き可能なコンポーネント |
