@@ -4,52 +4,74 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクト概要
 
-AI-SDDワークフロープラグインのデモ用プレゼンテーション。React + Reveal.js で構築されたスライドアプリケーション。
+React + Reveal.js ベースのスライドプレゼンテーション作成ツール。JSON ファイルでスライド内容やテーマを定義し、ブラウザ上でプレゼンテーションとして表示する。
 
 ## コマンド
 
 ```bash
-npm run dev      # 開発サーバー起動（Vite HMR）
-npm run build    # プロダクションビルド（dist/ に出力）
-npm run preview  # ビルド済みファイルのプレビュー
-npm run format   # Prettier でコード整形（src/**/*.{ts,tsx,css}）
+npm run dev          # 開発サーバー起動（アドオンビルド + Vite HMR）
+npm run build        # プロダクションビルド（アドオンビルド + dist/ に出力）
+npm run build:addons # アドオンのみビルド
+npm run preview      # ビルド済みファイルのプレビュー
+npm run format       # Prettier でコード整形（src/**/*.{ts,tsx,css}）
+npm run typecheck    # TypeScript 型チェック
+npm run test         # テスト実行（Vitest）
+npm run test:watch   # テスト監視モード
 ```
 
 ## アーキテクチャ
 
-React コンポーネントで各スライドを定義し、Reveal.js でプレゼンテーションとして描画する構成。
+### データ駆動型スライドシステム
+
+スライドは React コンポーネントではなく **JSON データ**で定義する。`public/slides.json` を配置するとカスタムスライドを表示し、存在しない場合は `src/data/default-slides.json` のテンプレートガイドを表示する。
+
+### 起動フロー
 
 ```
-src/
-├── App.tsx          # Reveal.js 初期化とスライド配置（ルート）
-├── main.tsx         # エントリポイント
-├── slides/          # 各スライド（独立した React コンポーネント、10枚）
-├── components/      # 再利用可能な UI パーツ
-├── layouts/         # スライド構造のラッパー（4種）
-├── visuals/         # 複雑なアニメーション付きビジュアル
-├── hooks/           # カスタムフック（useReveal）
-├── styles/          # グローバル CSS（変数、アニメーション、Reveal.js オーバーライド）
-├── theme.ts         # MUI テーマ設定
-└── reveal.d.ts      # Reveal.js の TypeScript 型定義
+main.tsx
+├── applyTheme()           # public/theme-colors.json から色を適用
+├── loadAddons()           # addons/manifest.json → script 挿入 → ComponentRegistry に登録
+├── fetch('/slides.json')  # カスタムスライドデータのロード
+└── <App presentationData={data} />
+    ├── registerDefaultComponents()
+    ├── loadPresentationData()   # バリデーション + フォールバック
+    ├── applyThemeData()         # slides.json 内の theme フィールド適用
+    ├── useReveal()              # Reveal.js 初期化
+    └── <SlideRenderer />        # layout に基づきスライド描画
 ```
 
-### スライドの追加・削除
+### コンポーネントシステム
 
-`App.tsx` の `<div className="slides">` 内でコンポーネントの追加・削除を行う。並び順がスライドの順序になる。
+`ComponentRegistry` がすべてのコンポーネントを一元管理する。3つのレイヤーがある。
 
-### コンポーネント設計パターン
+1. **デフォルトコンポーネント** — `registerDefaults.tsx` で登録（`TerminalAnimation`, MUI アイコン等）
+2. **アドオンコンポーネント** — `window.__ADDON_REGISTER__()` 経由で登録
+3. **フォールバック** — 未登録コンポーネント参照時に表示
 
-- **slides/** — コンテナコンポーネント。レイアウトと共通コンポーネントを組み合わせてスライドを構成する
-- **layouts/** — 構造ラッパー。`ContentLayout`（タイトル付き左寄せ）、`TitleLayout`（中央寄せ）、`SectionLayout`（セクション区切り）、`BleedLayout`（2カラム全幅）の4種
-- **components/** — 再利用可能な UI パーツ（`SlideHeading`, `BulletList`, `TwoColumnGrid`, `FeatureTileGrid`, `CodeBlockPanel`, `Timeline` 等）
-- **visuals/** — アニメーション付き複合ビジュアル（`HierarchyFlowVisual`, `PersistenceVisual`, `VibeCodingDemo`, `TerminalAnimation`）
+スライド JSON から `{ "component": { "name": "Foo", "props": {} } }` で参照する。
+
+### アドオンシステム
+
+`addons/src/{アドオン名}/entry.ts` を自動検出し、IIFE 形式でバンドルする。`addon-bridge.ts` が `window.React` 等をグローバル公開し、アドオンから利用可能にする。ビルド時に `addons/dist/manifest.json` を自動生成。
+
+### レイアウト
+
+`SlideRenderer` が `layout` フィールドに基づいて描画関数を切り替える。レイアウトラッパーとして `ContentLayout`（左寄せ）、`TitleLayout`（中央寄せ）、`SectionLayout`（セクション区切り）、`BleedLayout`（2カラム全幅）の4種がある。
+
+### テーマシステム
+
+2つの方法でカスタマイズ可能:
+- `slides.json` の `theme` フィールド（色・フォント・カスタム CSS）
+- `public/theme-colors.json`（色のみ）
+
+いずれも `applyTheme.ts` が CSS 変数（`--theme-primary`, `--theme-background` 等）を `document.documentElement.style` に設定する。全色に `-rgb` 変数もあり `rgba()` で使用可能。
 
 ### スタイリング規約
 
-- **CSS 変数**（`src/styles/global.css`）: テーマカラー定義（`--theme-primary`, `--theme-background` 等）。全色に `-rgb` 変数もあり `rgba()` で使用可能
+- **CSS 変数**（`src/styles/global.css`）: テーマカラー・フォント定義
 - **グローバル CSS**: レイアウトシステム、アニメーション（`fadeInUp`）、Reveal.js オーバーライド
-- **CSS Modules**: 複雑なコンポーネント固有のスタイル（`Timeline.module.css` 等）
-- **MUI `sx` prop**: インラインの微調整やレスポンシブ対応
+- **CSS Modules**: 複雑なコンポーネント固有スタイル（`Timeline.module.css` 等）
+- **MUI `sx` prop**: インラインの微調整
 
 ## AI-SDD Instructions (v2.4.2)
 <!-- sdd-workflow version: "2.4.2" -->
