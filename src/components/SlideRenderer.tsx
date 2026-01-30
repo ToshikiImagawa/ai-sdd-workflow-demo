@@ -58,9 +58,26 @@ function renderIcon(iconName: string): ReactNode {
   return <IconComponent />
 }
 
-/** タイトルスライドをレンダリング */
-function renderTitleSlide(slide: SlideData): ReactNode {
+/** centerスライドをレンダリング（variant: "section" でSectionLayout） */
+function renderCenterSlide(slide: SlideData): ReactNode {
   const { content } = slide
+  const variant = content.variant as string | undefined
+
+  if (variant === 'section') {
+    return (
+      <SectionLayout id={slide.id} meta={slide.meta}>
+        <UnderlinedHeading sx={{ mb: '30px' }}>{content.title}</UnderlinedHeading>
+        {content.body && (
+          <Typography variant="body1" sx={{ fontSize: '24px', maxWidth: '800px', mb: '40px' }}>
+            {renderWithLineBreaks(content.body)}
+          </Typography>
+        )}
+        {typeof content.githubUrl === 'string' && <QrCodeCard url={content.githubUrl} sx={{ mb: '30px' }} />}
+        {typeof content.githubRepo === 'string' && <GitHubLink repo={content.githubRepo} sx={{ mt: '10px' }} />}
+      </SectionLayout>
+    )
+  }
+
   return (
     <TitleLayout id={slide.id} meta={slide.meta}>
       <SlideHeading title={content.title ?? ''} variant="h1" sx={{ color: 'var(--theme-text-heading)' }} />
@@ -167,44 +184,41 @@ function renderColumnContent(data: Record<string, unknown> | undefined): ReactNo
   return elements.length === 1 ? elements[0] : <>{elements}</>
 }
 
-/** ワークフロースライドをレンダリング */
-function renderWorkflowSlide(slide: SlideData): ReactNode {
-  const { content } = slide
-  const steps = content.steps as Array<{ number: number; title: string; description: string; command: string }>
+/** contentスライドの子要素をレンダリング */
+function renderContentChildren(content: SlideData['content']): ReactNode {
+  // steps があれば Timeline
+  if (content.steps) {
+    const steps = content.steps as Array<{ number: number; title: string; description: string; command: string }>
+    return (
+      <>
+        <Timeline
+          items={steps.map((step) => (
+            <TimelineNode key={step.number} number={step.number} title={step.title}>
+              <Typography variant="body2">
+                {step.description}
+                {step.command && (
+                  <>
+                    <br />
+                    <code>{step.command}</code>
+                  </>
+                )}
+              </Typography>
+            </TimelineNode>
+          ))}
+        />
+        {typeof content.footer === 'string' && (
+          <Typography variant="body1" sx={{ textAlign: 'center', mt: '40px', fontStyle: 'italic' }}>
+            {content.footer}
+          </Typography>
+        )}
+      </>
+    )
+  }
 
-  return (
-    <ContentLayout id={slide.id} title={content.title ?? ''} meta={slide.meta}>
-      <Timeline
-        items={steps.map((step) => (
-          <TimelineNode key={step.number} number={step.number} title={step.title}>
-            <Typography variant="body2">
-              {step.description}
-              {step.command && (
-                <>
-                  <br />
-                  <code>{step.command}</code>
-                </>
-              )}
-            </Typography>
-          </TimelineNode>
-        ))}
-      />
-      {typeof content.footer === 'string' && (
-        <Typography variant="body1" sx={{ textAlign: 'center', mt: '40px', fontStyle: 'italic' }}>
-          {content.footer}
-        </Typography>
-      )}
-    </ContentLayout>
-  )
-}
-
-/** フィーチャースライドをレンダリング */
-function renderFeaturesSlide(slide: SlideData): ReactNode {
-  const { content } = slide
-  const tiles = content.tiles as Array<{ icon: string; title: string; description: string }>
-
-  return (
-    <ContentLayout id={slide.id} title={content.title ?? ''} meta={slide.meta}>
+  // tiles があれば FeatureTileGrid
+  if (content.tiles) {
+    const tiles = content.tiles as Array<{ icon: string; title: string; description: string }>
+    return (
       <FeatureTileGrid
         tiles={tiles.map((tile) => ({
           icon: renderIcon(tile.icon),
@@ -212,12 +226,29 @@ function renderFeaturesSlide(slide: SlideData): ReactNode {
           description: renderHtml(tile.description),
         }))}
       />
+    )
+  }
+
+  // component があればそれを描画
+  if (content.component) {
+    return renderComponent(content.component)
+  }
+
+  return null
+}
+
+/** contentスライドをレンダリング */
+function renderContentSlide(slide: SlideData): ReactNode {
+  const { content } = slide
+  return (
+    <ContentLayout id={slide.id} title={content.title ?? ''} meta={slide.meta}>
+      {renderContentChildren(content)}
     </ContentLayout>
   )
 }
 
-/** デモスライドをレンダリング */
-function renderDemoSlide(slide: SlideData): ReactNode {
+/** bleedスライドをレンダリング */
+function renderBleedSlide(slide: SlideData): ReactNode {
   const { content } = slide
   const commands = content.commands as Array<{ text: string; color: string }>
 
@@ -234,45 +265,24 @@ function renderDemoSlide(slide: SlideData): ReactNode {
   return <BleedLayout id={slide.id} meta={slide.meta} left={leftContent} right={rightContent} />
 }
 
-/** サマリースライドをレンダリング */
-function renderSummarySlide(slide: SlideData): ReactNode {
-  const { content } = slide
-  return (
-    <SectionLayout id={slide.id} meta={slide.meta}>
-      <UnderlinedHeading sx={{ mb: '30px' }}>{content.title}</UnderlinedHeading>
-      {content.body && (
-        <Typography variant="body1" sx={{ fontSize: '24px', maxWidth: '800px', mb: '40px' }}>
-          {renderWithLineBreaks(content.body)}
-        </Typography>
-      )}
-      {typeof content.githubUrl === 'string' && <QrCodeCard url={content.githubUrl} sx={{ mb: '30px' }} />}
-      {typeof content.githubRepo === 'string' && <GitHubLink repo={content.githubRepo} sx={{ mt: '10px' }} />}
-    </SectionLayout>
-  )
-}
-
 /** 単一スライドをレイアウト種別に応じてレンダリング */
 function renderSlide(slide: SlideData): ReactNode {
   switch (slide.layout) {
-    case 'title':
-      return renderTitleSlide(slide)
+    case 'center':
+      return renderCenterSlide(slide)
     case 'two-column':
       return renderTwoColumnSlide(slide)
-    case 'workflow':
-      return renderWorkflowSlide(slide)
-    case 'features':
-      return renderFeaturesSlide(slide)
-    case 'demo':
-      return renderDemoSlide(slide)
-    case 'summary':
-      return renderSummarySlide(slide)
+    case 'content':
+      return renderContentSlide(slide)
+    case 'bleed':
+      return renderBleedSlide(slide)
     case 'custom': {
       const ref = slide.content.component
       if (ref) return renderComponent(ref)
       return null
     }
     default:
-      return renderTitleSlide(slide)
+      return renderCenterSlide(slide)
   }
 }
 

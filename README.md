@@ -35,7 +35,7 @@ npm install
   "slides": [
     {
       "id": "slide-1",
-      "layout": "title",
+      "layout": "center",
       "content": {
         "title": "タイトルスライド",
         "subtitle": "サブタイトル"
@@ -49,15 +49,28 @@ npm install
 
 各スライドの `layout` フィールドで、以下のレイアウトを指定できます。
 
-| layout       | 用途          | 主なフィールド                            |
-|--------------|-------------|------------------------------------|
-| `title`      | 表紙・タイトル     | `title`, `subtitle`                |
-| `two-column` | 左右2カラム      | `title`, `left`, `right`           |
-| `workflow`   | ワークフロー・手順   | `title`, `steps[]`                 |
-| `features`   | 機能紹介タイル     | `title`, `tiles[]`                 |
-| `demo`       | デモ表示        | `title`, `commands[]`, `component` |
-| `summary`    | まとめ         | `title`, `body`, `githubUrl`       |
-| `custom`     | カスタムコンポーネント | `component`                        |
+| layout       | 用途              | 主なフィールド                            |
+|--------------|-----------------|--------------------------------------|
+| `center`     | 表紙・タイトル・まとめ | `title`, `subtitle`, `variant`       |
+| `content`    | コンテンツ表示      | `title`, `steps[]` / `tiles[]` / `component` |
+| `two-column` | 左右2カラム        | `title`, `left`, `right`             |
+| `bleed`      | 2カラム全幅        | `title`, `commands[]`, `component`   |
+| `custom`     | カスタムコンポーネント  | `component`                          |
+
+`center` レイアウトは `variant` フィールドで表示を切り替えます。
+
+| variant     | 説明                                   |
+|-------------|--------------------------------------|
+| （未指定）      | TitleLayout（タイトル・サブタイトル表示）           |
+| `"section"` | SectionLayout（まとめ表示。`body`, `githubUrl` 等を使用） |
+
+`content` レイアウトは子要素のフィールドで描画内容が決まります。
+
+| フィールド     | 描画内容         |
+|-----------|--------------|
+| `steps`   | Timeline     |
+| `tiles`   | FeatureTileGrid |
+| `component` | カスタムコンポーネント |
 
 ### two-column レイアウトの詳細
 
@@ -95,7 +108,7 @@ npm install
 ```json
 {
   "id": "slide-1",
-  "layout": "title",
+  "layout": "center",
   "content": {
     "title": "タイトル"
   },

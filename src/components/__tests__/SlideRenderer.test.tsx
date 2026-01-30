@@ -29,7 +29,7 @@ describe('SlideRenderer', () => {
     }
   })
 
-  it('タイトルスライドにh1要素が含まれる', () => {
+  it('centerスライドにh1要素が含まれる', () => {
     const titleSlide = defaultPresentationData.slides[0]
     const { container } = renderWithTheme(<SlideRenderer slides={[titleSlide]} />)
     const h1 = container.querySelector('h1')
@@ -45,8 +45,8 @@ describe('SlideRenderer', () => {
     expect(h2?.textContent).toBe(contentSlide.content.title)
   })
 
-  it('workflowスライドにステップが含まれる', () => {
-    const workflowSlide = defaultPresentationData.slides.find((s) => s.layout === 'workflow')!
+  it('contentスライド(steps)にステップが含まれる', () => {
+    const workflowSlide = defaultPresentationData.slides.find((s) => s.layout === 'content' && (s.content as Record<string, unknown>).steps)!
     const { container } = renderWithTheme(<SlideRenderer slides={[workflowSlide]} />)
     const steps = (workflowSlide.content as Record<string, unknown>).steps as Array<{ title: string }>
     for (const step of steps) {
@@ -54,8 +54,8 @@ describe('SlideRenderer', () => {
     }
   })
 
-  it('featuresスライドにタイル情報が含まれる', () => {
-    const featuresSlide = defaultPresentationData.slides.find((s) => s.layout === 'features')!
+  it('contentスライド(tiles)にタイル情報が含まれる', () => {
+    const featuresSlide = defaultPresentationData.slides.find((s) => s.layout === 'content' && (s.content as Record<string, unknown>).tiles)!
     const { container } = renderWithTheme(<SlideRenderer slides={[featuresSlide]} />)
     const tiles = (featuresSlide.content as Record<string, unknown>).tiles as Array<{ title: string }>
     for (const tile of tiles) {
@@ -63,8 +63,8 @@ describe('SlideRenderer', () => {
     }
   })
 
-  it('summaryスライドにタイトルが含まれる', () => {
-    const summarySlide = defaultPresentationData.slides.find((s) => s.layout === 'summary')!
+  it('centerスライド(variant: section)にタイトルが含まれる', () => {
+    const summarySlide = defaultPresentationData.slides.find((s) => s.layout === 'center' && (s.content as Record<string, unknown>).variant === 'section')!
     const { container } = renderWithTheme(<SlideRenderer slides={[summarySlide]} />)
     expect(container.textContent).toContain(summarySlide.content.title)
   })
@@ -72,7 +72,7 @@ describe('SlideRenderer', () => {
   it('metaが指定されたスライドにdata-transition属性が設定される', () => {
     const slideWithMeta = {
       id: 'test-meta',
-      layout: 'title' as const,
+      layout: 'center' as const,
       content: { title: 'Test' },
       meta: { transition: 'fade' },
     }

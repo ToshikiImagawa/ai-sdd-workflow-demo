@@ -17,12 +17,8 @@ export function TwoColumnGrid({ left, right }: Props) {
         alignItems: 'start',
       }}
     >
-      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%', overflow: 'hidden' }}>
-        {left}
-      </Box>
-      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%', overflow: 'hidden' }}>
-        {right}
-      </Box>
+      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%', overflow: 'hidden' }}>{left}</Box>
+      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%', overflow: 'hidden' }}>{right}</Box>
     </Box>
   )
 }

@@ -6,7 +6,7 @@
   "slides": [
     {
       "id": "guide-title",
-      "layout": "title",
+      "layout": "center",
       "content": {
         "title": "Slide Template Guide",
         "subtitle": "利用可能なレイアウトとコンポーネントの紹介\n<code>public/slides.json</code> を配置してカスタマイズできます"
@@ -84,9 +84,9 @@
     },
     {
       "id": "guide-workflow",
-      "layout": "workflow",
+      "layout": "content",
       "content": {
-        "title": "layout: \"workflow\" — タイムライン",
+        "title": "layout: \"content\" — タイムライン (steps)",
         "steps": [
           {"number": 1, "title": "Step Title", "description": "各ステップの説明文", "command": "/command_name"},
           {"number": 2, "title": "Step Title", "description": "command はオプション"},
@@ -98,9 +98,9 @@
     },
     {
       "id": "guide-features",
-      "layout": "features",
+      "layout": "content",
       "content": {
-        "title": "layout: \"features\" — タイルグリッド",
+        "title": "layout: \"content\" — タイルグリッド (tiles)",
         "tiles": [
           {
             "icon": "Description",
@@ -122,9 +122,9 @@
     },
     {
       "id": "guide-demo",
-      "layout": "demo",
+      "layout": "bleed",
       "content": {
-        "title": "layout: \"demo\" — 2カラム全幅",
+        "title": "layout: \"bleed\" — 2カラム全幅",
         "titleDescription": "titleDescription: 左カラムにタイトル補足を表示",
         "commands": [
           {"text": "$ commands[0].text", "color": "var(--theme-text-heading)"},
@@ -164,7 +164,7 @@
               "Icon:Search"
             ]
           },
-          "accentText": "→ features レイアウトの icon に名前を指定して使用"
+          "accentText": "→ content レイアウトの tiles の icon に名前を指定して使用"
         }
       }
     },
@@ -239,9 +239,10 @@
     },
     {
       "id": "guide-summary",
-      "layout": "summary",
+      "layout": "center",
       "content": {
-        "title": "layout: \"summary\"",
+        "variant": "section",
+        "title": "layout: \"center\" (variant: \"section\")",
         "body": "大きなタイトルと本文テキスト。\nQR コードと GitHub リンクを表示できます。",
         "githubUrl": "https://github.com/ToshikiImagawa/ai-sdd-workflow-demo",
         "githubRepo": "ToshikiImagawa/ai-sdd-workflow-demo"
