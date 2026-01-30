@@ -64,14 +64,20 @@
             "items": [
               "\"right\": {",
               "  \"component\": {",
-              "    \"name\": \"VibeCodingDemo\"",
+              "    \"name\": \"TerminalAnimation\",",
+              "    \"props\": {",
+              "      \"logTextUrl\": \"/demo-log.txt\"",
+              "    }",
               "  }",
               "}"
             ]
           }
         },
         "right": {
-          "component": {"name": "VibeCodingDemo"}
+          "component": {
+            "name": "TerminalAnimation",
+            "props": {"logTextUrl": "/demo-log.txt"}
+          }
         }
       }
     },
@@ -134,18 +140,8 @@
       "id": "guide-custom",
       "layout": "two-column",
       "content": {
-        "title": "登録済みビジュアルコンポーネント一覧",
+        "title": "デフォルト登録コンポーネント一覧",
         "left": {
-          "titledBulletList": {
-            "title": "ビジュアル (props なし)",
-            "items": [
-              "<strong>VibeCodingDemo</strong>\nAIのコード生成をユーモラスに表現",
-              "<strong>HierarchyFlowVisual</strong>\nドキュメント階層の流れを可視化",
-              "<strong>PersistenceVisual</strong>\nGit への永続化を表示"
-            ]
-          }
-        },
-        "right": {
           "titledBulletList": {
             "title": "TerminalAnimation",
             "description": "アニメーション付きターミナル表示",
@@ -153,7 +149,9 @@
               "<strong>logTextUrl</strong>: ログファイルの URL\n例: \"/demo-log.txt\"",
               "logTextUrl 省略時は組み込みデフォルトを使用"
             ]
-          },
+          }
+        },
+        "right": {
           "codeBlock": {
             "header": "> 登録済み MUI アイコン",
             "items": [
@@ -163,7 +161,43 @@
               "Icon:Memory",
               "Icon:Search"
             ]
+          },
+          "accentText": "→ features レイアウトの icon に名前を指定して使用"
+        }
+      }
+    },
+    {
+      "id": "guide-addon",
+      "layout": "two-column",
+      "content": {
+        "title": "アドオンコンポーネント",
+        "left": {
+          "paragraphs": [
+            "<code>addons/src/</code> にコンポーネントを配置すると、動的に登録されスライドから利用できます。"
+          ],
+          "items": [
+            {"text": "自動登録:", "emphasis": true, "description": " アドオンは起動時に ComponentRegistry へ登録"},
+            {"text": "未ロード時:", "emphasis": true, "description": " フォールバック表示（コンポーネント名を表示）"}
+          ],
+          "codeBlock": {
+            "header": "> JSON での指定例",
+            "items": [
+              "\"component\": {",
+              "  \"name\": \"VibeCodingDemo\"",
+              "}"
+            ]
           }
+        },
+        "right": {
+          "titledBulletList": {
+            "title": "利用可能なアドオン",
+            "items": [
+              "<strong>VibeCodingDemo</strong>\nAIのコード生成をユーモラスに表現",
+              "<strong>HierarchyFlowVisual</strong>\nドキュメント階層の流れを可視化",
+              "<strong>PersistenceVisual</strong>\nGit への永続化を表示"
+            ]
+          },
+          "accentText": "→ アドオン未ロード時はフォールバック UI を表示"
         }
       }
     },

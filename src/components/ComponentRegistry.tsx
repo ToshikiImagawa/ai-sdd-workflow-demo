@@ -7,13 +7,20 @@ const defaultComponents = new Map<string, RegisteredComponent>()
 const customComponents = new Map<string, RegisteredComponent>()
 
 /** フォールバックコンポーネント（未登録名指定時に使用） */
-function FallbackComponent({ name }: { name?: string; [key: string]: unknown }) {
-  return (
-    <div style={{ padding: '16px', border: '1px dashed #888', borderRadius: '8px', textAlign: 'center', opacity: 0.6 }}>
-      <p>Component not found: {name ?? 'unknown'}</p>
-    </div>
-  )
-}
+const FallbackComponent = ({ name }: { name?: string; [_: string]: unknown }) => (
+  <div
+    style={{
+      padding: '16px',
+      border: '1px dashed var(--theme-text-muted)',
+      borderRadius: '8px',
+      textAlign: 'center',
+      color: 'var(--theme-text-body)',
+      opacity: 0.6,
+    }}
+  >
+    <p>Component not found: {name ?? 'unknown'}</p>
+  </div>
+)
 
 /** デフォルトコンポーネントを登録する */
 export function registerDefaultComponent(name: string, component: RegisteredComponent): void {
