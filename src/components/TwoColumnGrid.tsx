@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import Grid from '@mui/material/Grid'
+import Box from '@mui/material/Box'
 
 type Props = {
   left: ReactNode
@@ -8,13 +8,21 @@ type Props = {
 
 export function TwoColumnGrid({ left, right }: Props) {
   return (
-    <Grid container spacing="60px" sx={{ alignItems: 'stretch', height: '100%' }}>
-      <Grid size={6} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', overflow: 'hidden' }}>
+    <Box
+      sx={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+        gap: '60px',
+        height: '100%',
+        alignItems: 'start',
+      }}
+    >
+      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%', overflow: 'hidden' }}>
         {left}
-      </Grid>
-      <Grid size={6} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', overflow: 'hidden' }}>
+      </Box>
+      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%', overflow: 'hidden' }}>
         {right}
-      </Grid>
-    </Grid>
+      </Box>
+    </Box>
   )
 }
