@@ -299,6 +299,9 @@ function SlideRenderer(props: SlideRendererProps): JSX.Element {
 | 統合テスト    | SlideRenderer + レイアウト        | デフォルトデータで10枚全スライド正常レンダリング |
 | ビジュアルテスト | デフォルトデータでのプレゼン表示             | 既存プレゼンとの差異ゼロ（NFR-003）     |
 
+**テスト環境の注意点:**
+- jsdom環境にはIntersectionObserverが存在しないため、`test-setup.ts`でグローバルモックを設定。TerminalAnimationコンポーネントを含むSlideRendererテストで必要
+
 ---
 
 # 9. 設計判断
@@ -315,6 +318,8 @@ function SlideRenderer(props: SlideRendererProps): JSX.Element {
 | 既存スライドの移行   | 一括移行 / 段階的移行                     | 完全データ駆動化（一括移行） | ユーザー選択。全10枚のスライドをJSON化し、SlideRendererで統一レンダリング |
 | レイアウト実装方式 | 個別レイアウトファイル / SlideRenderer集約 | SlideRenderer集約 | 既存の4レイアウト（Title/Content/Bleed/Section）をSlideRenderer内で活用。レイアウト種別ごとのレンダリングロジックをSlideRenderer.tsxに集約 |
 | アイコン解決方式 | コンポーネント直接指定 / 名前ベースレジストリ | 名前ベースレジストリ（Icon:プレフィックス） | JSONから文字列でアイコンを指定可能にするため。registerDefaultsでMUIアイコンを名前登録 |
+| TerminalAnimation注入方式 | props直接指定 / ラッパーコンポーネント | ラッパーコンポーネント（registerDefaults.tsx） | TerminalAnimationはlogText propsが必須だが、デフォルトデータからはコンポーネント参照のみでpropsを渡さないため、`?raw`インポートしたlogTextを事前注入するラッパーが必要 |
+| HTMLコンテンツ処理方式 | Markdownパーサー / dangerouslySetInnerHTML / カスタムパーサー | dangerouslySetInnerHTML | 既存スライドで使用されている`<strong>`, `<code>`, `<br>`タグをJSON文字列から復元するため。コンテンツはすべてアプリ内部のJSON定義であり外部入力ではないためXSSリスクなし |
 
 ## 9.2. 未解決の課題
 
@@ -343,3 +348,11 @@ function SlideRenderer(props: SlideRendererProps): JSX.Element {
 - 実装ステータスを🟢実装済みに更新
 - 設計判断に3項目追加: レイアウト実装方式、アイコン解決方式、既存スライド移行を完全データ駆動化に変更
 - 未解決の課題を更新: JSON化・カスタムコンポーネント登録は解決済み、SlideMeta対応・目視確認を追加
+
+## v0.3.0 (2026-01-30)
+
+**変更内容:**
+
+- 設計判断に2項目追加: TerminalAnimation注入方式、HTMLコンテンツ処理方式
+- テスト戦略にIntersectionObserverモックの注意点を追記
+- task/DEM-001/ の実装ログから設計判断を統合し、タスクログを削除
