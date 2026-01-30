@@ -56,7 +56,15 @@ main.tsx
 
 ### レイアウト
 
-`SlideRenderer` が `layout` フィールドに基づいて描画関数を切り替える。レイアウトラッパーとして `ContentLayout`（左寄せ）、`TitleLayout`（中央寄せ）、`SectionLayout`（セクション区切り）、`BleedLayout`（2カラム全幅）の4種がある。
+`SlideRenderer` が `layout` フィールドに基づいて描画関数を切り替える。構造ベースの5種類:
+
+| layout | ラッパー | 用途 |
+|---|---|---|
+| `center` | TitleLayout / SectionLayout | タイトル・まとめ。`variant: "section"` で SectionLayout を選択 |
+| `content` | ContentLayout | 子要素で描画を判別: `steps` → Timeline, `tiles` → FeatureTileGrid, `component` → カスタム |
+| `two-column` | ContentLayout + TwoColumnGrid | 左右2カラム。`left`/`right` で各カラムの内容を定義 |
+| `bleed` | BleedLayout | 2カラム全幅（端まで広がるレイアウト） |
+| `custom` | なし | `component` で指定したコンポーネントを直接描画 |
 
 ### テーマシステム
 
@@ -72,6 +80,11 @@ main.tsx
 - **グローバル CSS**: レイアウトシステム、アニメーション（`fadeInUp`）、Reveal.js オーバーライド
 - **CSS Modules**: 複雑なコンポーネント固有スタイル（`Timeline.module.css` 等）
 - **MUI `sx` prop**: インラインの微調整
+
+### コード規約
+
+- **Prettier**: セミコロンなし、シングルクォート、末尾カンマ、印刷幅 240
+- **TypeScript**: strict モード、未使用変数・パラメータをエラーとして検出
 
 ## AI-SDD Instructions (v2.4.2)
 <!-- sdd-workflow version: "2.4.2" -->
