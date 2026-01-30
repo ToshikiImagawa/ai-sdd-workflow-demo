@@ -63,12 +63,12 @@
             "header": "> JSON での指定方法",
             "items": [
               "\"right\": {",
-              "  \"component\": {",
-              "    \"name\": \"TerminalAnimation\",",
-              "    \"props\": {",
-              "      \"logTextUrl\": \"/demo-log.txt\"",
-              "    }",
-              "  }",
+              "\u00a0\u00a0\"component\": {",
+              "\u00a0\u00a0\u00a0\u00a0\"name\": \"TerminalAnimation\",",
+              "\u00a0\u00a0\u00a0\u00a0\"props\": {",
+              "\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"logTextUrl\": \"/demo-log.txt\"",
+              "\u00a0\u00a0\u00a0\u00a0}",
+              "\u00a0\u00a0}",
               "}"
             ]
           }
@@ -139,6 +139,43 @@
       }
     },
     {
+      "id": "guide-image-component",
+      "layout": "two-column",
+      "content": {
+        "title": "component: \"Image\" — 画像表示",
+        "left": {
+          "paragraphs": [
+            "<code>component</code> に <code>Image</code> を指定すると、画像を表示できます。",
+            "<code>FallbackImage</code> をラップしており、読み込みエラー時はフォールバック UI を表示します。"
+          ],
+          "codeBlock": {
+            "header": "> JSON での指定方法",
+            "items": [
+              "\"component\": {",
+              "\u00a0\u00a0\"name\": \"Image\",",
+              "\u00a0\u00a0\"props\": {",
+              "\u00a0\u00a0\u00a0\u00a0\"src\": \"https://...\",",
+              "\u00a0\u00a0\u00a0\u00a0\"width\": 320,",
+              "\u00a0\u00a0\u00a0\u00a0\"height\": 320,",
+              "\u00a0\u00a0}",
+              "}"
+            ]
+          }
+        },
+        "right": {
+          "component": {
+            "name": "Image",
+            "props": {
+              "src": "https://avatars.githubusercontent.com/u/6396938?v=4",
+              "width": 320,
+              "height": 320
+            },
+            "style": { "display": "flex", "justifyContent": "center", "alignItems": "center", "height": "100%" }
+          }
+        }
+      }
+    },
+    {
       "id": "guide-custom",
       "layout": "two-column",
       "content": {
@@ -185,7 +222,7 @@
             "header": "> JSON での指定例",
             "items": [
               "\"component\": {",
-              "  \"name\": \"VibeCodingDemo\"",
+              "\u00a0\u00a0\"name\": \"VibeCodingDemo\"",
               "}"
             ]
           }
@@ -213,10 +250,10 @@
             "header": "> meta (各スライド共通)",
             "items": [
               "\"meta\": {",
-              "  \"transition\": \"slide\",",
-              "  \"backgroundColor\": \"#1a1a2e\",",
-              "  \"backgroundImage\": \"/bg.png\",",
-              "  \"notes\": \"スピーカーノート\"",
+              "\u00a0\u00a0\"transition\": \"slide\",",
+              "\u00a0\u00a0\"backgroundColor\": \"#1a1a2e\",",
+              "\u00a0\u00a0\"backgroundImage\": \"/bg.png\",",
+              "\u00a0\u00a0\"notes\": \"スピーカーノート\"",
               "}"
             ]
           }
@@ -226,10 +263,10 @@
             "header": "> theme (プレゼン全体)",
             "items": [
               "\"theme\": {",
-              "  \"colors\": {",
-              "    \"primary\": \"#6c63ff\",",
-              "    \"background\": \"#0f0e17\"",
-              "  }",
+              "\u00a0\u00a0\"colors\": {",
+              "\u00a0\u00a0\u00a0\u00a0\"primary\": \"#6c63ff\",",
+              "\u00a0\u00a0\u00a0\u00a0\"background\": \"#0f0e17\"",
+              "\u00a0\u00a0}",
               "}"
             ]
           },
