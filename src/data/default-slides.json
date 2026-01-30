@@ -1,0 +1,185 @@
+{
+  "meta": {
+    "title": "AI-SDD-Workflow",
+    "description": "脱・Vibe Coding。仕様駆動で実現する、確実なAIソフトウェア開発。"
+  },
+  "slides": [
+    {
+      "id": "slide1",
+      "layout": "title",
+      "content": {
+        "title": "AI-SDD-Workflow",
+        "subtitle": "脱・Vibe Coding。\n仕様駆動で実現する、確実なAIソフトウェア開発。"
+      }
+    },
+    {
+      "id": "slide2",
+      "layout": "two-column",
+      "content": {
+        "title": "Introduction: The Problem",
+        "left": {
+          "heading": "\"Vibe Coding\" の限界",
+          "headingDescription": "AIに対して「いい感じに作って」と指示していませんか？",
+          "items": [
+            {"text": "曖昧な指示:", "emphasis": true, "description": "AIが意図を推測する必要がある"},
+            {"text": "認識のズレ:", "emphasis": true, "description": "推測に基づく実装は、開発者の意図と乖離しやすい"},
+            {"text": "バグの温床:", "emphasis": true, "description": "制御不能なコードが生成される"}
+          ]
+        },
+        "right": {
+          "component": {"name": "VibeCodingDemo"}
+        }
+      }
+    },
+    {
+      "id": "slide3",
+      "layout": "two-column",
+      "content": {
+        "title": "Solution: Single Source of Truth",
+        "left": {
+          "paragraphs": [
+            "AI-SDD-Workflowは、<strong>仕様書（Specification）</strong>をプロジェクトの唯一の真実と定義します。",
+            "曖昧な「雰囲気（Vibe）」ではなく、明確なドキュメントに基づいてAIを制御します。"
+          ]
+        },
+        "right": {
+          "component": {"name": "HierarchyFlowVisual"}
+        }
+      }
+    },
+    {
+      "id": "slide4",
+      "layout": "two-column",
+      "content": {
+        "title": "CONSTITUTION.md: プロジェクト原則",
+        "left": {
+          "paragraphs": [
+            "プロジェクトのルートに配置される「非交渉の原則」。全ての開発プロセスはこのファイルに従います。"
+          ],
+          "codeBlock": {
+            "header": "> Hierarchy of Truth",
+            "items": [
+              "1. <strong>PRD</strong> (Why & What)",
+              "2. <strong>Specification</strong> (How structured)",
+              "3. <strong>Design</strong> (Implementation details)",
+              "4. <strong>Tasks</strong> (Actionable steps)"
+            ]
+          }
+        },
+        "right": {
+          "titledBulletList": {
+            "title": "厳格な依存関係",
+            "items": [
+              "下位ドキュメントは上位ドキュメントに矛盾してはならない",
+              "実装（Task）は必ず設計（Design）に基づく",
+              "「なんとなく実装」を許さないガードレール"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "slide5",
+      "layout": "workflow",
+      "content": {
+        "title": "SDD Workflow Cycle",
+        "steps": [
+          {"number": 1, "title": "Specify", "description": "PRD & 仕様策定", "command": "/generate_prd"},
+          {"number": 2, "title": "Plan", "description": "設計詳細化", "command": "/generate_spec"},
+          {"number": 3, "title": "Task", "description": "タスク分解", "command": "/task_breakdown"},
+          {"number": 4, "title": "Implement", "description": "実装 & レビュー", "command": "/implement"}
+        ],
+        "footer": "AIとの対話を通じて、仕様を段階的に「育てて」いくフロー"
+      }
+    },
+    {
+      "id": "slide6",
+      "layout": "features",
+      "content": {
+        "title": "Powerful Automation",
+        "tiles": [
+          {
+            "icon": "Description",
+            "title": "Auto Review",
+            "description": "ドキュメント生成後、即座にAIレビュアーが起動。人間の介入前に品質を担保します。"
+          },
+          {
+            "icon": "PlaylistAddCheck",
+            "title": "Task Breakdown",
+            "description": "設計書から実装タスクを自動分解。TDDベースの小さなステップで確実な実装を支援。"
+          },
+          {
+            "icon": "Traffic",
+            "title": "Vibe Detector",
+            "description": "ユーザーの指示の曖昧さを3段階（赤/黄/緑）で自動判定し、リスクを警告。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "slide7",
+      "layout": "two-column",
+      "content": {
+        "title": "知識財産の永続化",
+        "left": {
+          "component": {"name": "PersistenceVisual"}
+        },
+        "right": {
+          "titledBulletList": {
+            "title": "Knowledge vs Ephemeral",
+            "items": [
+              "<strong>PRD / Spec / Design:</strong>\n永続的な知識資産としてリポジトリに残る。",
+              "<strong>Tasks / Logs:</strong>\n一時的なデータ。実装完了後に設計書へ統合され、<code>/task_cleanup</code>で削除される。"
+            ]
+          },
+          "accentText": "→ セッションを跨いでも、コンテキストが失われない。"
+        }
+      }
+    },
+    {
+      "id": "slide8",
+      "layout": "features",
+      "content": {
+        "title": "Advanced Features",
+        "tiles": [
+          {
+            "icon": "Memory",
+            "title": "Context Efficiency",
+            "description": "レビュー処理を独立したサブエージェントに隔離。メインコンテキストのトークン消費を抑え、長期間の開発でも軽快な動作を維持。"
+          },
+          {
+            "icon": "Search",
+            "title": "Clarification",
+            "description": "<code>/clarify</code> コマンドが仕様の穴を9つのカテゴリで自動スキャン。質問と回答を自動的に仕様書へ統合し、手戻りを防ぎます。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "slide9",
+      "layout": "demo",
+      "content": {
+        "title": "Demo Flow",
+        "titleDescription": "わずか数コマンドで、要件定義から実装準備まで完了します。",
+        "commands": [
+          {"text": "$ /sdd_init", "color": "var(--theme-text-heading)"},
+          {"text": "$ /generate_prd \"To-Do App\"", "color": "var(--theme-text-heading)"},
+          {"text": "$ /generate_spec", "color": "var(--theme-text-heading)"},
+          {"text": "$ /task_breakdown", "color": "var(--theme-primary)"},
+          {"text": "$ /implement", "color": "var(--theme-text-heading)"}
+        ],
+        "component": {"name": "TerminalAnimation"}
+      }
+    },
+    {
+      "id": "slide10",
+      "layout": "summary",
+      "content": {
+        "title": "Start SDD Today",
+        "body": "AI開発に「確実性」と「持続可能性」を。\n最新の導入手順とドキュメントはGitHubをご覧ください。",
+        "githubUrl": "https://github.com/ToshikiImagawa/ai-sdd-workflow",
+        "githubRepo": "ToshikiImagawa/ai-sdd-workflow"
+      }
+    }
+  ]
+}
