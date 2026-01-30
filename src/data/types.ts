@@ -78,11 +78,24 @@ export interface ColorPalette {
   [key: string]: string | undefined
 }
 
+/** フォントソース定義 */
+export interface FontSource {
+  family: string
+  /** ローカルフォントファイルパス（@font-face で登録） */
+  src?: string
+  /** 外部フォント URL（<link> タグで読み込み） */
+  url?: string
+}
+
 /** フォント定義 */
 export interface FontDefinition {
   heading?: string
   body?: string
   code?: string
+  /** 基本フォントサイズ（px）。デフォルト 20px。全サイズをこの値を基準に比率で算出 */
+  baseFontSize?: number
+  /** フォントソースの配列 */
+  sources?: FontSource[]
 }
 
 /** バリデーションエラー */

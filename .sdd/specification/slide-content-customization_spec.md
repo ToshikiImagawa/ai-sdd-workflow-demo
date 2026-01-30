@@ -64,7 +64,7 @@
 
 | ディレクトリ          | ファイル名                 | エクスポート                                       | 概要                            |
 |-----------------|-----------------------|----------------------------------------------|-------------------------------|
-| src/data/       | types.ts              | `SlideData`, `PresentationData`, `ThemeData`, `LogoConfig` | スライドデータの型定義                   |
+| src/data/       | types.ts              | `SlideData`, `PresentationData`, `ThemeData`, `LogoConfig`, `FontSource` | スライドデータの型定義                   |
 | src/data/       | default-slides.json   | (デフォルトエクスポート)                                | デフォルトのスライドデータ                 |
 | src/data/       | loader.ts             | `loadPresentationData`                       | スライドデータの読み込みとバリデーション          |
 | src/components/ | SlideRenderer.tsx     | `SlideRenderer`                              | スライドデータからReactコンポーネントへのレンダリング |
@@ -154,11 +154,24 @@ interface ColorPalette {
     [key: string]: string | undefined;
 }
 
+/** フォントソース定義 */
+interface FontSource {
+    family: string;
+    /** ローカルフォントファイルパス（@font-face で登録） */
+    src?: string;
+    /** 外部フォント URL（<link> タグで読み込み） */
+    url?: string;
+}
+
 /** フォント定義 */
 interface FontDefinition {
     heading?: string;
     body?: string;
     code?: string;
+    /** 基本フォントサイズ（px）。デフォルト 20px。全サイズをこの値を基準に比率で算出 */
+    baseFontSize?: number;
+    /** フォントソースの配列 */
+    sources?: FontSource[];
 }
 ```
 

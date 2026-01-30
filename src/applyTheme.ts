@@ -1,4 +1,4 @@
-import type { ThemeData } from './data'
+import type { FontSource, ThemeData } from './data'
 
 function hexToRgb(hex: string): string {
   const r = parseInt(hex.slice(1, 3), 16)
@@ -41,6 +41,54 @@ export async function applyTheme() {
   }
 }
 
+/** フォントサイズ比率（body1 = 1.0 基準） */
+const fontSizeRatios: Record<string, number> = {
+  '--theme-font-size-h1': 3.6,
+  '--theme-font-size-h2': 2.4,
+  '--theme-font-size-h3': 1.2,
+  '--theme-font-size-h4': 1.0,
+  '--theme-font-size-subtitle1': 1.4,
+  '--theme-font-size-body1': 1.0,
+  '--theme-font-size-body2': 0.8,
+}
+
+/** baseFontSize から各フォントサイズ CSS 変数を設定する */
+export function applyBaseFontSize(root: HTMLElement, baseFontSize: number): void {
+  root.style.setProperty('--theme-font-size-base', `${baseFontSize}px`)
+  for (const [cssVar, ratio] of Object.entries(fontSizeRatios)) {
+    root.style.setProperty(cssVar, `${baseFontSize * ratio}px`)
+  }
+}
+
+/** フォントソースを動的にロードする */
+export function loadFontSources(sources: FontSource[]): void {
+  for (const source of sources) {
+    if (source.src) {
+      loadLocalFont(source.family, source.src)
+    } else if (source.url) {
+      loadExternalFont(source.url)
+    }
+  }
+}
+
+function loadLocalFont(family: string, src: string): void {
+  const styleId = `sdd-font-face-${family.replace(/\s+/g, '-').toLowerCase()}`
+  if (document.getElementById(styleId)) return
+  const style = document.createElement('style')
+  style.id = styleId
+  style.textContent = `@font-face { font-family: '${family}'; src: url('${src}'); }`
+  document.head.appendChild(style)
+}
+
+function loadExternalFont(url: string): void {
+  const existing = document.querySelector(`link[href="${url}"]`)
+  if (existing) return
+  const link = document.createElement('link')
+  link.rel = 'stylesheet'
+  link.href = url
+  document.head.appendChild(link)
+}
+
 /** ThemeDataからCSS変数を適用する */
 const themeColorToCssVar: Record<string, string> = {
   primary: '--theme-primary',
@@ -73,11 +121,19 @@ export function applyThemeData(themeData: ThemeData): void {
 
   if (themeData.fonts) {
     for (const [key, value] of Object.entries(themeData.fonts)) {
-      if (!value) continue
+      if (!value || typeof value !== 'string') continue
       const cssVar = themeFontToCssVar[key]
       if (cssVar) {
         root.style.setProperty(cssVar, value)
       }
+    }
+
+    if (themeData.fonts.sources) {
+      loadFontSources(themeData.fonts.sources)
+    }
+
+    if (themeData.fonts.baseFontSize != null) {
+      applyBaseFontSize(root, themeData.fonts.baseFontSize)
     }
   }
 

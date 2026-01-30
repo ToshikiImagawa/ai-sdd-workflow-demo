@@ -161,7 +161,12 @@ src/
     "fonts": {
       "heading": "'Noto Sans JP', sans-serif",
       "body": "'Noto Sans JP', sans-serif",
-      "code": "'Source Code Pro', monospace"
+      "code": "'Source Code Pro', monospace",
+      "baseFontSize": 24,
+      "sources": [
+        { "family": "MyFont", "src": "/fonts/MyFont.woff2" },
+        { "family": "Fira Code", "url": "https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" }
+      ]
     }
   },
   "slides": [
@@ -322,6 +327,8 @@ function SlideRenderer(props: SlideRendererProps): JSX.Element {
 | アイコン解決方式 | コンポーネント直接指定 / 名前ベースレジストリ | 名前ベースレジストリ（Icon:プレフィックス） | JSONから文字列でアイコンを指定可能にするため。registerDefaultsでMUIアイコンを名前登録 |
 | TerminalAnimation注入方式 | props直接指定 / ラッパーコンポーネント | ラッパーコンポーネント（registerDefaults.tsx） | TerminalAnimationはlogText propsが必須だが、デフォルトデータからはコンポーネント参照のみでpropsを渡さないため、`?raw`インポートしたlogTextを事前注入するラッパーが必要 |
 | HTMLコンテンツ処理方式 | Markdownパーサー / dangerouslySetInnerHTML / カスタムパーサー | dangerouslySetInnerHTML | 既存スライドで使用されている`<strong>`, `<code>`, `<br>`タグをJSON文字列から復元するため。コンテンツはすべてアプリ内部のJSON定義であり外部入力ではないためXSSリスクなし |
+| フォントサイズ制御方式 | 固定px値 / CSS変数 + 比率ベース / rem単位 | CSS変数 + 比率ベース（`baseFontSize`） | `baseFontSize` を基準に全サイズを比率で算出し CSS 変数に設定。MUI typography と global.css の両方で CSS 変数を参照することで一元管理。固定px値と同等のデフォルト値を `:root` に設定し後方互換性を維持 |
+| フォントソースロード方式 | ビルド時バンドル / ランタイム動的ロード | ランタイム動的ロード（`@font-face` / `<link>` 挿入） | ローカルフォントは `@font-face` スタイル要素を動的追加、外部フォント（Google Fonts等）は `<link>` タグを動的挿入。重複ロード防止機構あり。ビルド時バンドルは設定ファイルだけでフォントを差し替えたいユースケースに不向き |
 
 ## 9.2. 未解決の課題
 
@@ -350,6 +357,16 @@ function SlideRenderer(props: SlideRendererProps): JSX.Element {
 - 実装ステータスを🟢実装済みに更新
 - 設計判断に3項目追加: レイアウト実装方式、アイコン解決方式、既存スライド移行を完全データ駆動化に変更
 - 未解決の課題を更新: JSON化・カスタムコンポーネント登録は解決済み、SlideMeta対応・目視確認を追加
+
+## v0.5.0 (2026-01-31)
+
+**変更内容:**
+
+- `FontDefinition` に `baseFontSize?: number` と `sources?: FontSource[]` を追加
+- `FontSource` インターフェース（`family`, `src?`, `url?`）を追加
+- フォントサイズ制御方式の設計判断を追加（CSS変数 + 比率ベース）
+- フォントソースロード方式の設計判断を追加（ランタイム動的ロード）
+- JSONデータ構造例に `baseFontSize` と `sources` を追記
 
 ## v0.4.0 (2026-01-31)
 

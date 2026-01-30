@@ -200,6 +200,16 @@ const revealConfig = {
     --theme-font-heading: 'Roboto', sans-serif;
     --theme-font-body: 'Roboto', sans-serif;
     --theme-font-code: 'Roboto Mono', monospace;
+
+    /* フォントサイズ（baseFontSize で動的に上書き可能） */
+    --theme-font-size-base: 20px;
+    --theme-font-size-h1: 72px;       /* ratio: 3.6 */
+    --theme-font-size-h2: 48px;       /* ratio: 2.4 */
+    --theme-font-size-h3: 24px;       /* ratio: 1.2 */
+    --theme-font-size-h4: 20px;       /* ratio: 1.0 */
+    --theme-font-size-subtitle1: 28px; /* ratio: 1.4 */
+    --theme-font-size-body1: 20px;    /* ratio: 1.0 */
+    --theme-font-size-body2: 16px;    /* ratio: 0.8 */
 }
 ```
 
@@ -233,9 +243,28 @@ async function applyTheme(): Promise<void> {
 
 /**
  * PresentationData の theme フィールドからCSS変数を動的に適用する。
- * カラー、フォント、カスタムCSSの3種類をサポート。
+ * カラー、フォント（名前・サイズ・ソース）、カスタムCSSをサポート。
+ *
+ * - fonts.heading/body/code: フォントファミリーを CSS 変数に設定
+ * - fonts.baseFontSize: 基準サイズから比率で全フォントサイズ CSS 変数を算出・設定
+ * - fonts.sources: ローカルフォント(@font-face)または外部フォント(<link>)を動的ロード
  */
 function applyThemeData(themeData: ThemeData): void {
+}
+
+/**
+ * baseFontSize から各フォントサイズ CSS 変数を比率ベースで設定する。
+ */
+function applyBaseFontSize(root: HTMLElement, baseFontSize: number): void {
+}
+
+/**
+ * フォントソースを動的にロードする。
+ * - src 指定: @font-face スタイル要素を動的追加
+ * - url 指定: <link rel="stylesheet"> を動的追加
+ * 重複ロード防止機構あり。
+ */
+function loadFontSources(sources: FontSource[]): void {
 }
 ```
 
@@ -294,6 +323,14 @@ function applyThemeData(themeData: ThemeData): void {
 ---
 
 # 10. 変更履歴
+
+## v1.2.0 (2026-01-31)
+
+**変更内容:**
+
+- CSS変数体系にフォントサイズ変数（`--theme-font-size-*`）を追加
+- `applyThemeData` のインターフェース説明にフォントサイズ・フォントソース機能を追記
+- `applyBaseFontSize`, `loadFontSources` 関数のインターフェースを追加
 
 ## v1.1.0 (2026-01-31)
 
