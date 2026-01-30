@@ -10,13 +10,16 @@
 
 # 1. 背景
 
-プレゼンテーションアプリケーションでは、ビジュアルコンポーネント（VibeCodingDemo, HierarchyFlowVisual, PersistenceVisual）が `src/visuals/` に配置され、`registerDefaults.tsx` でデフォルトコンポーネントとして登録されている。これらのビジュアルは AI-SDD デモ用の特化コンポーネントであり、プレゼンテーション本体の汎用コンポーネントとは性質が異なる。
+プレゼンテーションアプリケーションでは、ビジュアルコンポーネント（VibeCodingDemo, HierarchyFlowVisual, PersistenceVisual）が
+`src/visuals/` に配置され、`registerDefaults.tsx` でデフォルトコンポーネントとして登録されている。これらのビジュアルは
+AI-SDD デモ用の特化コンポーネントであり、プレゼンテーション本体の汎用コンポーネントとは性質が異なる。
 
 本体コードとビジュアルの結合を解消し、アドオンとして独立管理可能にすることで、拡張性と保守性を向上させる。
 
 # 2. 概要
 
-ビジュアルコンポーネントを「アドオン」という単位でグループ化し、統一された型定義（AddonDefinition）で構造を規定する。アドオンは既存の ComponentRegistry の custom 側登録 API を利用して登録され、本体コードの変更なしに追加・削除が可能となる。
+ビジュアルコンポーネントを「アドオン」という単位でグループ化し、統一された型定義（AddonDefinition）で構造を規定する。アドオンは既存の
+ComponentRegistry の custom 側登録 API を利用して登録され、本体コードの変更なしに追加・削除が可能となる。
 
 アドオンの有効/無効は、エントリポイントファイル（`src/addons/index.ts`）での import 操作のみで切り替える。
 
@@ -24,91 +27,98 @@
 
 ## 3.1. 機能要件 (Functional Requirements)
 
-| ID     | 要件                                      | 優先度 | 根拠                                    | PRD参照  |
-|--------|------------------------------------------|------|---------------------------------------|--------|
-| FR-001 | アドオンは AddonDefinition 型で構造を統一する            | 必須   | 将来のアドオン開発者が統一されたインターフェースで拡張できるようにするため  | FR-001 |
-| FR-002 | アドオンのコンポーネントは registerComponent で登録する       | 必須   | 既存の ComponentRegistry を活用し、本体コードの変更を最小化して互換性を維持するため | FR-002 |
-| FR-003 | アドオンの有効/無効は import の追加/削除で管理する             | 必須   | 設定ファイルのパースやバリデーション不要で、TypeScript の型チェックが効くシンプルな管理を実現するため | FR-003 |
-| FR-004 | 既存3ビジュアルを addons/ 配下に移動しアドオンとして再構成する       | 必須   | AI-SDD デモ用の特化ビジュアルを本体の汎用コンポーネントから分離し、独立管理を実現するため | FR-004 |
+| ID     | 要件                                    | 優先度 | 根拠                                                       | PRD参照  |
+|--------|---------------------------------------|-----|----------------------------------------------------------|--------|
+| FR-001 | アドオンは AddonDefinition 型で構造を統一する       | 必須  | 将来のアドオン開発者が統一されたインターフェースで拡張できるようにするため                    | FR-001 |
+| FR-002 | アドオンのコンポーネントは registerComponent で登録する | 必須  | 既存の ComponentRegistry を活用し、本体コードの変更を最小化して互換性を維持するため      | FR-002 |
+| FR-003 | アドオンの有効/無効は import の追加/削除で管理する        | 必須  | 設定ファイルのパースやバリデーション不要で、TypeScript の型チェックが効くシンプルな管理を実現するため | FR-003 |
+| FR-004 | 既存3ビジュアルを addons/ 配下に移動しアドオンとして再構成する  | 必須  | AI-SDD デモ用の特化ビジュアルを本体の汎用コンポーネントから分離し、独立管理を実現するため         | FR-004 |
 
-## 3.2. 設計制約
+## 3.2. 非機能要件 (Non-Functional Requirements)
 
-| ID     | 制約                                      | 根拠                      | PRD参照  |
-|--------|------------------------------------------|--------------------------|--------|
-| DC-001 | ComponentRegistry の仕組みを変更しない             | 既存機能の互換性維持               | DC-001 |
-| DC-002 | プレゼンテーションの表示・動作に変更がないこと                  | ビジネス価値の維持                | DC-002 |
+| ID      | 要件                                      | 優先度 | 根拠                               | PRD参照   |
+|---------|-----------------------------------------|-----|----------------------------------|---------|
+| NFR-001 | アドオン化によるビルドサイズの増加は最小限に抑える               | 推奨  | ファイル分割による overhead 以上の増加は不要      | NFR-001 |
+| NFR-002 | アドオンの追加・削除は index.ts の import 変更のみで完結する | 必須  | 開発者が他ファイルの修正なしにアドオンを管理できるようにするため | NFR-002 |
+
+## 3.3. 設計制約
+
+| ID     | 制約                           | 根拠         | PRD参照  |
+|--------|------------------------------|------------|--------|
+| DC-001 | ComponentRegistry の仕組みを変更しない | 既存機能の互換性維持 | DC-001 |
+| DC-002 | プレゼンテーションの表示・動作に変更がないこと      | ビジネス価値の維持  | DC-002 |
 
 # 4. API
 
-| ディレクトリ            | ファイル名       | エクスポート              | 概要                                      |
-|---------------------|---------------|------------------------|------------------------------------------|
-| `src/addons`        | `types.ts`    | `AddonDefinition`      | アドオン定義型                                  |
-| `src/addons`        | `types.ts`    | `AddonComponent`       | アドオンコンポーネント定義型                          |
-| `src/addons`        | `index.ts`    | `addons`               | 有効なアドオン定義の配列                            |
-| `src/addons`        | `register.ts` | `registerAddons()`     | 全アドオンを ComponentRegistry に一括登録する関数       |
-| `src/addons/ai-sdd-visuals` | `index.ts` | `aiSddVisualsAddon` | AI-SDD デモ用ビジュアルアドオン定義                    |
+| ディレクトリ                      | ファイル名         | エクスポート              | 概要                                 |
+|-----------------------------|---------------|---------------------|------------------------------------|
+| `src/addons`                | `types.ts`    | `AddonDefinition`   | アドオン定義型                            |
+| `src/addons`                | `types.ts`    | `AddonComponent`    | アドオンコンポーネント定義型                     |
+| `src/addons`                | `index.ts`    | `addons`            | 有効なアドオン定義の配列                       |
+| `src/addons`                | `register.ts` | `registerAddons()`  | 全アドオンを ComponentRegistry に一括登録する関数 |
+| `src/addons/ai-sdd-visuals` | `index.ts`    | `aiSddVisualsAddon` | AI-SDD デモ用ビジュアルアドオン定義              |
 
 ## 4.1. 型定義
 
 ```typescript
 /** アドオンが提供するコンポーネント定義 */
 type AddonComponent = {
-  name: string
-  component: RegisteredComponent
+    name: string
+    component: RegisteredComponent
 }
 
 /** アドオン定義 */
 type AddonDefinition = {
-  name: string
-  components: AddonComponent[]
+    name: string
+    components: AddonComponent[]
 }
 ```
 
 # 5. 用語集
 
-| 用語 | 説明 |
-|------|------|
-| アドオン（Addon） | プレゼンテーション本体から独立したコンポーネントのパッケージ単位 |
-| AddonDefinition | アドオンの構造を定義する TypeScript 型。名前とコンポーネント一覧を持つ |
-| AddonComponent | アドオン内の個別コンポーネント定義。登録名と React コンポーネントのペア |
-| ComponentRegistry | コンポーネント名から実コンポーネントを解決するレジストリ機構 |
+| 用語                | 説明                                        |
+|-------------------|-------------------------------------------|
+| アドオン（Addon）       | プレゼンテーション本体から独立したコンポーネントのパッケージ単位          |
+| AddonDefinition   | アドオンの構造を定義する TypeScript 型。名前とコンポーネント一覧を持つ |
+| AddonComponent    | アドオン内の個別コンポーネント定義。登録名と React コンポーネントのペア   |
+| ComponentRegistry | コンポーネント名から実コンポーネントを解決するレジストリ機構            |
 
 # 6. 使用例
 
 ```tsx
 // アドオン定義の例（src/addons/ai-sdd-visuals/index.ts）
-import type { AddonDefinition } from '../types'
-import { VibeCodingDemo } from './VibeCodingDemo'
+import type {AddonDefinition} from '../types'
+import {VibeCodingDemo} from './VibeCodingDemo'
 
 export const aiSddVisualsAddon: AddonDefinition = {
-  name: 'ai-sdd-visuals',
-  components: [
-    { name: 'VibeCodingDemo', component: VibeCodingDemo },
-  ],
+    name: 'ai-sdd-visuals',
+    components: [
+        {name: 'VibeCodingDemo', component: VibeCodingDemo},
+    ],
 }
 ```
 
 ```tsx
 // アドオンの有効化（src/addons/index.ts）
-import type { AddonDefinition } from './types'
-import { aiSddVisualsAddon } from './ai-sdd-visuals'
+import type {AddonDefinition} from './types'
+import {aiSddVisualsAddon} from './ai-sdd-visuals'
 
 export const addons: AddonDefinition[] = [
-  aiSddVisualsAddon,
+    aiSddVisualsAddon,
 ]
 ```
 
 ```tsx
 // アドオンの一括登録（src/addons/register.ts）
-import { registerComponent } from '../components/ComponentRegistry'
-import { addons } from './index'
+import {registerComponent} from '../components/ComponentRegistry'
+import {addons} from './index'
 
 export function registerAddons(): void {
-  for (const addon of addons) {
-    for (const { name, component } of addon.components) {
-      registerComponent(name, component)
+    for (const addon of addons) {
+        for (const {name, component} of addon.components) {
+            registerComponent(name, component)
+        }
     }
-  }
 }
 ```
 
@@ -120,15 +130,12 @@ sequenceDiagram
     participant RegDef as registerDefaults
     participant RegAddon as registerAddons
     participant Registry as ComponentRegistry
-
     App ->> RegDef: registerDefaultComponents()
     RegDef ->> Registry: registerDefaultComponent(name, comp)
     Note right of Registry: default 層に登録
-
     App ->> RegAddon: registerAddons()
     RegAddon ->> Registry: registerComponent(name, comp)
     Note right of Registry: custom 層に登録（default を上書き可能）
-
     Note over App, Registry: スライド描画時
     App ->> Registry: resolveComponent(name)
     Registry -->> App: custom → default → fallback の優先順で解決
