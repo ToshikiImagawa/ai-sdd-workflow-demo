@@ -1,11 +1,5 @@
 import { describe, expect, it, beforeEach } from 'vitest'
-import {
-  registerComponent,
-  registerDefaultComponent,
-  resolveComponent,
-  getRegisteredComponents,
-  clearRegistry,
-} from '../ComponentRegistry'
+import { registerComponent, registerDefaultComponent, resolveComponent, getRegisteredComponents, clearRegistry } from '../ComponentRegistry'
 
 function MockComponentA() {
   return <div>ComponentA</div>

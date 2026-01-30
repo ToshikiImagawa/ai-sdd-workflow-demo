@@ -6,13 +6,7 @@ type Props = { id: string; title: string; meta?: SlideMeta; children: React.Reac
 
 export function ContentLayout({ id, title, meta, children }: Props) {
   return (
-    <section
-      className="slide-container"
-      id={id}
-      data-transition={meta?.transition}
-      data-background-image={meta?.backgroundImage}
-      data-background-color={meta?.backgroundColor}
-    >
+    <section className="slide-container" id={id} data-transition={meta?.transition} data-background-image={meta?.backgroundImage} data-background-color={meta?.backgroundColor}>
       <Typography variant="h2" className="slide-title">
         {title}
       </Typography>

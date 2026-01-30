@@ -11,14 +11,7 @@ type Props = {
 
 export function BleedLayout({ id, left, right, meta, sectionRef }: Props) {
   return (
-    <section
-      ref={sectionRef}
-      className="slide-container bleed-image-layout"
-      id={id}
-      data-transition={meta?.transition}
-      data-background-image={meta?.backgroundImage}
-      data-background-color={meta?.backgroundColor}
-    >
+    <section ref={sectionRef} className="slide-container bleed-image-layout" id={id} data-transition={meta?.transition} data-background-image={meta?.backgroundImage} data-background-color={meta?.backgroundColor}>
       <div className="bleed-content">{left}</div>
       {right}
     </section>

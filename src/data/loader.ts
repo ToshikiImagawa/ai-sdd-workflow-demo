@@ -22,13 +22,7 @@ function validateSlide(slide: unknown, index: number, errors: ValidationError[])
     addError(errors, `${prefix}.id`, 'idは空でない文字列である必要があります', 'string', String(typeof slide.id))
   }
   if (typeof slide.layout !== 'string' || slide.layout === '') {
-    addError(
-      errors,
-      `${prefix}.layout`,
-      'layoutは空でない文字列である必要があります',
-      'string',
-      String(typeof slide.layout),
-    )
+    addError(errors, `${prefix}.layout`, 'layoutは空でない文字列である必要があります', 'string', String(typeof slide.layout))
   }
   if (!isRecord(slide.content)) {
     addError(errors, `${prefix}.content`, 'contentはオブジェクトである必要があります', 'object', typeof slide.content)
@@ -72,10 +66,7 @@ export function validatePresentationData(data: unknown): data is PresentationDat
 }
 
 /** スライドデータを読み込む。未指定・バリデーション失敗時はデフォルトデータにフォールバック */
-export function loadPresentationData(
-  source: PresentationData | undefined,
-  defaultData: PresentationData,
-): PresentationData {
+export function loadPresentationData(source: PresentationData | undefined, defaultData: PresentationData): PresentationData {
   if (source === undefined) {
     return defaultData
   }

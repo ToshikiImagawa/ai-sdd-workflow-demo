@@ -20,12 +20,7 @@ export function QrCodeCard({ url, size = 200, sx }: Props) {
         ...sx,
       }}
     >
-      <FallbackImage
-        src={`https://api.qrserver.com/v1/create-qr-code/?size=${size * 2}x${size * 2}&data=${encodeURIComponent(url)}`}
-        alt="QR Code"
-        width={size}
-        height={size}
-      />
+      <FallbackImage src={`https://api.qrserver.com/v1/create-qr-code/?size=${size * 2}x${size * 2}&data=${encodeURIComponent(url)}`} alt="QR Code" width={size} height={size} />
     </Box>
   )
 }

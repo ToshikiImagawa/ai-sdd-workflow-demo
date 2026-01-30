@@ -1,7 +1,4 @@
-import BalanceIcon from '@mui/icons-material/Balance'
-import DescriptionIcon from '@mui/icons-material/Description'
-import DesignServicesIcon from '@mui/icons-material/DesignServices'
-import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck'
+import { BalanceIcon, DescriptionIcon, DesignServicesIcon, PlaylistAddCheckIcon } from './icons'
 import styles from './HierarchyFlowVisual.module.css'
 
 export function HierarchyFlowVisual() {

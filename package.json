@@ -2,8 +2,9 @@
   "name": "demo",
   "version": "1.0.0",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "npm run build:addons && vite",
+    "build": "npm run build:addons && vite build",
+    "build:addons": "vite build --config addons/ai-sdd-visuals/vite.config.ts",
     "preview": "vite preview",
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\"",
     "typecheck": "tsc --noEmit",

@@ -6,3 +6,4 @@ dist/
 
 assets/*
 public/*
+addons/*/dist/

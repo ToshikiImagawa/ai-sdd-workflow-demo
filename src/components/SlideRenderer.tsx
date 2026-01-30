@@ -92,14 +92,7 @@ function renderColumnContent(data: Record<string, unknown> | undefined): ReactNo
 
   // 見出し
   if (data.heading) {
-    elements.push(
-      <SlideHeading
-        key="heading"
-        title={data.heading as string}
-        variant="h3"
-        description={data.headingDescription as string | undefined}
-      />,
-    )
+    elements.push(<SlideHeading key="heading" title={data.heading as string} variant="h3" description={data.headingDescription as string | undefined} />)
   }
 
   // 段落
