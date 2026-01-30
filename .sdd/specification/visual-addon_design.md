@@ -151,6 +151,8 @@ export function registerAddons(): void {
 | 型安全性（T-001）           | AddonDefinition 型で構造を強制し、any 型を使用しない           |
 | 表示互換性（DC-002）        | CSS Modules をそのまま移動し、スタイルの変更なし                |
 | ビルド互換性                | Vite の既存設定で CSS Modules が動作することを確認             |
+| ビルドサイズ（NFR-001）      | ファイル移動とエントリポイント追加のみで新規ロジックを最小化。Vite の tree-shaking により未使用コードは除外される |
+| 開発者体験（NFR-002）        | `src/addons/index.ts` の配列に import を追加/削除するだけでアドオンの有効/無効を切り替え可能。他ファイルの修正不要 |
 
 ---
 
@@ -179,6 +181,12 @@ export function registerAddons(): void {
 ---
 
 # 10. 変更履歴
+
+## v1.1.0 (2026-01-30)
+
+**変更内容:**
+
+- 非機能要件実現方針に NFR-001（ビルドサイズ）、NFR-002（開発者体験）を追加
 
 ## v1.0.0 (2026-01-30)
 
