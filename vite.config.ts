@@ -9,7 +9,7 @@ function copyAddonsPlugin(): Plugin {
   return {
     name: 'copy-addons',
     closeBundle() {
-      cpSync(resolve(__dirname, 'addons/ai-sdd-visuals/dist'), resolve(__dirname, 'dist/addons'), {
+      cpSync(resolve(__dirname, 'addons/dist'), resolve(__dirname, 'dist/addons'), {
         recursive: true,
       })
     },
@@ -25,7 +25,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '/addons': resolve(__dirname, 'addons/ai-sdd-visuals/dist'),
+      '/addons': resolve(__dirname, 'addons/dist'),
     },
   },
   test: {

@@ -14,35 +14,37 @@
 
 ## 1.1. 実装進捗
 
-| モジュール/機能                        | ステータス | 備考 |
-|--------------------------------------|----------|------|
-| `src/addons/types.ts`                | 🟢       |      |
-| `src/addons/ai-sdd-visuals/index.ts` | 🟢       |      |
-| `src/addons/index.ts`                | 🟢       |      |
-| `src/addons/register.ts`             | 🟢       |      |
-| ビジュアルファイル移動                    | 🟢       |      |
-| `registerDefaults.tsx` 修正           | 🟢       |      |
-| `App.tsx` 修正                        | 🟢       |      |
-| `src/visuals/` 削除                   | 🟢       |      |
+| モジュール/機能                                  | ステータス | 備考 |
+|----------------------------------------------|----------|------|
+| `addons/entry.ts`                            | 🟢       | アドオン登録エントリポイント |
+| `addons/vite.config.ts`                      | 🟢       | IIFE ビルド設定 |
+| ビジュアルファイル移動（`addons/ai-sdd-visuals/`）     | 🟢       | 3コンポーネント + CSS Modules + icons.tsx |
+| `src/addon-bridge.ts`                        | 🟢       | グローバル登録インターフェース |
+| `src/main.tsx` アドオンローダー                    | 🟢       | manifest fetch + スクリプト動的ロード |
+| `src/components/registerDefaults.tsx` 修正     | 🟢       | ビジュアル3つの登録を削除 |
+| `vite.config.ts` dev/prod アドオン配信設定          | 🟢       | alias + copyAddonsPlugin |
+| `src/visuals/` 削除                            | 🟢       |      |
 
 ---
 
 # 2. 設計目標
 
-1. **本体との分離**: ビジュアルコンポーネントをアドオンとして本体コードから独立させる
+1. **本体との完全分離**: ビジュアルコンポーネントを `src/` 外の `addons/` に配置し、独立した IIFE バンドルとしてビルドする
 2. **既存動作の維持**: ComponentRegistry の仕組みを変更せず、表示・動作に影響を与えない（DC-001, DC-002）
-3. **シンプルな管理**: アドオンの有効/無効を import の追加/削除のみで切り替え可能にする（FR-003）
-4. **型安全性**: AddonDefinition 型による構造統一で型安全なアドオン定義を実現する（T-001）
+3. **宣言的管理**: アドオンの有効/無効を manifest.json で宣言的に管理し、ホストアプリのソースコード変更を不要にする（FR-003）
+4. **動的ロード**: ランタイムでのスクリプト動的ロードにより、ビルド時の静的結合を排除する
 
 ---
 
 # 3. 技術スタック
 
-| 領域           | 採用技術                    | 選定理由                                         |
-|---------------|--------------------------|------------------------------------------------|
-| 型定義          | TypeScript               | プロジェクト既存のスタック（T-001）                         |
-| コンポーネント登録 | ComponentRegistry        | 既存の仕組みを活用し、変更を最小化（DC-001）                   |
-| スタイル         | CSS Modules              | 各ビジュアルが既に CSS Modules を使用しており、そのまま移動可能      |
+| 領域               | 採用技術                    | 選定理由                                         |
+|-------------------|--------------------------|------------------------------------------------|
+| アドオンビルド         | Vite（IIFE ライブラリモード）    | プロジェクト既存のビルドツールを活用。IIFE 形式で独立バンドル生成          |
+| コンポーネント登録       | ComponentRegistry        | 既存の仕組みを活用し、変更を最小化（DC-001）                   |
+| スタイル             | CSS Modules（JS インライン化） | 各ビジュアルが CSS Modules を使用。ビルド時に JS バンドルにインライン化  |
+| ランタイムロード        | `<script>` タグ動的挿入       | 外部依存なしの最もシンプルなスクリプトロード方式                    |
+| React 共有         | window グローバル経由          | ホストアプリの React インスタンスをアドオンが共有（バンドル重複回避）      |
 
 ---
 
@@ -52,18 +54,22 @@
 
 ```mermaid
 graph TD
-    App[App.tsx] --> RegDef[registerDefaults.tsx]
-    App --> RegAddon[registerAddons]
-    RegDef --> Registry[ComponentRegistry]
-    RegAddon --> Registry
+    Main[main.tsx] --> Bridge[addon-bridge.ts]
+    Main --> RegDef[registerDefaults.tsx]
+    Main --> Loader[アドオンローダー]
+    Bridge --> Registry[ComponentRegistry]
+    RegDef --> Registry
+    Loader --> Manifest[manifest.json]
+    Loader --> Script["&lt;script&gt; 動的ロード"]
 
-    subgraph "addons/"
-        RegAddon --> AddonIndex[index.ts<br/>有効アドオン一覧]
-        AddonIndex --> AiSdd[ai-sdd-visuals/<br/>AddonDefinition]
-        AiSdd --> VCD[VibeCodingDemo]
-        AiSdd --> HFV[HierarchyFlowVisual]
-        AiSdd --> PV[PersistenceVisual]
+    subgraph "addons/ai-sdd-visuals/"
+        Script --> Entry[entry.ts]
+        Entry --> VCD[VibeCodingDemo]
+        Entry --> HFV[HierarchyFlowVisual]
+        Entry --> PV[PersistenceVisual]
     end
+
+    Entry -->|"window.__ADDON_REGISTER__"| Bridge
 
     subgraph "components/"
         RegDef --> TA[TerminalAnimation]
@@ -75,51 +81,68 @@ graph TD
 
 ## 4.2. モジュール分割
 
-| モジュール名                       | 責務                                           | 依存関係                          | 配置場所                             |
-|----------------------------------|----------------------------------------------|-------------------------------|-------------------------------------|
-| `types.ts`                       | AddonDefinition, AddonComponent 型定義           | ComponentRegistry（型のみ）         | `src/addons/types.ts`               |
-| `ai-sdd-visuals/index.ts`        | AI-SDD デモ用ビジュアルアドオンの定義                      | types.ts, 各ビジュアルコンポーネント       | `src/addons/ai-sdd-visuals/index.ts`|
-| `index.ts`                       | 有効アドオン一覧の管理                                 | types.ts, 各アドオン定義              | `src/addons/index.ts`               |
-| `register.ts`                    | 全アドオンの ComponentRegistry への一括登録              | ComponentRegistry, index.ts    | `src/addons/register.ts`            |
+| モジュール名                  | 責務                                           | 依存関係                               | 配置場所                               |
+|--------------------------|----------------------------------------------|-------------------------------------|---------------------------------------|
+| `addon-bridge.ts`        | グローバル登録関数のセットアップ、React インスタンス公開             | ComponentRegistry, React             | `src/addon-bridge.ts`                 |
+| `main.tsx`（ローダー部分）     | manifest.json の fetch とアドオンスクリプト動的ロード        | addon-bridge.ts                      | `src/main.tsx`                        |
+| `entry.ts`               | アドオンのコンポーネントを `__ADDON_REGISTER__` 経由で登録     | 各ビジュアルコンポーネント, window グローバル         | `addons/entry.ts`                     |
+| `vite.config.ts`         | アドオンの IIFE ビルド設定、CSS インライン化、manifest 生成     | Vite                                 | `addons/vite.config.ts`               |
+| ビジュアルコンポーネント（3つ）       | 各ビジュアルの描画ロジック                               | React, CSS Modules                   | `addons/ai-sdd-visuals/`              |
 
 ## 4.3. ディレクトリ構成
 
 ```
-src/
-├── addons/                              # 新規
-│   ├── types.ts                         # AddonDefinition 型
-│   ├── index.ts                         # 有効アドオン一覧
-│   ├── register.ts                      # 全アドオンの一括登録
-│   └── ai-sdd-visuals/                  # AI-SDD デモ用ビジュアルセット
-│       ├── index.ts                     # アドオン定義
-│       ├── VibeCodingDemo.tsx           # src/visuals/ から移動
-│       ├── VibeCodingDemo.module.css
-│       ├── HierarchyFlowVisual.tsx
-│       ├── HierarchyFlowVisual.module.css
-│       ├── PersistenceVisual.tsx
-│       └── PersistenceVisual.module.css
-├── components/
-│   ├── ComponentRegistry.tsx            # 変更なし
-│   └── registerDefaults.tsx             # ビジュアル3つの登録を削除
+project-root/
+├── addons/                                  # アドオンディレクトリ（src/ 外）
+│   ├── ai-sdd-visuals/                      # コンテンツ：プレゼン固有ビジュアル
+│   │   ├── icons.tsx                        # SVG アイコンユーティリティ
+│   │   ├── VibeCodingDemo.tsx
+│   │   ├── VibeCodingDemo.module.css
+│   │   ├── HierarchyFlowVisual.tsx
+│   │   ├── HierarchyFlowVisual.module.css
+│   │   ├── PersistenceVisual.tsx
+│   │   └── PersistenceVisual.module.css
+│   ├── entry.ts                             # 登録エントリポイント
+│   ├── vite.config.ts                       # アドオンビルド設定
+│   └── dist/                                # ビルド出力（git 管理外）
+│       ├── ai-sdd-visuals.iife.js
+│       └── manifest.json
+├── src/
+│   ├── addon-bridge.ts                      # グローバル登録インターフェース
+│   ├── main.tsx                             # エントリポイント（アドオンローダー含む）
+│   └── components/
+│       ├── ComponentRegistry.tsx             # 変更なし
+│       └── registerDefaults.tsx              # ビジュアル3つの登録を削除
+└── vite.config.ts                           # dev: alias, prod: copyAddonsPlugin
 ```
 
 ---
 
 # 5. データモデル
 
+## 5.1. manifest.json
+
 ```typescript
-import type { RegisteredComponent } from '../components/ComponentRegistry'
-
-/** アドオンが提供するコンポーネント定義 */
-type AddonComponent = {
-  name: string
-  component: RegisteredComponent
+type AddonManifest = {
+  addons: Array<{
+    name: string    // アドオン名
+    bundle: string  // バンドルファイルのパス
+  }>
 }
+```
 
-/** アドオン定義 */
-type AddonDefinition = {
-  name: string
-  components: AddonComponent[]
+## 5.2. グローバルインターフェース
+
+```typescript
+declare global {
+  interface Window {
+    __ADDON_REGISTER__?: (
+      addonName: string,
+      components: Array<{ name: string; component: React.ComponentType<Record<string, unknown>> }>
+    ) => void
+    React?: typeof React
+    ReactJSXRuntime?: typeof ReactJSXRuntime
+  }
 }
 ```
 
@@ -127,18 +150,40 @@ type AddonDefinition = {
 
 # 6. インターフェース定義
 
-```typescript
-// src/addons/register.ts
-import { registerComponent } from '../components/ComponentRegistry'
-import { addons } from './index'
+## 6.1. addon-bridge.ts（ホスト側）
 
-/** 全アドオンのコンポーネントを ComponentRegistry に登録する */
-export function registerAddons(): void {
-  for (const addon of addons) {
-    for (const { name, component } of addon.components) {
-      registerComponent(name, component)
-    }
+```typescript
+// src/addon-bridge.ts
+import React from 'react'
+import * as ReactJSXRuntime from 'react/jsx-runtime'
+import { registerComponent, type RegisteredComponent } from './components/ComponentRegistry'
+
+// アドオン IIFE が参照するグローバル変数を公開
+window.React = React
+window.ReactJSXRuntime = ReactJSXRuntime
+
+// アドオン登録コールバックを定義
+window.__ADDON_REGISTER__ = (
+  _addonName: string,
+  components: Array<{ name: string; component: RegisteredComponent }>
+) => {
+  for (const { name, component } of components) {
+    registerComponent(name, component)
   }
+}
+```
+
+## 6.2. entry.ts（アドオン側）
+
+```typescript
+// addons/entry.ts
+const register = window.__ADDON_REGISTER__
+if (register) {
+  register('ai-sdd-visuals', [
+    { name: 'VibeCodingDemo', component: VibeCodingDemo },
+    { name: 'HierarchyFlowVisual', component: HierarchyFlowVisual },
+    { name: 'PersistenceVisual', component: PersistenceVisual },
+  ])
 }
 ```
 
@@ -148,11 +193,13 @@ export function registerAddons(): void {
 
 | 要件                     | 実現方針                                          |
 |------------------------|------------------------------------------------|
-| 型安全性（T-001）           | AddonDefinition 型で構造を強制し、any 型を使用しない           |
-| 表示互換性（DC-002）        | CSS Modules をそのまま移動し、スタイルの変更なし                |
-| ビルド互換性                | Vite の既存設定で CSS Modules が動作することを確認             |
-| ビルドサイズ（NFR-001）      | ファイル移動とエントリポイント追加のみで新規ロジックを最小化。Vite の tree-shaking により未使用コードは除外される |
-| 開発者体験（NFR-002）        | `src/addons/index.ts` の配列に import を追加/削除するだけでアドオンの有効/無効を切り替え可能。他ファイルの修正不要 |
+| 型安全性（T-001）           | アドオンソースは tsconfig.json の `include` に含め、型チェック対象。vite.config.ts は `exclude` |
+| 表示互換性（DC-002）        | CSS Modules をビルド時に JS にインライン化。ランタイムで `<style>` タグとして注入 |
+| ビルド互換性                | `npm run build:addons` で独立ビルド。メインビルドの前に実行される  |
+| ビルドサイズ（NFR-001）      | React を external 指定しバンドルに含めない。CSS インライン化で追加ファイルなし |
+| 開発者体験（NFR-002）        | manifest.json のエントリ追加/削除のみでアドオン管理。ホストアプリのソースコード変更不要 |
+| dev server 対応          | `resolve.alias` で `/addons` を `addons/.../dist/` にマッピング |
+| prod ビルド対応            | `copyAddonsPlugin` で `addons/.../dist/` を `dist/addons/` にコピー |
 
 ---
 
@@ -162,7 +209,8 @@ export function registerAddons(): void {
 |-----------|------------------------------|----------|
 | 型チェック    | `npx tsc --noEmit`           | エラー 0件   |
 | ユニットテスト | `npx vitest run`（既存34件）       | 全件パス    |
-| ビルド      | `npm run build`              | エラー 0件   |
+| アドオンビルド | `npm run build:addons`       | エラー 0件、dist/ に出力 |
+| ビルド      | `npm run build`              | エラー 0件、dist/addons/ にコピー |
 | 表示確認    | ブラウザでの目視確認                   | 既存と同一    |
 
 ---
@@ -171,16 +219,32 @@ export function registerAddons(): void {
 
 ## 9.1. 決定事項
 
-| 決定事項                   | 選択肢                                                    | 決定内容                        | 理由                                                         |
-|------------------------|--------------------------------------------------------|----------------------------|------------------------------------------------------------|
-| アドオン登録先               | (A) default 側 (B) custom 側                              | (B) custom 側               | アドオンはデフォルトを上書き可能であるべき。将来的にユーザーがデフォルトの VibeCodingDemo を別の実装に差し替える際に custom 側が適切 |
-| 有効/無効管理方式             | (A) 設定ファイル (B) import 追加/削除 (C) 環境変数                    | (B) import 追加/削除            | 設定ファイルのパースやバリデーション不要でシンプル。TypeScript の型チェックが効く          |
-| スタイル管理方針（A-002 対応）   | (A) style.css に集約 (B) アドオン内 CSS Modules を維持              | (B) アドオン内 CSS Modules を維持   | 既存ビジュアルが CSS Modules を使用しており、集約すると移動コストが増大。アドオンの独立性を優先  |
-| registerAddons の呼び出し場所 | (A) App.tsx の関数内 (B) App.tsx のモジュールスコープ (C) main.tsx     | (B) App.tsx のモジュールスコープ      | registerDefaultComponents と同じパターンを踏襲。モジュール読み込み時に一度だけ実行   |
+| 決定事項                   | 選択肢                                                    | 決定内容                                  | 理由                                                         |
+|------------------------|--------------------------------------------------------|--------------------------------------|------------------------------------------------------------|
+| アドオン配置場所              | (A) `src/addons/` (B) ルートレベル `addons/`                  | (B) ルートレベル `addons/`                  | ホストアプリの `src/` から完全に分離し、独立したビルドプロセスを明確化するため             |
+| バンドル形式                | (A) ESM (B) IIFE (C) UMD                                | (B) IIFE                              | `<script>` タグでの動的ロードに最適。即時実行で登録が完了する                     |
+| アドオン登録方式              | (A) static import (B) dynamic import (C) window グローバルコールバック | (C) window グローバルコールバック               | IIFE バンドルとの親和性が高い。React の共有も window 経由で自然に実現             |
+| 有効/無効管理方式             | (A) import 追加/削除 (B) manifest.json (C) 環境変数             | (B) manifest.json                     | ホストアプリのソースコード変更不要。宣言的で拡張性が高い                           |
+| CSS 管理方針              | (A) 外部 CSS ファイル (B) JS インライン化                           | (B) JS インライン化                         | IIFE バンドルの自己完結性を確保。追加のファイル配信設定が不要                       |
+| React 共有方式            | (A) バンドルに含める (B) window グローバル経由                          | (B) window グローバル経由                    | React の重複を避け、ホストアプリとの状態共有を保証                             |
+| dev server 配信方式       | (A) proxy (B) resolve alias                              | (B) resolve alias                     | 設定がシンプルで、Vite のモジュール解決と統合的に動作する                         |
+| prod ビルド配信方式          | (A) public/ にコピー (B) カスタムプラグインで dist/ にコピー               | (B) カスタムプラグイン（copyAddonsPlugin）      | アドオンの dist/ をそのまま配信ディレクトリにコピー。public/ への依存を排除           |
 
 ---
 
 # 10. 変更履歴
+
+## v2.0.0 (2026-01-30)
+
+**変更内容:**
+
+- 設計を全面改訂: 静的 import 方式から動的 IIFE バンドル方式に移行
+- アドオン配置を `src/addons/` からルートレベル `addons/` に変更
+- manifest.json による宣言的アドオン管理を導入
+- `window.__ADDON_REGISTER__` グローバルコールバックによる動的登録方式を導入
+- `addon-bridge.ts` によるホスト/アドオン間の接続インターフェースを追加
+- CSS インライン化による自己完結型バンドルを実現
+- dev server / prod ビルドの配信設定を追加
 
 ## v1.1.0 (2026-01-30)
 
@@ -193,4 +257,4 @@ export function registerAddons(): void {
 **変更内容:**
 
 - 初版作成
-- ビジュアルコンポーネントのアドオン化設計を定義
+- ビジュアルコンポーネントのアドオン化設計を定義（静的 import 方式）

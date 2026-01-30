@@ -11,35 +11,36 @@
 # 1. 背景
 
 プレゼンテーションアプリケーションでは、ビジュアルコンポーネント（VibeCodingDemo, HierarchyFlowVisual, PersistenceVisual）が
-`src/visuals/` に配置され、`registerDefaults.tsx` でデフォルトコンポーネントとして登録されている。これらのビジュアルは
-AI-SDD デモ用の特化コンポーネントであり、プレゼンテーション本体の汎用コンポーネントとは性質が異なる。
+`src/visuals/` に配置され、`registerDefaults.tsx` でデフォルトコンポーネントとして登録されていた。これらのビジュアルは
+AI-SDD デモ用の特化コンポーネントであり、プレゼンテーション本体の汎用コンポーネントとは性質が異なるが、同じ登録経路で管理されていた。
 
-本体コードとビジュアルの結合を解消し、アドオンとして独立管理可能にすることで、拡張性と保守性を向上させる。
+本体コードとビジュアルの結合を解消し、独立した IIFE バンドルとしてアドオン化することで、拡張性と保守性を向上させる。
 
 # 2. 概要
 
-ビジュアルコンポーネントを「アドオン」という単位でグループ化し、統一された型定義（AddonDefinition）で構造を規定する。アドオンは既存の
-ComponentRegistry の custom 側登録 API を利用して登録され、本体コードの変更なしに追加・削除が可能となる。
+ビジュアルコンポーネントを「アドオン」という単位でグループ化し、独立した IIFE バンドルとしてビルドする。アドオンはホストアプリの `src/` ディレクトリ外（`addons/`）に配置され、独自のビルド設定を持つ。
 
-アドオンの有効/無効は、エントリポイントファイル（`src/addons/index.ts`）での import 操作のみで切り替える。
+ホストアプリは起動時に `manifest.json` を fetch し、記載されたアドオンバンドルを動的にスクリプトロードする。アドオンは `window.__ADDON_REGISTER__` グローバルコールバックを通じて ComponentRegistry の custom 側にコンポーネントを登録する。
+
+アドオンの有効/無効は、manifest.json のエントリの追加/削除で管理する。
 
 # 3. 要求定義
 
 ## 3.1. 機能要件 (Functional Requirements)
 
-| ID     | 要件                                    | 優先度 | 根拠                                                       | PRD参照  |
-|--------|---------------------------------------|-----|----------------------------------------------------------|--------|
-| FR-001 | アドオンは AddonDefinition 型で構造を統一する       | 必須  | 将来のアドオン開発者が統一されたインターフェースで拡張できるようにするため                    | FR-001 |
-| FR-002 | アドオンのコンポーネントは registerComponent で登録する | 必須  | 既存の ComponentRegistry を活用し、本体コードの変更を最小化して互換性を維持するため      | FR-002 |
-| FR-003 | アドオンの有効/無効は import の追加/削除で管理する        | 必須  | 設定ファイルのパースやバリデーション不要で、TypeScript の型チェックが効くシンプルな管理を実現するため | FR-003 |
-| FR-004 | 既存3ビジュアルを addons/ 配下に移動しアドオンとして再構成する  | 必須  | AI-SDD デモ用の特化ビジュアルを本体の汎用コンポーネントから分離し、独立管理を実現するため         | FR-004 |
+| ID     | 要件                                       | 優先度 | 根拠                                                       | PRD参照  |
+|--------|------------------------------------------|-----|----------------------------------------------------------|--------|
+| FR-001 | アドオンを独立した IIFE バンドルとしてビルドする               | 必須  | ホストアプリとの完全な分離を実現し、独立した開発・ビルドを可能にするため                   | FR-001 |
+| FR-002 | アドオンのコンポーネントは registerComponent で登録する      | 必須  | 既存の ComponentRegistry を活用し、本体コードの変更を最小化して互換性を維持するため      | FR-002 |
+| FR-003 | manifest.json のエントリ追加/削除で有効/無効を管理する        | 必須  | 宣言的な設定でアドオン管理を実現し、ホストアプリのソースコード変更を不要にするため              | FR-003 |
+| FR-004 | 既存3ビジュアルを addons/ 配下に移動し独立バンドルとして再構成する    | 必須  | AI-SDD デモ用の特化ビジュアルを本体の汎用コンポーネントから分離し、独立管理を実現するため         | FR-004 |
 
 ## 3.2. 非機能要件 (Non-Functional Requirements)
 
-| ID      | 要件                                      | 優先度 | 根拠                               | PRD参照   |
-|---------|-----------------------------------------|-----|----------------------------------|---------|
-| NFR-001 | アドオン化によるビルドサイズの増加は最小限に抑える               | 推奨  | ファイル分割による overhead 以上の増加は不要      | NFR-001 |
-| NFR-002 | アドオンの追加・削除は index.ts の import 変更のみで完結する | 必須  | 開発者が他ファイルの修正なしにアドオンを管理できるようにするため | NFR-002 |
+| ID      | 要件                                          | 優先度 | 根拠                                    | PRD参照   |
+|---------|---------------------------------------------|-----|---------------------------------------|---------|
+| NFR-001 | アドオン化によるビルドサイズの増加は最小限に抑える                   | 推奨  | ファイル分割による overhead 以上の増加は不要           | NFR-001 |
+| NFR-002 | アドオンの追加・削除は manifest.json の変更のみで完結する         | 必須  | ホストアプリのソースコード修正なしにアドオンを管理できるようにするため | NFR-002 |
 
 ## 3.3. 設計制約
 
@@ -50,75 +51,98 @@ ComponentRegistry の custom 側登録 API を利用して登録され、本体�
 
 # 4. API
 
-| ディレクトリ                      | ファイル名         | エクスポート              | 概要                                 |
-|-----------------------------|---------------|---------------------|------------------------------------|
-| `src/addons`                | `types.ts`    | `AddonDefinition`   | アドオン定義型                            |
-| `src/addons`                | `types.ts`    | `AddonComponent`    | アドオンコンポーネント定義型                     |
-| `src/addons`                | `index.ts`    | `addons`            | 有効なアドオン定義の配列                       |
-| `src/addons`                | `register.ts` | `registerAddons()`  | 全アドオンを ComponentRegistry に一括登録する関数 |
-| `src/addons/ai-sdd-visuals` | `index.ts`    | `aiSddVisualsAddon` | AI-SDD デモ用ビジュアルアドオン定義              |
+## 4.1. ホストアプリ側
 
-## 4.1. 型定義
+| ディレクトリ | ファイル名                | エクスポート / 役割                     | 概要                                        |
+|--------|----------------------|-----------------------------------|-------------------------------------------|
+| `src`  | `addon-bridge.ts`    | `window.__ADDON_REGISTER__` セットアップ | アドオンがコンポーネントを登録するためのグローバルインターフェース         |
+| `src`  | `main.tsx`           | アドオンローダー                          | manifest.json の fetch とアドオンスクリプトの動的ロード     |
+
+## 4.2. アドオン側
+
+| ディレクトリ                  | ファイル名           | 役割                | 概要                             |
+|-------------------------|-----------------|-------------------|--------------------------------|
+| `addons`                | `entry.ts`      | 登録エントリポイント         | `window.__ADDON_REGISTER__` を呼びコンポーネントを登録 |
+| `addons`                | `vite.config.ts`| ビルド設定             | IIFE バンドル生成、CSS インライン化、manifest 生成 |
+| `addons/dist`           | `manifest.json` | アドオンメタデータ          | 有効アドオン一覧とバンドルパス                 |
+| `addons/ai-sdd-visuals` | `*.tsx`         | ビジュアルコンポーネント       | プレゼン固有のビジュアル（3コンポーネント + icons）  |
+
+## 4.3. グローバルインターフェース
 
 ```typescript
-/** アドオンが提供するコンポーネント定義 */
-type AddonComponent = {
-    name: string
-    component: RegisteredComponent
-}
+declare global {
+  interface Window {
+    /** アドオンがコンポーネントを登録するためのコールバック */
+    __ADDON_REGISTER__?: (
+      addonName: string,
+      components: Array<{ name: string; component: React.ComponentType<Record<string, unknown>> }>
+    ) => void
 
-/** アドオン定義 */
-type AddonDefinition = {
-    name: string
-    components: AddonComponent[]
+    /** アドオンが共有する React インスタンス */
+    React?: typeof React
+    ReactJSXRuntime?: typeof ReactJSXRuntime
+  }
+}
+```
+
+## 4.4. manifest.json スキーマ
+
+```typescript
+type AddonManifest = {
+  addons: Array<{
+    name: string    // アドオン名
+    bundle: string  // バンドルファイルのパス（例: "/addons/ai-sdd-visuals.iife.js"）
+  }>
 }
 ```
 
 # 5. 用語集
 
-| 用語                | 説明                                        |
-|-------------------|-------------------------------------------|
-| アドオン（Addon）       | プレゼンテーション本体から独立したコンポーネントのパッケージ単位          |
-| AddonDefinition   | アドオンの構造を定義する TypeScript 型。名前とコンポーネント一覧を持つ |
-| AddonComponent    | アドオン内の個別コンポーネント定義。登録名と React コンポーネントのペア   |
-| ComponentRegistry | コンポーネント名から実コンポーネントを解決するレジストリ機構            |
+| 用語                     | 説明                                                               |
+|------------------------|------------------------------------------------------------------|
+| アドオン（Addon）            | プレゼンテーション本体から独立した IIFE バンドルとしてパッケージされたコンポーネント群      |
+| IIFE バンドル              | 即時実行関数式形式の JavaScript バンドル。ロード時に即座に実行される                   |
+| manifest.json          | 有効なアドオンの一覧とバンドルパスを定義する設定ファイル                          |
+| addon-bridge           | ホストアプリ側のグローバル登録インターフェース（`src/addon-bridge.ts`）          |
+| `__ADDON_REGISTER__`   | アドオンがコンポーネントを登録するための `window` 上のグローバルコールバック関数           |
+| ComponentRegistry      | コンポーネント名から実コンポーネントを解決するレジストリ機構                        |
 
 # 6. 使用例
 
-```tsx
-// アドオン定義の例（src/addons/ai-sdd-visuals/index.ts）
-import type {AddonDefinition} from '../types'
-import {VibeCodingDemo} from './VibeCodingDemo'
+```typescript
+// アドオンエントリポイント（addons/entry.ts）
+import { VibeCodingDemo } from './ai-sdd-visuals/VibeCodingDemo'
+import { HierarchyFlowVisual } from './ai-sdd-visuals/HierarchyFlowVisual'
+import { PersistenceVisual } from './ai-sdd-visuals/PersistenceVisual'
 
-export const aiSddVisualsAddon: AddonDefinition = {
-    name: 'ai-sdd-visuals',
-    components: [
-        {name: 'VibeCodingDemo', component: VibeCodingDemo},
-    ],
+const register = window.__ADDON_REGISTER__
+if (register) {
+  register('ai-sdd-visuals', [
+    { name: 'VibeCodingDemo', component: VibeCodingDemo },
+    { name: 'HierarchyFlowVisual', component: HierarchyFlowVisual },
+    { name: 'PersistenceVisual', component: PersistenceVisual },
+  ])
 }
 ```
 
-```tsx
-// アドオンの有効化（src/addons/index.ts）
-import type {AddonDefinition} from './types'
-import {aiSddVisualsAddon} from './ai-sdd-visuals'
-
-export const addons: AddonDefinition[] = [
-    aiSddVisualsAddon,
-]
+// manifest.json（addons/ai-sdd-visuals/dist/manifest.json）
+```json
+{
+  "addons": [
+    {
+      "name": "ai-sdd-visuals",
+      "bundle": "/addons/ai-sdd-visuals.iife.js"
+    }
+  ]
+}
 ```
 
-```tsx
-// アドオンの一括登録（src/addons/register.ts）
-import {registerComponent} from '../components/ComponentRegistry'
-import {addons} from './index'
-
-export function registerAddons(): void {
-    for (const addon of addons) {
-        for (const {name, component} of addon.components) {
-            registerComponent(name, component)
-        }
-    }
+```typescript
+// ホストアプリ側のアドオンロード（src/main.tsx）
+async function loadAddons(): Promise<void> {
+  const res = await fetch('/addons/manifest.json')
+  const manifest: AddonManifest = await res.json()
+  await Promise.all(manifest.addons.map((addon) => loadAddonScript(addon.bundle)))
 }
 ```
 
@@ -126,19 +150,27 @@ export function registerAddons(): void {
 
 ```mermaid
 sequenceDiagram
-    participant App as App.tsx
-    participant RegDef as registerDefaults
-    participant RegAddon as registerAddons
+    participant Main as main.tsx
+    participant Bridge as addon-bridge.ts
     participant Registry as ComponentRegistry
-    App ->> RegDef: registerDefaultComponents()
-    RegDef ->> Registry: registerDefaultComponent(name, comp)
-    Note right of Registry: default 層に登録
-    App ->> RegAddon: registerAddons()
-    RegAddon ->> Registry: registerComponent(name, comp)
+    participant Manifest as manifest.json
+    participant Addon as addon IIFE
+
+    Main ->> Bridge: import（グローバル登録関数をセットアップ）
+    Bridge ->> Bridge: window.__ADDON_REGISTER__ を定義
+    Bridge ->> Bridge: window.React, window.ReactJSXRuntime を公開
+    Main ->> Main: registerDefaultComponents()
+    Main ->> Manifest: fetch('/addons/manifest.json')
+    Manifest -->> Main: { addons: [{ name, bundle }] }
+    Main ->> Addon: <script> タグで動的ロード
+    Addon ->> Addon: IIFE 即時実行（CSS インライン注入）
+    Addon ->> Bridge: window.__ADDON_REGISTER__('ai-sdd-visuals', [...])
+    Bridge ->> Registry: registerComponent(name, component)
     Note right of Registry: custom 層に登録（default を上書き可能）
-    Note over App, Registry: スライド描画時
-    App ->> Registry: resolveComponent(name)
-    Registry -->> App: custom → default → fallback の優先順で解決
+    Main ->> Main: ReactDOM.createRoot().render(<App />)
+    Note over Main, Registry: スライド描画時
+    Main ->> Registry: resolveComponent(name)
+    Registry -->> Main: custom → default → fallback の優先順で解決
 ```
 
 # 8. 制約事項
@@ -147,6 +179,7 @@ sequenceDiagram
 - TypeScript strict mode に準拠する（T-001）
 - Reveal.js の DOM 構造との互換性を維持する（T-002）
 - プレゼンテーションの表示品質に影響を与えない（B-001）
+- アドオンは React を external 指定とし、ホストアプリの React インスタンスを共有する
 
 ---
 

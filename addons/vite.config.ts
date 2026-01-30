@@ -1,14 +1,19 @@
 import { defineConfig, type Plugin } from 'vite'
 import { writeFileSync, mkdirSync } from 'fs'
-import { resolve } from 'path'
+import { resolve, dirname } from 'path'
+import { fileURLToPath } from 'url'
 
-/** CSS を JS にインライン化するプラグイン */
+const __dirname = dirname(fileURLToPath(import.meta.url))
+
+const ADDON_NAME = 'ai-sdd-visuals'
+const BUNDLE_FILE = `${ADDON_NAME}.iife.js`
+
+/** CSS to JS inline plugin */
 function cssInlinePlugin(): Plugin {
   return {
     name: 'css-inline',
     enforce: 'post',
     generateBundle(_options, bundle) {
-      // CSS ファイルの内容を収集
       const cssChunks: string[] = []
       const cssFileNames: string[] = []
 
@@ -21,7 +26,6 @@ function cssInlinePlugin(): Plugin {
 
       if (cssChunks.length === 0) return
 
-      // CSS を JS に注入するコードを生成
       const cssInjection = `
 (function(){
   var style = document.createElement('style');
@@ -29,14 +33,12 @@ function cssInlinePlugin(): Plugin {
   document.head.appendChild(style);
 })();`
 
-      // JS バンドルに CSS 注入コードを先頭に追加
       for (const [, chunk] of Object.entries(bundle)) {
         if (chunk.type === 'chunk' && chunk.isEntry) {
           chunk.code = cssInjection + '\n' + chunk.code
         }
       }
 
-      // CSS ファイルをバンドルから除去
       for (const name of cssFileNames) {
         delete bundle[name]
       }
@@ -44,7 +46,7 @@ function cssInlinePlugin(): Plugin {
   }
 }
 
-/** ビルド後に manifest.json を生成するプラグイン */
+/** manifest.json generation plugin */
 function manifestPlugin(): Plugin {
   return {
     name: 'addon-manifest',
@@ -54,8 +56,8 @@ function manifestPlugin(): Plugin {
       const manifest = {
         addons: [
           {
-            name: 'ai-sdd-visuals',
-            bundle: '/addons/ai-sdd-visuals.iife.js',
+            name: ADDON_NAME,
+            bundle: `/addons/${BUNDLE_FILE}`,
           },
         ],
       }
@@ -69,10 +71,10 @@ export default defineConfig({
   publicDir: false,
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/entry.ts'),
-      name: 'AiSddVisuals',
+      entry: resolve(__dirname, 'entry.ts'),
+      name: 'Addon',
       formats: ['iife'],
-      fileName: () => 'ai-sdd-visuals.iife.js',
+      fileName: () => BUNDLE_FILE,
     },
     outDir: resolve(__dirname, 'dist'),
     emptyOutDir: false,

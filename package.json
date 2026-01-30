@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "npm run build:addons && vite",
     "build": "npm run build:addons && vite build",
-    "build:addons": "vite build --config addons/ai-sdd-visuals/vite.config.ts",
+    "build:addons": "vite build --config addons/vite.config.ts",
     "preview": "vite preview",
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\"",
     "typecheck": "tsc --noEmit",
@@ -27,6 +27,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
+    "@types/node": "^25.1.0",
     "@types/react": "^19.2.10",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.2",

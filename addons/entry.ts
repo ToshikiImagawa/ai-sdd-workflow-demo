@@ -1,6 +1,6 @@
-import { VibeCodingDemo } from './VibeCodingDemo'
-import { HierarchyFlowVisual } from './HierarchyFlowVisual'
-import { PersistenceVisual } from './PersistenceVisual'
+import { VibeCodingDemo } from './ai-sdd-visuals/VibeCodingDemo'
+import { HierarchyFlowVisual } from './ai-sdd-visuals/HierarchyFlowVisual'
+import { PersistenceVisual } from './ai-sdd-visuals/PersistenceVisual'
 
 declare global {
   interface Window {

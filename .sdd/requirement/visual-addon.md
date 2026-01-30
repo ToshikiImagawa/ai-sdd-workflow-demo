@@ -17,7 +17,7 @@ AI-SDD デモ用の特化コンポーネントであり、本体の汎用コン�
 
 - **カスタマイズ性向上**: 特定の聴衆や用途に応じてビジュアルセットを選択可能にする
 - **保守性の向上**: ビジュアル要素の変更が本体コードに影響しない
-- **拡張性の向上**: 新しいビジュアルアドオンの追加が import の1行追加で完結する
+- **拡張性の向上**: 新しいビジュアルアドオンの追加が manifest.json へのエントリ追加で完結する
 
 ---
 
@@ -69,14 +69,14 @@ graph TB
 ## 2.2. 機能一覧（テキスト形式）
 
 - アドオン定義
-    - AddonDefinition 型による構造統一
+    - 独立した IIFE バンドルとしてアドオンをパッケージ化
     - アドオン単位でのコンポーネントグループ化
 - アドオン登録
-    - ComponentRegistry の custom 側への一括登録
-    - registerAddons() 関数による起動時登録
+    - ComponentRegistry の custom 側への動的登録
+    - `window.__ADDON_REGISTER__` グローバルコールバックによる起動時登録
 - アドオン管理
-    - import の追加/削除によるアドオンの有効/無効切替
-    - 有効アドオン一覧の集中管理
+    - manifest.json による有効アドオンの宣言的管理
+    - 動的スクリプトロードによるアドオンの読み込み
 
 ---
 
@@ -93,9 +93,9 @@ requirementDiagram
         verifymethod: demonstration
     }
 
-    functionalRequirement AddonDefinitionType {
+    functionalRequirement AddonBundle {
         id: FR_001
-        text: "AddonDefinition型で構造を統一すること"
+        text: "アドオンを独立したIIFEバンドルとしてビルドすること"
         risk: low
         verifymethod: test
     }
@@ -109,7 +109,7 @@ requirementDiagram
 
     functionalRequirement AddonToggle {
         id: FR_003
-        text: "importの追加削除のみで有効無効を管理できること"
+        text: "manifest.jsonへのエントリ追加削除で有効無効を管理できること"
         risk: low
         verifymethod: inspection
     }
@@ -135,14 +135,14 @@ requirementDiagram
         verifymethod: demonstration
     }
 
-    AddonSystem - contains -> AddonDefinitionType
+    AddonSystem - contains -> AddonBundle
     AddonSystem - contains -> AddonRegistration
     AddonSystem - contains -> AddonToggle
     AddonSystem - contains -> VisualMigration
     AddonSystem - contains -> ExistingRegistryCompat
     AddonSystem - contains -> NoBehaviorChange
-    AddonRegistration - derives -> AddonDefinitionType
-    VisualMigration - derives -> AddonDefinitionType
+    AddonRegistration - derives -> AddonBundle
+    VisualMigration - derives -> AddonBundle
 ```
 
 ---
@@ -153,23 +153,23 @@ requirementDiagram
 
 ### UR-001: ビジュアルコンポーネントのアドオン化
 
-開発者がビジュアルコンポーネントをプレゼンテーション本体から独立して管理でき、アドオンの追加・削除がシンプルな操作（import
-の変更）で完結すること。
+開発者がビジュアルコンポーネントをプレゼンテーション本体から独立して管理でき、アドオンの追加・削除がシンプルな操作（manifest.json の変更）で完結すること。
 
 **検証方法:** デモンストレーションによる検証
 
 ## 4.2. 機能要求
 
-### FR-001: AddonDefinition 型による構造統一
+### FR-001: アドオンの独立バンドル化
 
 **優先度**: Must
 
-アドオンは統一された型定義（AddonDefinition）に従い、以下の情報を持つ：
+アドオンは独立した IIFE バンドルとしてビルドされ、以下の構造を持つ：
 
 - アドオン名（name）
-- 提供するコンポーネント一覧（components）— 各コンポーネントは登録名と React コンポーネントのペア
+- 提供するコンポーネント一覧 — 各コンポーネントは登録名と React コンポーネントのペア
+- 独立したビルド設定（vite.config.ts）による自己完結型バンドル
 
-**検証方法:** テスト（型チェック）による検証
+**検証方法:** テスト（ビルド成功・型チェック）による検証
 
 ### FR-002: ComponentRegistry への登録
 
@@ -178,12 +178,11 @@ requirementDiagram
 アドオンが提供するコンポーネントは、既存の ComponentRegistry の `registerComponent`（custom側）を使用して登録される。これにより、アドオンのコンポーネントはデフォルトコンポーネントを上書き可能となる。
 
 **検証方法:** テストによる検証
-### FR-003: import による有効/無効管理
+### FR-003: manifest.json による有効/無効管理
 
 **優先度**: Must
 
-`src/addons/index.ts` で有効なアドオンの一覧を配列としてエクスポートし、アドオンの有効/無効は該当する
-import行の追加/削除のみで切り替え可能とする。
+`manifest.json` で有効なアドオンの一覧を宣言的に管理し、アドオンの有効/無効は該当するエントリの追加/削除で切り替え可能とする。ホストアプリは起動時に manifest.json を fetch し、記載されたバンドルを動的にロードする。
 
 **検証方法:** コードレビュー（インスペクション）による検証
 
@@ -191,7 +190,7 @@ import行の追加/削除のみで切り替え可能とする。
 
 **優先度**: Must
 
-以下の3つのビジュアルコンポーネントを `src/visuals/` から `src/addons/ai-sdd-visuals/` に移動し、アドオンとして再構成する：
+以下の3つのビジュアルコンポーネントを `src/visuals/` から `addons/ai-sdd-visuals/` に移動し、独立バンドルとして再構成する：
 
 - VibeCodingDemo
 - HierarchyFlowVisual
@@ -213,7 +212,7 @@ import行の追加/削除のみで切り替え可能とする。
 
 **優先度**: Must
 
-アドオンの追加・削除は `src/addons/index.ts` の import 行の変更のみで完結し、他のファイルの修正を必要としないこと。
+アドオンの追加・削除は manifest.json のエントリ変更のみで完結し、ホストアプリのソースコード修正を必要としないこと。
 
 **検証方法:** インスペクション（コードレビュー）による検証
 
@@ -251,7 +250,8 @@ custom側の登録 API を利用する。
 # 6. 前提条件
 
 - ComponentRegistry が default/custom の二層構造で動作していること
-- 移動対象のビジュアルコンポーネントが他のコンポーネントから直接 import されていないこと（registerDefaults.tsx 経由でのみ使用）
+- 移動対象のビジュアルコンポーネントが他のコンポーネントから直接 import されていないこと（レジストリ経由でのみ使用）
+- Vite によるビルド環境が利用可能であること
 
 ---
 
@@ -261,17 +261,20 @@ custom側の登録 API を利用する。
 
 - TerminalAnimation のアドオン化（本体のデフォルトコンポーネントとして残す）
 - MUI アイコンのアドオン化
-- アドオンの動的ロード（lazy import）
-- アドオン設定ファイル（JSON等）による管理
+- アドオンのバージョン管理・依存関係解決
+- アドオンのホットリロード（開発中はビルド後にリロードが必要）
 
 ---
 
 # 8. 用語集
 
-| 用語                | 定義                                             |
-|-------------------|------------------------------------------------|
-| アドオン（Addon）       | プレゼンテーション本体から独立したコンポーネントのパッケージ単位               |
-| AddonDefinition   | アドオンの構造を定義する TypeScript 型                      |
-| ComponentRegistry | コンポーネント名から実コンポーネントを解決するレジストリ機構                 |
-| default コンポーネント   | registerDefaults.tsx で登録される標準コンポーネント           |
-| custom コンポーネント    | registerComponent で登録され、default を上書き可能なコンポーネント |
+| 用語                     | 定義                                                               |
+|------------------------|------------------------------------------------------------------|
+| アドオン（Addon）            | プレゼンテーション本体から独立した IIFE バンドルとしてパッケージされたコンポーネント群      |
+| IIFE バンドル              | 即時実行関数式（Immediately Invoked Function Expression）形式の JavaScript バンドル |
+| manifest.json          | 有効なアドオンの一覧とバンドルパスを定義する設定ファイル                          |
+| addon-bridge           | ホストアプリとアドオン間の接続を担うグローバル登録インターフェース                     |
+| `__ADDON_REGISTER__`   | アドオンがコンポーネントを登録するためのグローバルコールバック関数                     |
+| ComponentRegistry      | コンポーネント名から実コンポーネントを解決するレジストリ機構                        |
+| default コンポーネント        | registerDefaults.tsx で登録される標準コンポーネント                          |
+| custom コンポーネント         | アドオン経由で登録され、default を上書き可能なコンポーネント                      |
