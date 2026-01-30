@@ -6,4 +6,6 @@ dist/
 
 assets/*
 public/*
+addons/src/
 addons/dist/
+addons/.entry-generated.ts

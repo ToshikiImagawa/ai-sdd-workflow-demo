@@ -18,5 +18,5 @@
     "noUncheckedSideEffectImports": true
   },
   "include": ["src", "addons"],
-  "exclude": ["addons/vite.config.ts", "addons/dist"]
+  "exclude": ["addons/vite.config.ts", "addons/src", "addons/dist"]
 }

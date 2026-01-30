@@ -16,9 +16,9 @@
 
 | モジュール/機能                                  | ステータス | 備考 |
 |----------------------------------------------|----------|------|
-| `addons/entry.ts`                            | 🟢       | アドオン登録エントリポイント |
-| `addons/vite.config.ts`                      | 🟢       | IIFE ビルド設定 |
-| ビジュアルファイル移動（`addons/ai-sdd-visuals/`）     | 🟢       | 3コンポーネント + CSS Modules + icons.tsx |
+| `addons/src/ai-sdd-visuals/entry.ts`         | 🟢       | アドオン登録エントリポイント（各アドオン内に配置） |
+| `addons/vite.config.ts`                      | 🟢       | IIFE ビルド設定（自動検出方式） |
+| ビジュアルファイル移動（`addons/src/ai-sdd-visuals/`）  | 🟢       | 3コンポーネント + CSS Modules + icons.tsx |
 | `src/addon-bridge.ts`                        | 🟢       | グローバル登録インターフェース |
 | `src/main.tsx` アドオンローダー                    | 🟢       | manifest fetch + スクリプト動的ロード |
 | `src/components/registerDefaults.tsx` 修正     | 🟢       | ビジュアル3つの登録を削除 |
@@ -62,7 +62,7 @@ graph TD
     Loader --> Manifest[manifest.json]
     Loader --> Script["&lt;script&gt; 動的ロード"]
 
-    subgraph "addons/ai-sdd-visuals/"
+    subgraph "addons/src/ai-sdd-visuals/"
         Script --> Entry[entry.ts]
         Entry --> VCD[VibeCodingDemo]
         Entry --> HFV[HierarchyFlowVisual]
@@ -85,27 +85,28 @@ graph TD
 |--------------------------|----------------------------------------------|-------------------------------------|---------------------------------------|
 | `addon-bridge.ts`        | グローバル登録関数のセットアップ、React インスタンス公開             | ComponentRegistry, React             | `src/addon-bridge.ts`                 |
 | `main.tsx`（ローダー部分）     | manifest.json の fetch とアドオンスクリプト動的ロード        | addon-bridge.ts                      | `src/main.tsx`                        |
-| `entry.ts`               | アドオンのコンポーネントを `__ADDON_REGISTER__` 経由で登録     | 各ビジュアルコンポーネント, window グローバル         | `addons/entry.ts`                     |
-| `vite.config.ts`         | アドオンの IIFE ビルド設定、CSS インライン化、manifest 生成     | Vite                                 | `addons/vite.config.ts`               |
-| ビジュアルコンポーネント（3つ）       | 各ビジュアルの描画ロジック                               | React, CSS Modules                   | `addons/ai-sdd-visuals/`              |
+| `entry.ts`               | アドオンのコンポーネントを `__ADDON_REGISTER__` 経由で登録     | 各ビジュアルコンポーネント, window グローバル         | `addons/src/ai-sdd-visuals/entry.ts`  |
+| `vite.config.ts`         | アドオンの IIFE ビルド設定、自動検出、CSS インライン化、manifest 生成 | Vite                                 | `addons/vite.config.ts`               |
+| ビジュアルコンポーネント（3つ）       | 各ビジュアルの描画ロジック                               | React, CSS Modules                   | `addons/src/ai-sdd-visuals/`          |
 
 ## 4.3. ディレクトリ構成
 
 ```
 project-root/
 ├── addons/                                  # アドオンディレクトリ（src/ 外）
-│   ├── ai-sdd-visuals/                      # コンテンツ：プレゼン固有ビジュアル
-│   │   ├── icons.tsx                        # SVG アイコンユーティリティ
-│   │   ├── VibeCodingDemo.tsx
-│   │   ├── VibeCodingDemo.module.css
-│   │   ├── HierarchyFlowVisual.tsx
-│   │   ├── HierarchyFlowVisual.module.css
-│   │   ├── PersistenceVisual.tsx
-│   │   └── PersistenceVisual.module.css
-│   ├── entry.ts                             # 登録エントリポイント
-│   ├── vite.config.ts                       # アドオンビルド設定
+│   ├── vite.config.ts                       # アドオンビルド設定（自動検出方式）
+│   ├── src/                                 # アドオンコンテンツ（git 管理外）
+│   │   └── ai-sdd-visuals/                  # プレゼン固有ビジュアル
+│   │       ├── entry.ts                     # 登録エントリポイント（規約: 各アドオンに必須）
+│   │       ├── icons.tsx                    # SVG アイコンユーティリティ
+│   │       ├── VibeCodingDemo.tsx
+│   │       ├── VibeCodingDemo.module.css
+│   │       ├── HierarchyFlowVisual.tsx
+│   │       ├── HierarchyFlowVisual.module.css
+│   │       ├── PersistenceVisual.tsx
+│   │       └── PersistenceVisual.module.css
 │   └── dist/                                # ビルド出力（git 管理外）
-│       ├── ai-sdd-visuals.iife.js
+│       ├── addons.iife.js
 │       └── manifest.json
 ├── src/
 │   ├── addon-bridge.ts                      # グローバル登録インターフェース
@@ -176,7 +177,11 @@ window.__ADDON_REGISTER__ = (
 ## 6.2. entry.ts（アドオン側）
 
 ```typescript
-// addons/entry.ts
+// addons/src/ai-sdd-visuals/entry.ts
+import { VibeCodingDemo } from './VibeCodingDemo'
+import { HierarchyFlowVisual } from './HierarchyFlowVisual'
+import { PersistenceVisual } from './PersistenceVisual'
+
 const register = window.__ADDON_REGISTER__
 if (register) {
   register('ai-sdd-visuals', [
@@ -233,6 +238,16 @@ if (register) {
 ---
 
 # 10. 変更履歴
+
+## v3.0.0 (2026-01-30)
+
+**変更内容:**
+
+- `addons/` 構成を再編: ビルド基盤（`vite.config.ts`）とコンテンツ（`src/`）を分離
+- `addons/src/*/entry.ts` 自動検出方式に変更。手動のエントリファイル管理を不要化
+- `addons/src/` を gitignore 対象に変更（プラグインコンテンツとして外部配置）
+- バンドルファイル名を `ai-sdd-visuals.iife.js` から `addons.iife.js` に変更（特定アドオン名に依存しない）
+- `addons/entry.ts` を廃止し、各アドオンディレクトリ内の `entry.ts` に移動
 
 ## v2.0.0 (2026-01-30)
 

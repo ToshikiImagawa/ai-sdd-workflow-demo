@@ -190,7 +190,7 @@ requirementDiagram
 
 **優先度**: Must
 
-以下の3つのビジュアルコンポーネントを `src/visuals/` から `addons/ai-sdd-visuals/` に移動し、独立バンドルとして再構成する：
+以下の3つのビジュアルコンポーネントを `src/visuals/` から `addons/src/ai-sdd-visuals/` に移動し、独立バンドルとして再構成する：
 
 - VibeCodingDemo
 - HierarchyFlowVisual

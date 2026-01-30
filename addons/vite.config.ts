@@ -1,12 +1,37 @@
 import { defineConfig, type Plugin } from 'vite'
-import { writeFileSync, mkdirSync } from 'fs'
+import { writeFileSync, mkdirSync, readdirSync, existsSync, unlinkSync } from 'fs'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
-const ADDON_NAME = 'ai-sdd-visuals'
-const BUNDLE_FILE = `${ADDON_NAME}.iife.js`
+const BUNDLE_FILE = 'addons.iife.js'
+const GENERATED_ENTRY = resolve(__dirname, '.entry-generated.ts')
+
+/** アドオンエントリ (src/{name}/entry.ts) を自動検出し、アドオン名の一覧を返す */
+function discoverAddons(): string[] {
+  const srcDir = resolve(__dirname, 'src')
+  if (!existsSync(srcDir)) return []
+  return readdirSync(srcDir, { withFileTypes: true })
+    .filter((d) => d.isDirectory() && existsSync(resolve(srcDir, d.name, 'entry.ts')))
+    .map((d) => d.name)
+}
+
+/** 自動検出したエントリを集約するファイルを生成・削除するプラグイン */
+function autoEntryPlugin(addonNames: string[]): Plugin {
+  return {
+    name: 'auto-entry',
+    buildStart() {
+      const imports = addonNames.map((name) => `import './src/${name}/entry.ts'`).join('\n')
+      writeFileSync(GENERATED_ENTRY, imports + '\n')
+    },
+    closeBundle() {
+      if (existsSync(GENERATED_ENTRY)) {
+        unlinkSync(GENERATED_ENTRY)
+      }
+    },
+  }
+}
 
 /** CSS to JS inline plugin */
 function cssInlinePlugin(): Plugin {
@@ -47,31 +72,31 @@ function cssInlinePlugin(): Plugin {
 }
 
 /** manifest.json generation plugin */
-function manifestPlugin(): Plugin {
+function manifestPlugin(addonNames: string[]): Plugin {
   return {
     name: 'addon-manifest',
     closeBundle() {
       const outDir = resolve(__dirname, 'dist')
       mkdirSync(outDir, { recursive: true })
       const manifest = {
-        addons: [
-          {
-            name: ADDON_NAME,
-            bundle: `/addons/${BUNDLE_FILE}`,
-          },
-        ],
+        addons: addonNames.map((name) => ({
+          name,
+          bundle: `/addons/${BUNDLE_FILE}`,
+        })),
       }
       writeFileSync(resolve(outDir, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n')
     },
   }
 }
 
+const addonNames = discoverAddons()
+
 export default defineConfig({
-  plugins: [cssInlinePlugin(), manifestPlugin()],
+  plugins: [autoEntryPlugin(addonNames), cssInlinePlugin(), manifestPlugin(addonNames)],
   publicDir: false,
   build: {
     lib: {
-      entry: resolve(__dirname, 'entry.ts'),
+      entry: GENERATED_ENTRY,
       name: 'Addon',
       formats: ['iife'],
       fileName: () => BUNDLE_FILE,

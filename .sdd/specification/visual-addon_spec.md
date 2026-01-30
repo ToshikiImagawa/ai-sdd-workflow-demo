@@ -62,10 +62,10 @@ AI-SDD デモ用の特化コンポーネントであり、プレゼンテーシ�
 
 | ディレクトリ                  | ファイル名           | 役割                | 概要                             |
 |-------------------------|-----------------|-------------------|--------------------------------|
-| `addons`                | `entry.ts`      | 登録エントリポイント         | `window.__ADDON_REGISTER__` を呼びコンポーネントを登録 |
-| `addons`                | `vite.config.ts`| ビルド設定             | IIFE バンドル生成、CSS インライン化、manifest 生成 |
-| `addons/dist`           | `manifest.json` | アドオンメタデータ          | 有効アドオン一覧とバンドルパス                 |
-| `addons/ai-sdd-visuals` | `*.tsx`         | ビジュアルコンポーネント       | プレゼン固有のビジュアル（3コンポーネント + icons）  |
+| `addons/src/ai-sdd-visuals` | `entry.ts`  | 登録エントリポイント         | `window.__ADDON_REGISTER__` を呼びコンポーネントを登録 |
+| `addons`                    | `vite.config.ts`| ビルド設定（自動検出方式）   | `src/*/entry.ts` 自動検出、IIFE バンドル生成、CSS インライン化、manifest 生成 |
+| `addons/dist`               | `manifest.json` | アドオンメタデータ        | 有効アドオン一覧とバンドルパス                 |
+| `addons/src/ai-sdd-visuals` | `*.tsx`         | ビジュアルコンポーネント     | プレゼン固有のビジュアル（3コンポーネント + icons）  |
 
 ## 4.3. グローバルインターフェース
 
@@ -91,7 +91,7 @@ declare global {
 type AddonManifest = {
   addons: Array<{
     name: string    // アドオン名
-    bundle: string  // バンドルファイルのパス（例: "/addons/ai-sdd-visuals.iife.js"）
+    bundle: string  // バンドルファイルのパス（例: "/addons/addons.iife.js"）
   }>
 }
 ```
@@ -110,10 +110,10 @@ type AddonManifest = {
 # 6. 使用例
 
 ```typescript
-// アドオンエントリポイント（addons/entry.ts）
-import { VibeCodingDemo } from './ai-sdd-visuals/VibeCodingDemo'
-import { HierarchyFlowVisual } from './ai-sdd-visuals/HierarchyFlowVisual'
-import { PersistenceVisual } from './ai-sdd-visuals/PersistenceVisual'
+// アドオンエントリポイント（addons/src/ai-sdd-visuals/entry.ts）
+import { VibeCodingDemo } from './VibeCodingDemo'
+import { HierarchyFlowVisual } from './HierarchyFlowVisual'
+import { PersistenceVisual } from './PersistenceVisual'
 
 const register = window.__ADDON_REGISTER__
 if (register) {
@@ -125,13 +125,13 @@ if (register) {
 }
 ```
 
-// manifest.json（addons/ai-sdd-visuals/dist/manifest.json）
+// manifest.json（addons/dist/manifest.json）
 ```json
 {
   "addons": [
     {
       "name": "ai-sdd-visuals",
-      "bundle": "/addons/ai-sdd-visuals.iife.js"
+      "bundle": "/addons/addons.iife.js"
     }
   ]
 }
