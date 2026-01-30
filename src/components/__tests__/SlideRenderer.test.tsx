@@ -15,10 +15,10 @@ describe('SlideRenderer', () => {
     registerDefaultComponents()
   })
 
-  it('デフォルトデータで10枚のスライドがレンダリングされる', () => {
+  it('デフォルトデータで全スライドがレンダリングされる', () => {
     const { container } = renderWithTheme(<SlideRenderer slides={defaultPresentationData.slides} />)
     const sections = container.querySelectorAll('section.slide-container')
-    expect(sections.length).toBe(10)
+    expect(sections.length).toBe(defaultPresentationData.slides.length)
   })
 
   it('各スライドに正しいidが設定される', () => {
@@ -34,38 +34,39 @@ describe('SlideRenderer', () => {
     const { container } = renderWithTheme(<SlideRenderer slides={[titleSlide]} />)
     const h1 = container.querySelector('h1')
     expect(h1).not.toBeNull()
-    expect(h1?.textContent).toContain('AI-SDD-Workflow')
+    expect(h1?.textContent).toContain(titleSlide.content.title)
   })
 
-  it('ContentLayoutスライドにh2タイトルが含まれる', () => {
-    const contentSlide = defaultPresentationData.slides[1]
+  it('two-columnスライドにh2タイトルが含まれる', () => {
+    const contentSlide = defaultPresentationData.slides.find((s) => s.layout === 'two-column')!
     const { container } = renderWithTheme(<SlideRenderer slides={[contentSlide]} />)
     const h2 = container.querySelector('h2.slide-title')
     expect(h2).not.toBeNull()
-    expect(h2?.textContent).toBe('Introduction: The Problem')
+    expect(h2?.textContent).toBe(contentSlide.content.title)
   })
 
-  it('ワークフロースライドにステップが含まれる', () => {
-    const workflowSlide = defaultPresentationData.slides[4]
+  it('workflowスライドにステップが含まれる', () => {
+    const workflowSlide = defaultPresentationData.slides.find((s) => s.layout === 'workflow')!
     const { container } = renderWithTheme(<SlideRenderer slides={[workflowSlide]} />)
-    expect(container.textContent).toContain('Specify')
-    expect(container.textContent).toContain('Plan')
-    expect(container.textContent).toContain('Task')
-    expect(container.textContent).toContain('Implement')
+    const steps = (workflowSlide.content as Record<string, unknown>).steps as Array<{ title: string }>
+    for (const step of steps) {
+      expect(container.textContent).toContain(step.title)
+    }
   })
 
-  it('フィーチャースライドにタイル情報が含まれる', () => {
-    const featuresSlide = defaultPresentationData.slides[5]
+  it('featuresスライドにタイル情報が含まれる', () => {
+    const featuresSlide = defaultPresentationData.slides.find((s) => s.layout === 'features')!
     const { container } = renderWithTheme(<SlideRenderer slides={[featuresSlide]} />)
-    expect(container.textContent).toContain('Auto Review')
-    expect(container.textContent).toContain('Task Breakdown')
-    expect(container.textContent).toContain('Vibe Detector')
+    const tiles = (featuresSlide.content as Record<string, unknown>).tiles as Array<{ title: string }>
+    for (const tile of tiles) {
+      expect(container.textContent).toContain(tile.title)
+    }
   })
 
-  it('サマリースライドにGitHubリンク情報が含まれる', () => {
-    const summarySlide = defaultPresentationData.slides[9]
+  it('summaryスライドにタイトルが含まれる', () => {
+    const summarySlide = defaultPresentationData.slides.find((s) => s.layout === 'summary')!
     const { container } = renderWithTheme(<SlideRenderer slides={[summarySlide]} />)
-    expect(container.textContent).toContain('Start SDD Today')
+    expect(container.textContent).toContain(summarySlide.content.title)
   })
 
   it('metaが指定されたスライドにdata-transition属性が設定される', () => {

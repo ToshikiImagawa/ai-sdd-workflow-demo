@@ -182,8 +182,12 @@ function renderWorkflowSlide(slide: SlideData): ReactNode {
           <TimelineNode key={step.number} number={step.number} title={step.title}>
             <Typography variant="body2">
               {step.description}
-              <br />
-              <code>{step.command}</code>
+              {step.command && (
+                <>
+                  <br />
+                  <code>{step.command}</code>
+                </>
+              )}
             </Typography>
           </TimelineNode>
         ))}
