@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import { useState } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 
@@ -10,7 +10,7 @@ type Props = {
   className?: string
 }
 
-export function FallbackImage({src, width, height, alt = '', className}: Props) {
+export function FallbackImage({ src, width, height, alt = '', className }: Props) {
   const [status, setStatus] = useState<'loading' | 'loaded' | 'error'>('loading')
 
   if (status === 'error') {

@@ -1,12 +1,12 @@
-import type {ReactNode} from 'react'
+import type { ReactNode } from 'react'
 import List from '@mui/material/List'
-import {BulletListItem} from './BulletListItem'
+import { BulletListItem } from './BulletListItem'
 
 type Props = {
   items: ReactNode[]
 }
 
-export function BulletList({items}: Props) {
+export function BulletList({ items }: Props) {
   return (
     <List disablePadding>
       {items.map((item, i) => (

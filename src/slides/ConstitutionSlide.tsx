@@ -1,8 +1,8 @@
 import Typography from '@mui/material/Typography'
-import {CodeBlockPanel} from '../components/CodeBlockPanel'
-import {TitledBulletList} from '../components/TitledBulletList'
-import {TwoColumnGrid} from '../components/TwoColumnGrid'
-import {ContentLayout} from '../layouts'
+import { CodeBlockPanel } from '../components/CodeBlockPanel'
+import { TitledBulletList } from '../components/TitledBulletList'
+import { TwoColumnGrid } from '../components/TwoColumnGrid'
+import { ContentLayout } from '../layouts'
 
 const items = [
   <>

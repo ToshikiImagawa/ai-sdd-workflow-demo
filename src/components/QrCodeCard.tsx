@@ -1,6 +1,6 @@
-import type {SxProps, Theme} from '@mui/material/styles'
+import type { SxProps, Theme } from '@mui/material/styles'
 import Box from '@mui/material/Box'
-import {FallbackImage} from './FallbackImage'
+import { FallbackImage } from './FallbackImage'
 
 type Props = {
   url: string
@@ -8,7 +8,7 @@ type Props = {
   sx?: SxProps<Theme>
 }
 
-export function QrCodeCard({url, size = 200, sx}: Props) {
+export function QrCodeCard({ url, size = 200, sx }: Props) {
   return (
     <Box
       sx={{

@@ -12,4 +12,4 @@ export type {
   ValidationError,
 } from './types'
 
-export {loadPresentationData, validatePresentationData, getValidationErrors, defaultPresentationData} from './loader'
+export { loadPresentationData, validatePresentationData, getValidationErrors, defaultPresentationData } from './loader'

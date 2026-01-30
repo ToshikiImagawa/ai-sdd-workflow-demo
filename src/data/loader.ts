@@ -1,11 +1,11 @@
-import type {PresentationData, SlideData, ValidationError} from './types'
+import type { PresentationData, SlideData, ValidationError } from './types'
 import defaultSlidesJson from './default-slides.json'
 
 /** デフォルトのプレゼンテーションデータ */
 export const defaultPresentationData: PresentationData = defaultSlidesJson as PresentationData
 
 function addError(errors: ValidationError[], path: string, message: string, expected: string, actual: string): void {
-  errors.push({path, message, expected, actual})
+  errors.push({ path, message, expected, actual })
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -90,5 +90,5 @@ export function loadPresentationData(
     return defaultData
   }
 
-  return source as PresentationData & {slides: SlideData[]}
+  return source as PresentationData & { slides: SlideData[] }
 }

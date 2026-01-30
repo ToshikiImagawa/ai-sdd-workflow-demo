@@ -1,8 +1,8 @@
-import {BulletList} from '../components/BulletList'
-import {SlideHeading} from '../components/SlideHeading'
-import {TwoColumnGrid} from '../components/TwoColumnGrid'
-import {VibeCodingDemo} from '../visuals/VibeCodingDemo'
-import {ContentLayout} from '../layouts'
+import { BulletList } from '../components/BulletList'
+import { SlideHeading } from '../components/SlideHeading'
+import { TwoColumnGrid } from '../components/TwoColumnGrid'
+import { VibeCodingDemo } from '../visuals/VibeCodingDemo'
+import { ContentLayout } from '../layouts'
 
 export function ProblemSlide() {
   return (

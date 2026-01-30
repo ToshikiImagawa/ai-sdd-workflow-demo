@@ -1,4 +1,4 @@
-import {useEffect, useRef} from 'react'
+import { useEffect, useRef } from 'react'
 import Reveal from 'reveal.js'
 
 export function useReveal() {

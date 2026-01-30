@@ -1,9 +1,9 @@
-import {createTheme} from '@mui/material/styles'
+import { createTheme } from '@mui/material/styles'
 
 export const theme = createTheme({
   palette: {
     mode: 'dark',
-    primary: {main: '#e07a5f'},
+    primary: { main: '#e07a5f' },
     background: {
       default: '#1c1917',
       paper: '#292524',

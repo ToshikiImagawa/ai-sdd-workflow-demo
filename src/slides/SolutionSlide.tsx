@@ -1,7 +1,7 @@
 import Typography from '@mui/material/Typography'
-import {TwoColumnGrid} from '../components/TwoColumnGrid'
-import {HierarchyFlowVisual} from '../visuals/HierarchyFlowVisual'
-import {ContentLayout} from '../layouts'
+import { TwoColumnGrid } from '../components/TwoColumnGrid'
+import { HierarchyFlowVisual } from '../visuals/HierarchyFlowVisual'
+import { ContentLayout } from '../layouts'
 
 export function SolutionSlide() {
   return (
@@ -9,7 +9,7 @@ export function SolutionSlide() {
       <TwoColumnGrid
         left={
           <>
-            <Typography variant="body1" sx={{mb: '16px'}}>
+            <Typography variant="body1" sx={{ mb: '16px' }}>
               AI-SDD-Workflowは、<strong>仕様書（Specification）</strong>
               をプロジェクトの唯一の真実と定義します。
             </Typography>

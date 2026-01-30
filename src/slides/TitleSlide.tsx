@@ -1,11 +1,11 @@
-import {SlideHeading} from '../components/SlideHeading'
-import {SubtitleText} from '../components/SubtitleText'
-import {TitleLayout} from '../layouts'
+import { SlideHeading } from '../components/SlideHeading'
+import { SubtitleText } from '../components/SubtitleText'
+import { TitleLayout } from '../layouts'
 
 export function TitleSlide() {
   return (
     <TitleLayout id="slide1">
-      <SlideHeading title="AI-SDD-Workflow" variant="h1" sx={{color: 'var(--theme-text-heading)'}} />
+      <SlideHeading title="AI-SDD-Workflow" variant="h1" sx={{ color: 'var(--theme-text-heading)' }} />
       <SubtitleText>
         脱・Vibe Coding。
         <br />

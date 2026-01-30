@@ -1,4 +1,4 @@
-import type {ReactNode} from 'react'
+import type { ReactNode } from 'react'
 import ListItem from '@mui/material/ListItem'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
@@ -8,9 +8,9 @@ type Props = {
   primary: ReactNode
 }
 
-export function BulletListItem({primary}: Props) {
+export function BulletListItem({ primary }: Props) {
   return (
-    <ListItem disablePadding sx={{mb: '20px', pl: '30px', position: 'relative'}}>
+    <ListItem disablePadding sx={{ mb: '20px', pl: '30px', position: 'relative' }}>
       <ListItemIcon
         sx={{
           minWidth: 0,

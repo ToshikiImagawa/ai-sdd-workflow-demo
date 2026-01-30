@@ -1,6 +1,6 @@
-import type {ReactNode} from 'react'
-import {BulletList} from './BulletList'
-import {SlideHeading} from './SlideHeading'
+import type { ReactNode } from 'react'
+import { BulletList } from './BulletList'
+import { SlideHeading } from './SlideHeading'
 
 type Props = {
   title: string
@@ -8,7 +8,7 @@ type Props = {
   items: ReactNode[]
 }
 
-export function TitledBulletList({title, description, items}: Props) {
+export function TitledBulletList({ title, description, items }: Props) {
   return (
     <>
       <SlideHeading title={title} variant="h3" description={description} />

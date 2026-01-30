@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
 import styles from './TerminalAnimation.module.css'
 
@@ -26,7 +26,7 @@ type Props = {
   title?: string
 }
 
-export function TerminalAnimation({logText, title = 'Terminal'}: Props) {
+export function TerminalAnimation({ logText, title = 'Terminal' }: Props) {
   const lines = logText.split('\n')
   const terminalBodyRef = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
@@ -43,7 +43,7 @@ export function TerminalAnimation({logText, title = 'Terminal'}: Props) {
   useEffect(() => {
     const el = containerRef.current
     if (!el) return
-    const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), {threshold: 0.5})
+    const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { threshold: 0.5 })
     observer.observe(el)
     return () => observer.disconnect()
   }, [])

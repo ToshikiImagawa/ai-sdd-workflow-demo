@@ -1,8 +1,8 @@
 import Box from '@mui/material/Box'
 
-type Props = {id: string; children: React.ReactNode}
+type Props = { id: string; children: React.ReactNode }
 
-export function TitleLayout({id, children}: Props) {
+export function TitleLayout({ id, children }: Props) {
   return (
     <section className="slide-container" id={id}>
       <Box className="title-layout">{children}</Box>

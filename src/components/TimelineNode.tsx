@@ -1,4 +1,4 @@
-import type {ReactNode} from 'react'
+import type { ReactNode } from 'react'
 import Avatar from '@mui/material/Avatar'
 import Typography from '@mui/material/Typography'
 
@@ -8,7 +8,7 @@ type Props = {
   children: ReactNode
 }
 
-export function TimelineNode({number, title, children}: Props) {
+export function TimelineNode({ number, title, children }: Props) {
   return (
     <>
       <Avatar
@@ -27,7 +27,7 @@ export function TimelineNode({number, title, children}: Props) {
       >
         {number}
       </Avatar>
-      <Typography variant="h3" sx={{fontSize: '22px', mb: '10px', color: 'var(--theme-primary)'}}>
+      <Typography variant="h3" sx={{ fontSize: '22px', mb: '10px', color: 'var(--theme-primary)' }}>
         {title}
       </Typography>
       {children}

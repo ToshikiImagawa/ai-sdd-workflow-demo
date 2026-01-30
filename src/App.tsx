@@ -1,13 +1,13 @@
-import {ThemeProvider} from '@mui/material/styles'
-import {FallbackImage} from './components/FallbackImage'
-import {SlideRenderer} from './components/SlideRenderer'
-import {registerDefaultComponents} from './components/registerDefaults'
-import {defaultPresentationData, loadPresentationData} from './data'
-import type {PresentationData} from './data'
-import {useReveal} from './hooks/useReveal'
-import {theme} from './theme'
-import {applyThemeData} from './applyTheme'
-import {useEffect} from 'react'
+import { ThemeProvider } from '@mui/material/styles'
+import { FallbackImage } from './components/FallbackImage'
+import { SlideRenderer } from './components/SlideRenderer'
+import { registerDefaultComponents } from './components/registerDefaults'
+import { defaultPresentationData, loadPresentationData } from './data'
+import type { PresentationData } from './data'
+import { useReveal } from './hooks/useReveal'
+import { theme } from './theme'
+import { applyThemeData } from './applyTheme'
+import { useEffect } from 'react'
 
 // デフォルトコンポーネントを登録
 registerDefaultComponents()
@@ -16,7 +16,7 @@ type AppProps = {
   presentationData?: PresentationData
 }
 
-export function App({presentationData}: AppProps) {
+export function App({ presentationData }: AppProps) {
   const data = loadPresentationData(presentationData, defaultPresentationData)
   const deckRef = useReveal()
 

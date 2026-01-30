@@ -1,5 +1,5 @@
-import type {ReactNode} from 'react'
-import type {SxProps, Theme} from '@mui/material/styles'
+import type { ReactNode } from 'react'
+import type { SxProps, Theme } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 
 type Props = {
@@ -7,7 +7,7 @@ type Props = {
   sx?: SxProps<Theme>
 }
 
-export function SubtitleText({children, sx}: Props) {
+export function SubtitleText({ children, sx }: Props) {
   return (
     <Typography variant="subtitle1" sx={sx}>
       {children}

@@ -1,8 +1,8 @@
-import {AccentText} from '../components/AccentText'
-import {TitledBulletList} from '../components/TitledBulletList'
-import {TwoColumnGrid} from '../components/TwoColumnGrid'
-import {PersistenceVisual} from '../visuals/PersistenceVisual'
-import {ContentLayout} from '../layouts'
+import { AccentText } from '../components/AccentText'
+import { TitledBulletList } from '../components/TitledBulletList'
+import { TwoColumnGrid } from '../components/TwoColumnGrid'
+import { PersistenceVisual } from '../visuals/PersistenceVisual'
+import { ContentLayout } from '../layouts'
 
 export function PersistenceSlide() {
   return (
@@ -27,7 +27,7 @@ export function PersistenceSlide() {
                 </>,
               ]}
             />
-            <AccentText sx={{mt: '20px'}}>→ セッションを跨いでも、コンテキストが失われない。</AccentText>
+            <AccentText sx={{ mt: '20px' }}>→ セッションを跨いでも、コンテキストが失われない。</AccentText>
           </>
         }
       />

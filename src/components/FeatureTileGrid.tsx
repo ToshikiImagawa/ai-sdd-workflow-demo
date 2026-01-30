@@ -1,4 +1,4 @@
-import type {ReactNode} from 'react'
+import type { ReactNode } from 'react'
 import Avatar from '@mui/material/Avatar'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
@@ -15,12 +15,12 @@ type Props = {
   tiles: Tile[]
 }
 
-export function FeatureTileGrid({tiles}: Props) {
+export function FeatureTileGrid({ tiles }: Props) {
   return (
-    <Stack direction="row" spacing="30px" sx={{width: '100%'}}>
+    <Stack direction="row" spacing="30px" sx={{ width: '100%' }}>
       {tiles.map((tile) => (
-        <Card key={tile.title} sx={{flex: 1, p: '30px'}}>
-          <CardContent sx={{p: 0, '&:last-child': {pb: 0}}}>
+        <Card key={tile.title} sx={{ flex: 1, p: '30px' }}>
+          <CardContent sx={{ p: 0, '&:last-child': { pb: 0 } }}>
             <Avatar
               sx={{
                 width: 62,
@@ -35,7 +35,7 @@ export function FeatureTileGrid({tiles}: Props) {
             >
               {tile.icon}
             </Avatar>
-            <Typography variant="h3" sx={{mb: '12px'}}>
+            <Typography variant="h3" sx={{ mb: '12px' }}>
               {tile.title}
             </Typography>
             <Typography variant="body2">{tile.description}</Typography>

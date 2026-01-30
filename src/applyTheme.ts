@@ -1,4 +1,4 @@
-import type {ThemeData} from './data'
+import type { ThemeData } from './data'
 
 function hexToRgb(hex: string): string {
   const r = parseInt(hex.slice(1, 3), 16)

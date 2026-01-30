@@ -1,4 +1,4 @@
-import type {ComponentType} from 'react'
+import type { ComponentType } from 'react'
 
 /** レジストリに登録可能なコンポーネントの型 */
 export type RegisteredComponent = ComponentType<Record<string, unknown>>
@@ -7,9 +7,9 @@ const defaultComponents = new Map<string, RegisteredComponent>()
 const customComponents = new Map<string, RegisteredComponent>()
 
 /** フォールバックコンポーネント（未登録名指定時に使用） */
-function FallbackComponent({name}: {name?: string; [key: string]: unknown}) {
+function FallbackComponent({ name }: { name?: string; [key: string]: unknown }) {
   return (
-    <div style={{padding: '16px', border: '1px dashed #888', borderRadius: '8px', textAlign: 'center', opacity: 0.6}}>
+    <div style={{ padding: '16px', border: '1px dashed #888', borderRadius: '8px', textAlign: 'center', opacity: 0.6 }}>
       <p>Component not found: {name ?? 'unknown'}</p>
     </div>
   )
