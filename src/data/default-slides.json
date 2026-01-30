@@ -76,7 +76,8 @@
         "right": {
           "component": {
             "name": "TerminalAnimation",
-            "props": {"logTextUrl": "/demo-log.txt"}
+            "props": { "logTextUrl": "/demo-log.txt" },
+            "style": { "height": "400px", "width": "90%", "margin": "auto" }
           }
         }
       }
@@ -132,7 +133,8 @@
         ],
         "component": {
           "name": "TerminalAnimation",
-          "props": {"logTextUrl": "/demo-log.txt"}
+          "props": { "logTextUrl": "/demo-log.txt" },
+          "style": { "height": "400px", "width": "90%", "margin": "auto" }
         }
       }
     },
