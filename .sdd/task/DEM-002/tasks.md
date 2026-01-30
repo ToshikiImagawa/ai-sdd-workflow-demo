@@ -29,8 +29,8 @@ graph LR
 **対応モジュール**: `src/addons/types.ts`
 **依存**: なし
 
-- [ ] `src/addons/` ディレクトリを作成
-- [ ] `src/addons/types.ts` を作成
+- [x] `src/addons/` ディレクトリを作成
+- [x] `src/addons/types.ts` を作成
   - `AddonComponent` 型（name: string, component: RegisteredComponent）
   - `AddonDefinition` 型（name: string, components: AddonComponent[]）
   - `RegisteredComponent` は `ComponentRegistry.tsx` から型のみ import
@@ -45,12 +45,12 @@ graph LR
 **対応モジュール**: `src/addons/ai-sdd-visuals/`
 **依存**: なし
 
-- [ ] `src/addons/ai-sdd-visuals/` ディレクトリを作成
-- [ ] 以下のファイルを `src/visuals/` → `src/addons/ai-sdd-visuals/` に移動
+- [x] `src/addons/ai-sdd-visuals/` ディレクトリを作成
+- [x] 以下のファイルを `src/visuals/` → `src/addons/ai-sdd-visuals/` に移動
   - `VibeCodingDemo.tsx` + `VibeCodingDemo.module.css`
   - `HierarchyFlowVisual.tsx` + `HierarchyFlowVisual.module.css`
   - `PersistenceVisual.tsx` + `PersistenceVisual.module.css`
-- [ ] 各ファイル内のインポートパスが正しいことを確認（CSS Modules は相対パスのため変更不要）
+- [x] 各ファイル内のインポートパスが正しいことを確認（CSS Modules は相対パスのため変更不要）
 
 **完了条件**: ファイルが新しい場所に存在し、旧ファイルは `git mv` で移動済み
 
@@ -64,7 +64,7 @@ graph LR
 **対応モジュール**: `src/addons/ai-sdd-visuals/index.ts`
 **依存**: 1.1, 1.2
 
-- [ ] `src/addons/ai-sdd-visuals/index.ts` を作成
+- [x] `src/addons/ai-sdd-visuals/index.ts` を作成
   - `AddonDefinition` 型を `../types` から import
   - 3つのビジュアルコンポーネントを同ディレクトリから import
   - `aiSddVisualsAddon` を `AddonDefinition` として export
@@ -79,7 +79,7 @@ graph LR
 **対応モジュール**: `src/addons/index.ts`
 **依存**: 2.1
 
-- [ ] `src/addons/index.ts` を作成
+- [x] `src/addons/index.ts` を作成
   - `AddonDefinition` 型を `./types` から import
   - `aiSddVisualsAddon` を `./ai-sdd-visuals` から import
   - `addons: AddonDefinition[]` 配列としてエクスポート
@@ -94,7 +94,7 @@ graph LR
 **対応モジュール**: `src/addons/register.ts`
 **依存**: 2.2
 
-- [ ] `src/addons/register.ts` を作成
+- [x] `src/addons/register.ts` を作成
   - `registerComponent` を `../components/ComponentRegistry` から import
   - `addons` を `./index` から import
   - `registerAddons()` 関数を export（全アドオンの全コンポーネントを registerComponent で登録）
@@ -111,10 +111,10 @@ graph LR
 **対応モジュール**: `src/components/registerDefaults.tsx`, `src/App.tsx`
 **依存**: 2.3
 
-- [ ] `src/components/registerDefaults.tsx` を修正
+- [x] `src/components/registerDefaults.tsx` を修正
   - VibeCodingDemo, HierarchyFlowVisual, PersistenceVisual の import を削除
   - `registerDefaultComponents()` から3つのビジュアルの `registerDefaultComponent` 呼び出しを削除
-- [ ] `src/App.tsx` を修正
+- [x] `src/App.tsx` を修正
   - `registerAddons` を `./addons/register` から import
   - `registerDefaultComponents()` の直後に `registerAddons()` を呼び出し（モジュールスコープ）
 
@@ -128,8 +128,8 @@ graph LR
 **対応モジュール**: `src/visuals/`
 **依存**: 3.1
 
-- [ ] `src/visuals/` ディレクトリが空であることを確認
-- [ ] `src/visuals/` ディレクトリを削除
+- [x] `src/visuals/` ディレクトリが空であることを確認
+- [x] `src/visuals/` ディレクトリを削除
 
 **完了条件**: `src/visuals/` が存在しない
 
@@ -142,9 +142,9 @@ graph LR
 **カテゴリ**: テスト
 **依存**: 3.2
 
-- [ ] `npx tsc --noEmit` — 型チェックでエラー 0 件
-- [ ] `npx vitest run` — 既存テスト全34件パス
-- [ ] `npm run build` — ビルドエラー 0 件
+- [x] `npx tsc --noEmit` — 型チェックでエラー 0 件
+- [x] `npx vitest run` — 既存テスト全34件パス
+- [x] `npm run build` — ビルドエラー 0 件
 
 **完了条件**: 上記3つのコマンドがすべて成功
 
@@ -157,8 +157,8 @@ graph LR
 **カテゴリ**: 仕上げ
 **依存**: 4.1
 
-- [ ] `visual-addon_design.md` の実装ステータスを 🔴 → 🟢 に更新
-- [ ] 各モジュールのステータスを更新
+- [x] `visual-addon_design.md` の実装ステータスを 🔴 → 🟢 に更新
+- [x] 各モジュールのステータスを更新
 
 **完了条件**: 設計書のステータスが実装状態を反映している
 

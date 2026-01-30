@@ -4,9 +4,6 @@ import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck'
 import SearchIcon from '@mui/icons-material/Search'
 import TrafficIcon from '@mui/icons-material/Traffic'
 import logText from '../data/default-log.txt?raw'
-import { VibeCodingDemo } from '../visuals/VibeCodingDemo'
-import { HierarchyFlowVisual } from '../visuals/HierarchyFlowVisual'
-import { PersistenceVisual } from '../visuals/PersistenceVisual'
 import { TerminalAnimation } from './TerminalAnimation'
 import { registerDefaultComponent } from './ComponentRegistry'
 
@@ -18,9 +15,6 @@ function DefaultTerminalAnimation(props: { logTextUrl?: string }) {
 /** デフォルトコンポーネントをレジストリに登録する */
 export function registerDefaultComponents(): void {
   // ビジュアルコンポーネント
-  registerDefaultComponent('VibeCodingDemo', VibeCodingDemo)
-  registerDefaultComponent('HierarchyFlowVisual', HierarchyFlowVisual)
-  registerDefaultComponent('PersistenceVisual', PersistenceVisual)
   registerDefaultComponent('TerminalAnimation', DefaultTerminalAnimation)
 
   // MUIアイコン

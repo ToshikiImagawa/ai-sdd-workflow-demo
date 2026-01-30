@@ -2,6 +2,7 @@ import { ThemeProvider } from '@mui/material/styles'
 import { FallbackImage } from './components/FallbackImage'
 import { SlideRenderer } from './components/SlideRenderer'
 import { registerDefaultComponents } from './components/registerDefaults'
+import { registerAddons } from './addons/register'
 import { defaultPresentationData, loadPresentationData } from './data'
 import type { PresentationData } from './data'
 import { useReveal } from './hooks/useReveal'
@@ -11,6 +12,8 @@ import { useEffect } from 'react'
 
 // デフォルトコンポーネントを登録
 registerDefaultComponents()
+// アドオンコンポーネントを登録
+registerAddons()
 
 type AppProps = {
   presentationData?: PresentationData
