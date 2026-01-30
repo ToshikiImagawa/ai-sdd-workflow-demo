@@ -16,7 +16,7 @@
 
 | モジュール/機能                            | ステータス  | 備考                   |
 |-------------------------------------|--------|----------------------|
-| 型定義（types.ts）                       | 🟢 実装済み | スライドデータの型定義          |
+| 型定義（types.ts）                       | 🟢 実装済み | スライドデータの型定義（`LogoConfig` 含む） |
 | デフォルトデータ（default-slides.json）       | 🟢 実装済み | 既存10枚スライドのJSON化      |
 | データローダー（loader.ts）                  | 🟢 実装済み | 読み込み・バリデーション・フォールバック |
 | コンポーネントレジストリ（ComponentRegistry.tsx） | 🟢 実装済み | カスタムコンポーネントの登録・解決    |
@@ -144,7 +144,12 @@ src/
   "meta": {
     "title": "AI-SDD ワークフロー デモ",
     "description": "AI駆動仕様駆動開発のプレゼンテーション",
-    "author": "Demo Author"
+    "author": "Demo Author",
+    "logo": {
+      "src": "/logo.png",
+      "width": 120,
+      "height": 40
+    }
   },
   "theme": {
     "colors": {
@@ -345,6 +350,15 @@ function SlideRenderer(props: SlideRendererProps): JSX.Element {
 - 実装ステータスを🟢実装済みに更新
 - 設計判断に3項目追加: レイアウト実装方式、アイコン解決方式、既存スライド移行を完全データ駆動化に変更
 - 未解決の課題を更新: JSON化・カスタムコンポーネント登録は解決済み、SlideMeta対応・目視確認を追加
+
+## v0.4.0 (2026-01-31)
+
+**変更内容:**
+
+- `PresentationMeta` に `logo?: LogoConfig` フィールドを追加
+- `LogoConfig` 型（`src`, `width?`, `height?`）を追加
+- JSONデータ構造例に `meta.logo` を追記
+- `meta.logo` 未指定時はロゴ非表示とする仕様
 
 ## v0.3.0 (2026-01-30)
 

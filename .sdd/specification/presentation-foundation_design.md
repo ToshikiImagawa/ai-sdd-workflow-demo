@@ -14,15 +14,15 @@
 
 ## 1.1. 実装進捗
 
-| モジュール/機能 | ステータス | 備考 |
-|------|------|------|
-| `useReveal` フック | 🟢 実装済み | Reveal.js の初期化・破棄を管理 |
-| App コンポーネント（Reveal.js 統合） | 🟢 実装済み | データ駆動型プレゼンテーション表示 |
-| レイアウトコンポーネント群 | 🟢 実装済み | TitleLayout, ContentLayout, SectionLayout, BleedLayout |
-| グローバルCSS（テーマ変数・アニメーション） | 🟢 実装済み | CSS変数ベースのテーマシステム |
-| ロゴ表示（FallbackImage） | 🟢 実装済み | エラー時プレースホルダー表示 |
-| MUI テーマ統合 | 🟢 実装済み | ダークモード、カスタムタイポグラフィ |
-| テーマ適用（applyTheme） | 🟢 実装済み | 2段階テーマ適用（グローバル色 + プレゼンテーション固有） |
+| モジュール/機能                  | ステータス   | 備考                                                     |
+|---------------------------|---------|--------------------------------------------------------|
+| `useReveal` フック           | 🟢 実装済み | Reveal.js の初期化・破棄を管理                                   |
+| App コンポーネント（Reveal.js 統合） | 🟢 実装済み | データ駆動型プレゼンテーション表示                                      |
+| レイアウトコンポーネント群             | 🟢 実装済み | TitleLayout, ContentLayout, SectionLayout, BleedLayout |
+| グローバルCSS（テーマ変数・アニメーション）   | 🟢 実装済み | CSS変数ベースのテーマシステム                                       |
+| ロゴ表示（FallbackImage）       | 🟢 実装済み | エラー時プレースホルダー表示。`meta.logo` による動的設定対応                   |
+| MUI テーマ統合                 | 🟢 実装済み | ダークモード、カスタムタイポグラフィ                                     |
+| テーマ適用（applyTheme）         | 🟢 実装済み | 2段階テーマ適用（グローバル色 + プレゼンテーション固有）                         |
 
 ---
 
@@ -38,13 +38,13 @@
 
 # 3. 技術スタック
 
-| 領域 | 採用技術 | 選定理由 |
-|------|------|------|
-| UI | React 18 + TypeScript | 型安全なコンポーネント指向開発。strict モード準拠（T-001） |
-| プレゼンテーション | Reveal.js | スライド表示に特化したライブラリ。ナビゲーション・スケーリング・トランジションを内包 |
-| UIコンポーネント | MUI (Material-UI) | Card、Typography 等のUIプリミティブ提供。ダークモードテーマとの統合 |
-| スタイリング | CSS 変数 + グローバルCSS | Reveal.js との親和性が高い。CSS-in-JS はReveal.js のスタイル上書きと相性が悪い（A-002） |
-| ビルドツール | Vite | 高速HMR、CSS/JSON のネイティブインポート対応 |
+| 領域        | 採用技術                  | 選定理由                                                          |
+|-----------|-----------------------|---------------------------------------------------------------|
+| UI        | React 18 + TypeScript | 型安全なコンポーネント指向開発。strict モード準拠（T-001）                           |
+| プレゼンテーション | Reveal.js             | スライド表示に特化したライブラリ。ナビゲーション・スケーリング・トランジションを内包                    |
+| UIコンポーネント | MUI (Material-UI)     | Card、Typography 等のUIプリミティブ提供。ダークモードテーマとの統合                    |
+| スタイリング    | CSS 変数 + グローバルCSS     | Reveal.js との親和性が高い。CSS-in-JS はReveal.js のスタイル上書きと相性が悪い（A-002） |
+| ビルドツール    | Vite                  | 高速HMR、CSS/JSON のネイティブインポート対応                                  |
 
 ---
 
@@ -97,18 +97,18 @@ graph TD
 
 ## 4.2. モジュール分割
 
-| モジュール名 | 責務 | 依存関係 | 配置場所 |
-|------|------|------|------|
-| useReveal | Reveal.js の初期化・設定・破棄を管理 | Reveal.js | `src/hooks/useReveal.ts` |
-| App | ルートコンポーネント。Reveal.js コンテナ、スライドレンダリング、テーマ適用、ロゴ表示を統合 | useReveal, SlideRenderer, applyTheme, FallbackImage | `src/App.tsx` |
-| TitleLayout | タイトルスライド用レイアウト | React, MUI | `src/layouts/TitleLayout.tsx` |
-| ContentLayout | 見出し＋本文スライド用レイアウト | React, MUI | `src/layouts/ContentLayout.tsx` |
-| SectionLayout | セクション区切り用レイアウト | React, MUI | `src/layouts/SectionLayout.tsx` |
-| BleedLayout | 2カラム全幅レイアウト | React | `src/layouts/BleedLayout.tsx` |
-| FallbackImage | 画像表示（エラー時プレースホルダー） | React, MUI | `src/components/FallbackImage.tsx` |
-| applyTheme | CSS変数ベースのテーマ適用 | なし（DOM API のみ） | `src/applyTheme.ts` |
-| global.css | CSS変数定義、アニメーション、Reveal.js オーバーライド | なし | `src/styles/global.css` |
-| theme.ts | MUI テーマ設定 | MUI | `src/theme.ts` |
+| モジュール名        | 責務                                                 | 依存関係                                                | 配置場所                               |
+|---------------|----------------------------------------------------|-----------------------------------------------------|------------------------------------|
+| useReveal     | Reveal.js の初期化・設定・破棄を管理                            | Reveal.js                                           | `src/hooks/useReveal.ts`           |
+| App           | ルートコンポーネント。Reveal.js コンテナ、スライドレンダリング、テーマ適用、ロゴ表示を統合 | useReveal, SlideRenderer, applyTheme, FallbackImage | `src/App.tsx`                      |
+| TitleLayout   | タイトルスライド用レイアウト                                     | React, MUI                                          | `src/layouts/TitleLayout.tsx`      |
+| ContentLayout | 見出し＋本文スライド用レイアウト                                   | React, MUI                                          | `src/layouts/ContentLayout.tsx`    |
+| SectionLayout | セクション区切り用レイアウト                                     | React, MUI                                          | `src/layouts/SectionLayout.tsx`    |
+| BleedLayout   | 2カラム全幅レイアウト                                        | React                                               | `src/layouts/BleedLayout.tsx`      |
+| FallbackImage | 画像表示（エラー時プレースホルダー）                                 | React, MUI                                          | `src/components/FallbackImage.tsx` |
+| applyTheme    | CSS変数ベースのテーマ適用                                     | なし（DOM API のみ）                                      | `src/applyTheme.ts`                |
+| global.css    | CSS変数定義、アニメーション、Reveal.js オーバーライド                  | なし                                                  | `src/styles/global.css`            |
+| theme.ts      | MUI テーマ設定                                          | MUI                                                 | `src/theme.ts`                     |
 
 ## 4.3. ディレクトリ構造
 
@@ -180,26 +180,26 @@ const revealConfig = {
 
 ```css
 :root {
-  /* カラーパレット */
-  --theme-primary: #e07a5f;
-  --theme-primary-rgb: 224, 122, 95;
-  --theme-background: #1c1917;
-  --theme-background-rgb: 28, 25, 23;
-  --theme-background-alt: #292524;
-  --theme-background-grid: #33302e;
-  --theme-text-heading: #faf8f5;
-  --theme-text-body: #a8a29e;
-  --theme-text-subtitle: #d6d3d1;
-  --theme-text-muted: #78716c;
-  --theme-border: #3d3835;
-  --theme-border-light: #4a4543;
-  --theme-success: #4ade80;
-  --theme-code-text: #fb923c;
+    /* カラーパレット */
+    --theme-primary: #e07a5f;
+    --theme-primary-rgb: 224, 122, 95;
+    --theme-background: #1c1917;
+    --theme-background-rgb: 28, 25, 23;
+    --theme-background-alt: #292524;
+    --theme-background-grid: #33302e;
+    --theme-text-heading: #faf8f5;
+    --theme-text-body: #a8a29e;
+    --theme-text-subtitle: #d6d3d1;
+    --theme-text-muted: #78716c;
+    --theme-border: #3d3835;
+    --theme-border-light: #4a4543;
+    --theme-success: #4ade80;
+    --theme-code-text: #fb923c;
 
-  /* フォント */
-  --theme-font-heading: 'Roboto', sans-serif;
-  --theme-font-body: 'Roboto', sans-serif;
-  --theme-font-code: 'Roboto Mono', monospace;
+    /* フォント */
+    --theme-font-heading: 'Roboto', sans-serif;
+    --theme-font-body: 'Roboto', sans-serif;
+    --theme-font-code: 'Roboto Mono', monospace;
 }
 ```
 
@@ -217,7 +217,8 @@ const revealConfig = {
  * - マウント時: Reveal.js インスタンスを生成し initialize() を呼び出す
  * - アンマウント時: destroy() を呼び出しリソースを解放する
  */
-function useReveal(): React.RefObject<HTMLDivElement>;
+function useReveal(): React.RefObject<HTMLDivElement> {
+}
 ```
 
 ## 6.2. applyTheme
@@ -227,39 +228,42 @@ function useReveal(): React.RefObject<HTMLDivElement>;
  * public/theme-colors.json からテーマカラーを読み込み、CSS変数に適用する。
  * アプリケーション起動時に1回呼び出す。
  */
-async function applyTheme(): Promise<void>;
+async function applyTheme(): Promise<void> {
+}
 
 /**
  * PresentationData の theme フィールドからCSS変数を動的に適用する。
  * カラー、フォント、カスタムCSSの3種類をサポート。
  */
-function applyThemeData(themeData: ThemeData): void;
+function applyThemeData(themeData: ThemeData): void {
+}
 ```
 
 ---
 
 # 7. 非機能要件実現方針
 
-| 要件 | 実現方針 |
-|------|------|
-| NFR_200: スケーリングパフォーマンス | Reveal.js 内蔵のスケーリング機能を使用。CSS transform ベースで GPU アクセラレーション対応 |
-| NFR_201: Reveal.js DOM構造 | 全レイアウトコンポーネントが `<section>` をルート要素として返す。App.tsx で `.reveal > .slides` コンテナを固定 |
-| NFR_202: React 統合の安全性 | `useReveal` フックの `useEffect` cleanup で `deck.destroy()` を呼び出し。依存配列 `[]` で初期化は1回のみ |
-| NFR_203: 基準解像度 | Reveal.js の `width: 1280, height: 720, margin: 0, minScale: 0.2, maxScale: 2.0` で固定 |
+| 要件                       | 実現方針                                                                                |
+|--------------------------|-------------------------------------------------------------------------------------|
+| NFR_200: スケーリングパフォーマンス   | Reveal.js 内蔵のスケーリング機能を使用。CSS transform ベースで GPU アクセラレーション対応                         |
+| NFR_201: Reveal.js DOM構造 | 全レイアウトコンポーネントが `<section>` をルート要素として返す。App.tsx で `.reveal > .slides` コンテナを固定        |
+| NFR_202: React 統合の安全性    | `useReveal` フックの `useEffect` cleanup で `deck.destroy()` を呼び出し。依存配列 `[]` で初期化は1回のみ   |
+| NFR_203: 基準解像度           | Reveal.js の `width: 1280, height: 720, margin: 0, minScale: 0.2, maxScale: 2.0` で固定 |
 
 ---
 
 # 8. テスト戦略
 
-| テストレベル | 対象 | カバレッジ目標 |
-|------|------|------|
-| 型チェック | 全TypeScriptファイル | ビルドエラーゼロ |
-| ユニットテスト | FallbackImage（状態遷移） | loading/loaded/error の3状態 |
-| 統合テスト | SlideRenderer + レイアウト | デフォルト10枚のスライドが `<section>` として正しくレンダリングされること |
-| ビジュアルテスト | デフォルトプレゼンテーション表示 | 1280×720での表示が意図通りであること（目視確認） |
-| 動作テスト | ナビゲーション | キーボード・タッチ・UIコントロールが正常動作（目視確認） |
+| テストレベル   | 対象                    | カバレッジ目標                                      |
+|----------|-----------------------|----------------------------------------------|
+| 型チェック    | 全TypeScriptファイル       | ビルドエラーゼロ                                     |
+| ユニットテスト  | FallbackImage（状態遷移）   | loading/loaded/error の3状態                    |
+| 統合テスト    | SlideRenderer + レイアウト | デフォルト10枚のスライドが `<section>` として正しくレンダリングされること |
+| ビジュアルテスト | デフォルトプレゼンテーション表示      | 1280×720での表示が意図通りであること（目視確認）                 |
+| 動作テスト    | ナビゲーション               | キーボード・タッチ・UIコントロールが正常動作（目視確認）                |
 
 **テスト環境の注意点:**
+
 - jsdom環境には IntersectionObserver が存在しないため、`test-setup.ts` でグローバルモックを設定
 - Reveal.js はブラウザ環境を前提とするため、DOM統合テストはビルド後の動作確認に依存
 
@@ -269,26 +273,36 @@ function applyThemeData(themeData: ThemeData): void;
 
 ## 9.1. 決定事項
 
-| 決定事項 | 選択肢 | 決定内容 | 理由 |
-|------|------|------|------|
-| Reveal.js 統合方式 | React ref + useEffect / 外部管理 / ラッパーライブラリ | React ref + useEffect（`useReveal` フック） | React のライフサイクルと最小結合で統合。外部ラッパーは不要な依存を追加し、Reveal.js の直接制御が困難になる |
-| スケーリング方式 | Reveal.js 内蔵 / 独自CSS transform / viewport単位 | Reveal.js 内蔵（width/height/margin/scale 設定） | Reveal.js のスケーリングエンジンはbattle-testedで信頼性が高い。独自実装は不要な複雑性を追加 |
-| テーマ管理方式 | CSS変数 / CSS-in-JS / インラインスタイル | CSS変数（`document.documentElement.style`） | Reveal.js のスタイルとの親和性が高い。CSS-in-JS は Reveal.js のグローバルCSSとの優先度管理が困難（A-002） |
-| ナビゲーションモード | 線形 / グリッド（ネストスライド） | 線形（`navigationMode: 'linear'`） | プレゼンテーションの流れが明確。ネストスライドは複雑性を追加し、聴衆の混乱を招く |
-| ロゴ配置方式 | Reveal.js プラグイン / fixed 要素 / スライド内埋め込み | fixed 要素（`.slide-logo`） | Reveal.js のスライド外に配置することで、スケーリングやトランジションの影響を受けない |
-| 背景グリッド | CSS background-image / SVG / Canvas | CSS background-image（linear-gradient） | CSS のみで実装可能。40px×40px のグリッドパターンを2方向のグラデーションで表現 |
-| entrance アニメーション | CSS animation / JavaScript / Reveal.js プラグイン | CSS animation（`fadeInUp`） | Reveal.js の `.present` クラス付与に連動。JavaScript 不要で宣言的 |
-| スライド上部アクセントバー | CSS pseudo-element / 実DOM要素 | CSS `::before` 擬似要素 | `.slide-container::before` で4pxのプライマリカラーバーを表示。実DOM追加不要 |
+| 決定事項             | 選択肢                                          | 決定内容                                       | 理由                                                                                                  |
+|------------------|----------------------------------------------|--------------------------------------------|-----------------------------------------------------------------------------------------------------|
+| Reveal.js 統合方式   | React ref + useEffect / 外部管理 / ラッパーライブラリ     | React ref + useEffect（`useReveal` フック）     | React のライフサイクルと最小結合で統合。外部ラッパーは不要な依存を追加し、Reveal.js の直接制御が困難になる                                       |
+| スケーリング方式         | Reveal.js 内蔵 / 独自CSS transform / viewport単位  | Reveal.js 内蔵（width/height/margin/scale 設定） | Reveal.js のスケーリングエンジンはbattle-testedで信頼性が高い。独自実装は不要な複雑性を追加                                           |
+| テーマ管理方式          | CSS変数 / CSS-in-JS / インラインスタイル                | CSS変数（`document.documentElement.style`）    | Reveal.js のスタイルとの親和性が高い。CSS-in-JS は Reveal.js のグローバルCSSとの優先度管理が困難（A-002）                            |
+| ナビゲーションモード       | 線形 / グリッド（ネストスライド）                           | 線形（`navigationMode: 'linear'`）             | プレゼンテーションの流れが明確。ネストスライドは複雑性を追加し、聴衆の混乱を招く                                                            |
+| ロゴ配置方式           | Reveal.js プラグイン / fixed 要素 / スライド内埋め込み       | fixed 要素（`.slide-logo`）                    | Reveal.js のスライド外に配置することで、スケーリングやトランジションの影響を受けない                                                     |
+| ロゴ設定方式           | ハードコード / meta.logo 動的設定 / 環境変数               | `meta.logo` 動的設定（`LogoConfig` 型）           | `slides.json` の `meta.logo` でロゴの `src`/`width`/`height` を指定可能。未指定時はロゴ非表示。プレゼンテーション単位でロゴをカスタマイズ可能にする |
+| 背景グリッド           | CSS background-image / SVG / Canvas          | CSS background-image（linear-gradient）      | CSS のみで実装可能。40px×40px のグリッドパターンを2方向のグラデーションで表現                                                      |
+| entrance アニメーション | CSS animation / JavaScript / Reveal.js プラグイン | CSS animation（`fadeInUp`）                  | Reveal.js の `.present` クラス付与に連動。JavaScript 不要で宣言的                                                   |
+| スライド上部アクセントバー    | CSS pseudo-element / 実DOM要素                  | CSS `::before` 擬似要素                        | `.slide-container::before` で4pxのプライマリカラーバーを表示。実DOM追加不要                                              |
 
 ## 9.2. 未解決の課題
 
-| 課題 | 影響度 | 対応方針 |
-|------|------|------|
-| Reveal.js の React 18 Strict Mode 対応 | 低 | 現状 `useEffect` が2回実行されても `destroy()` → 再 `initialize()` で正常動作。将来的にReveal.js の更新で変更がある場合は対応 |
+| 課題                                  | 影響度 | 対応方針                                                                                       |
+|-------------------------------------|-----|--------------------------------------------------------------------------------------------|
+| Reveal.js の React 18 Strict Mode 対応 | 低   | 現状 `useEffect` が2回実行されても `destroy()` → 再 `initialize()` で正常動作。将来的にReveal.js の更新で変更がある場合は対応 |
 
 ---
 
 # 10. 変更履歴
+
+## v1.1.0 (2026-01-31)
+
+**変更内容:**
+
+- ロゴ表示を `meta.logo`（`LogoConfig` 型）による動的設定に対応
+- `meta.logo` 未指定時はロゴを非表示とする仕様に変更
+- 設計判断にロゴ設定方式を追加
+- FR_901, FR_902 を追加
 
 ## v1.0.0 (2026-01-30)
 

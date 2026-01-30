@@ -26,6 +26,8 @@ export function App({ presentationData }: AppProps) {
     }
   }, [data.theme])
 
+  const logo = data.meta.logo
+
   return (
     <ThemeProvider theme={theme}>
       <div className="reveal" ref={deckRef}>
@@ -33,9 +35,11 @@ export function App({ presentationData }: AppProps) {
           <SlideRenderer slides={data.slides} />
         </div>
       </div>
-      <div className="slide-logo">
-        <FallbackImage src="/logo.png" width={120} height={40} alt="Logo" />
-      </div>
+      {logo && (
+        <div className="slide-logo">
+          <FallbackImage src={logo.src} width={logo.width ?? 120} height={logo.height ?? 40} alt="Logo" />
+        </div>
+      )}
     </ThemeProvider>
   )
 }

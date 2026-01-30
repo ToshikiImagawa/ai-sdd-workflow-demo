@@ -90,6 +90,8 @@ graph TB
     - ウインドウサイズに応じた自動スケーリング
 - ブランディング表示
     - ロゴの固定表示（左下）
+    - `meta.logo` によるロゴ画像・サイズのカスタマイズ
+    - ロゴ未指定時はロゴ非表示
 - ライフサイクル管理
     - React コンポーネントのマウント/アンマウントに連動した初期化・破棄
 
@@ -131,10 +133,27 @@ requirementDiagram
 
     functionalRequirement BrandingDisplay {
         id: FR_900
-        text: "プレゼンテーション画面にロゴを固定位置で常時表示できること"
+        text: "プレゼンテーション画面にロゴを固定位置で常時表示でき、表示するロゴをカスタマイズできること"
         risk: low
         verifymethod: demonstration
     }
+
+    functionalRequirement LogoCustomization {
+        id: FR_901
+        text: "ロゴ画像のパス・幅・高さをmeta.logoフィールドで設定できること"
+        risk: low
+        verifymethod: test
+    }
+
+    functionalRequirement LogoFallback {
+        id: FR_902
+        text: "meta.logo未指定時にロゴを非表示とすること"
+        risk: low
+        verifymethod: test
+    }
+
+    BrandingDisplay - contains -> LogoCustomization
+    BrandingDisplay - contains -> LogoFallback
 
     functionalRequirement LifecycleManagement {
         id: FR_1000
@@ -390,6 +409,11 @@ requirementDiagram
 **優先度:** Could
 
 **検証方法:** デモンストレーション
+
+| サブ要求   | 優先度    | 説明                                                   |
+|:-------|:-------|:-----------------------------------------------------|
+| FR_901 | Could  | ロゴ画像のパス・幅・高さを `meta.logo` フィールドで設定できること            |
+| FR_902 | Could  | `meta.logo` 未指定時にロゴを非表示とすること |
 
 ### FR_1000: ライフサイクル管理
 

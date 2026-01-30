@@ -48,7 +48,9 @@
 | FR_704 | スライド表示時に entrance アニメーションを適用できること | 任意 | FR_700 |
 | FR_705 | スライドの背景にグリッドパターンを表示できること | 任意 | FR_700 |
 | FR_800 | 基準解像度（1280×720）を維持しつつ、ウインドウサイズに応じて自動スケーリングできること | 必須 | UR_200 |
-| FR_900 | プレゼンテーション画面の固定位置（左下）にロゴを常時表示できること | 任意 | UR_200 |
+| FR_900 | プレゼンテーション画面の固定位置（左下）にロゴを常時表示でき、表示するロゴをカスタマイズできること | 任意 | UR_200 |
+| FR_901 | ロゴ画像のパス・幅・高さを `meta.logo` フィールドで設定できること | 任意 | FR_900 |
+| FR_902 | `meta.logo` 未指定時にロゴを非表示とすること | 任意 | FR_900 |
 | FR_1000 | React コンポーネントのライフサイクルに連動して Reveal.js を初期化・破棄できること | 必須 | UR_200, NFR_202 |
 
 ## 3.2. 非機能要件 (Non-Functional Requirements)
@@ -85,6 +87,13 @@ type UseRevealReturn = React.RefObject<HTMLDivElement>;
 /** App コンポーネントの Props */
 interface AppProps {
   presentationData?: PresentationData;
+}
+
+/** ロゴ設定 */
+interface LogoConfig {
+  src: string;
+  width?: number;   // デフォルト: 120
+  height?: number;  // デフォルト: 40
 }
 
 /** レイアウトコンポーネント共通 Props */
@@ -249,4 +258,4 @@ sequenceDiagram
 ## PRD参照
 
 - 対応PRD: `.sdd/requirement/presentation-foundation.md`
-- カバーする要求: UR_200, FR_600, FR_601, FR_602, FR_603, FR_604, FR_605, FR_606, FR_700, FR_701, FR_702, FR_703, FR_704, FR_705, FR_800, FR_900, FR_1000, NFR_200, NFR_201, NFR_202, NFR_203
+- カバーする要求: UR_200, FR_600, FR_601, FR_602, FR_603, FR_604, FR_605, FR_606, FR_700, FR_701, FR_702, FR_703, FR_704, FR_705, FR_800, FR_900, FR_901, FR_902, FR_1000, NFR_200, NFR_201, NFR_202, NFR_203

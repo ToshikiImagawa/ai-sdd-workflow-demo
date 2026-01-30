@@ -10,6 +10,14 @@ export interface PresentationMeta {
   title: string
   description?: string
   author?: string
+  logo?: LogoConfig
+}
+
+/** ロゴ設定 */
+export interface LogoConfig {
+  src: string
+  width?: number
+  height?: number
 }
 
 /** 個別スライドのデータ */

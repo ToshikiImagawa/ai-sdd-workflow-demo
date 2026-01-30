@@ -64,7 +64,7 @@
 
 | ディレクトリ          | ファイル名                 | エクスポート                                       | 概要                            |
 |-----------------|-----------------------|----------------------------------------------|-------------------------------|
-| src/data/       | types.ts              | `SlideData`, `PresentationData`, `ThemeData` | スライドデータの型定義                   |
+| src/data/       | types.ts              | `SlideData`, `PresentationData`, `ThemeData`, `LogoConfig` | スライドデータの型定義                   |
 | src/data/       | default-slides.json   | (デフォルトエクスポート)                                | デフォルトのスライドデータ                 |
 | src/data/       | loader.ts             | `loadPresentationData`                       | スライドデータの読み込みとバリデーション          |
 | src/components/ | SlideRenderer.tsx     | `SlideRenderer`                              | スライドデータからReactコンポーネントへのレンダリング |
@@ -85,6 +85,14 @@ interface PresentationMeta {
     title: string;
     description?: string;
     author?: string;
+    logo?: LogoConfig;
+}
+
+/** ロゴ設定 */
+interface LogoConfig {
+    src: string;
+    width?: number;   // デフォルト: 120
+    height?: number;  // デフォルト: 40
 }
 
 /** 個別スライドのデータ */
