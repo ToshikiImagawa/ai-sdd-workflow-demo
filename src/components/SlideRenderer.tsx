@@ -43,9 +43,13 @@ function renderWithLineBreaks(text: string): ReactNode {
 }
 
 /** カスタムコンポーネントを解決しレンダリングする */
-function renderComponent(ref: { name: string; props?: Record<string, unknown> }): ReactNode {
+function renderComponent(ref: { name: string; props?: Record<string, unknown>; style?: Record<string, string | number> }): ReactNode {
   const Component = resolveComponent(ref.name)
-  return <Component {...(ref.props ?? {})} name={ref.name} />
+  const element = <Component {...(ref.props ?? {})} name={ref.name} />
+  if (ref.style) {
+    return <div style={ref.style}>{element}</div>
+  }
+  return element
 }
 
 /** MUIアイコン名からアイコンコンポーネントを解決する */
@@ -84,7 +88,7 @@ function renderColumnContent(data: Record<string, unknown> | undefined): ReactNo
 
   // コンポーネント参照
   if (data.component) {
-    const ref = data.component as { name: string; props?: Record<string, unknown> }
+    const ref = data.component as { name: string; props?: Record<string, unknown>; style?: Record<string, string | number> }
     return renderComponent(ref)
   }
 
@@ -224,7 +228,7 @@ function renderDemoSlide(slide: SlideData): ReactNode {
     </>
   )
 
-  const terminalRef = content.component as { name: string; props?: Record<string, unknown> } | undefined
+  const terminalRef = content.component as { name: string; props?: Record<string, unknown>; style?: Record<string, string | number> } | undefined
   const rightContent = terminalRef ? renderComponent(terminalRef) : null
 
   return <BleedLayout id={slide.id} meta={slide.meta} left={leftContent} right={rightContent} />

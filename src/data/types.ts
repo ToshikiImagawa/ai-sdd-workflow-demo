@@ -43,6 +43,7 @@ export interface ContentItem {
 export interface ComponentReference {
   name: string
   props?: Record<string, unknown>
+  style?: Record<string, string | number>
 }
 
 /** スライドのメタ情報 */
