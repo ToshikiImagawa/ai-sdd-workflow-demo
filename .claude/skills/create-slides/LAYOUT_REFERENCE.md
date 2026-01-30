@@ -25,7 +25,7 @@
     "variant": "section",
     "title": "まとめタイトル",
     "body": "本文テキスト（改行は \\n）",
-    "githubUrl": "https://github.com/...",
+    "qrCode": "https://github.com/...",
     "githubRepo": "owner/repo"
   }
 }
@@ -100,8 +100,8 @@
   "layout": "two-column",
   "content": {
     "title": "スライドタイトル",
-    "left": { /* カラムコンテンツ */ },
-    "right": { /* カラムコンテンツ */ }
+    "left": {},
+    "right": {}
   }
 }
 ```

@@ -281,7 +281,7 @@
         "variant": "section",
         "title": "layout: \"center\" (variant: \"section\")",
         "body": "大きなタイトルと本文テキスト。\nQR コードと GitHub リンクを表示できます。",
-        "githubUrl": "https://github.com/ToshikiImagawa/ai-sdd-workflow-demo",
+        "qrCode": "https://github.com/ToshikiImagawa/ai-sdd-workflow-demo",
         "githubRepo": "ToshikiImagawa/ai-sdd-workflow-demo"
       }
     }

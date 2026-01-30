@@ -73,7 +73,7 @@ function renderCenterSlide(slide: SlideData): ReactNode {
             {renderWithLineBreaks(content.body)}
           </Typography>
         )}
-        {typeof content.githubUrl === 'string' && <QrCodeCard url={content.githubUrl} sx={{ mb: '30px' }} />}
+        {typeof content.qrCode === 'string' && <QrCodeCard url={content.qrCode} sx={{ mb: '30px' }} />}
         {typeof content.githubRepo === 'string' && <GitHubLink repo={content.githubRepo} sx={{ mt: '10px' }} />}
       </SectionLayout>
     )
@@ -175,18 +175,15 @@ function renderColumnContent(data: Record<string, unknown> | undefined): ReactNo
 
   // アクセントテキスト
   if (data.accentText) {
-    elements.push(
-      <AccentText key="accentText">
-        {data.accentText as string}
-      </AccentText>,
-    )
+    elements.push(<AccentText key="accentText">{data.accentText as string}</AccentText>)
   }
 
-  return elements.length === 1 ? (
-    elements[0]
-  ) : (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>{elements}</Box>
-  )
+  // QRコード
+  if (typeof data.qrCode === 'string') {
+    elements.push(<QrCodeCard key="qrCode" url={data.qrCode} />)
+  }
+
+  return elements.length === 1 ? elements[0] : <Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>{elements}</Box>
 }
 
 /** contentスライドの子要素をレンダリング */

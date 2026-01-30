@@ -62,7 +62,7 @@ npm install
 | variant     | 説明                                   |
 |-------------|--------------------------------------|
 | （未指定）      | TitleLayout（タイトル・サブタイトル表示）           |
-| `"section"` | SectionLayout（まとめ表示。`body`, `githubUrl` 等を使用） |
+| `"section"` | SectionLayout（まとめ表示。`body`, `qrCode` 等を使用） |
 
 `content` レイアウトは子要素のフィールドで描画内容が決まります。
 
