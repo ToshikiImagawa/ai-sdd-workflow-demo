@@ -177,18 +177,15 @@ src/
 
 ## 5.2. レイアウト種別マッピング
 
-既存スライドを再現するために必要なレイアウト種別：
+構造ベースの命名によるレイアウト種別：
 
-| レイアウト名       | 対応する既存スライド                            | 用途                  |
-|--------------|---------------------------------------|---------------------|
-| `title`      | TitleSlide                            | タイトルスライド            |
-| `content`    | ProblemSlide, SolutionSlide 等         | 見出し+本文+リスト          |
-| `two-column` | ConstitutionSlide, PersistenceSlide 等 | 左右2カラム              |
-| `workflow`   | WorkflowSlide                         | ワークフロー図             |
-| `features`   | FeaturesSlide                         | 機能一覧タイル             |
-| `demo`       | DemoSlide                             | デモ画面（ターミナルアニメーション等） |
-| `summary`    | SummarySlide                          | まとめスライド             |
-| `custom`     | （新規）                                  | カスタムコンポーネント参照用      |
+| レイアウト名       | ラッパー                           | 用途                                                      |
+|--------------|--------------------------------|---------------------------------------------------------|
+| `center`     | TitleLayout / SectionLayout    | タイトル・まとめ。`variant: "section"` で SectionLayout を選択       |
+| `content`    | ContentLayout                  | 子要素で描画を判別: `steps` → Timeline, `tiles` → FeatureTileGrid |
+| `two-column` | ContentLayout + TwoColumnGrid  | 左右2カラム                                                  |
+| `bleed`      | BleedLayout                    | 2カラム全幅（端まで広がるレイアウト）                                     |
+| `custom`     | なし                             | カスタムコンポーネント参照用                                          |
 
 ---
 
