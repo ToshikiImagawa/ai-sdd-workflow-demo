@@ -3,7 +3,7 @@ import MemoryIcon from '@mui/icons-material/Memory'
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck'
 import SearchIcon from '@mui/icons-material/Search'
 import TrafficIcon from '@mui/icons-material/Traffic'
-import logText from '../../assets/demo-log.txt?raw'
+import logText from '../data/demo-log.txt?raw'
 import { VibeCodingDemo } from '../visuals/VibeCodingDemo'
 import { HierarchyFlowVisual } from '../visuals/HierarchyFlowVisual'
 import { PersistenceVisual } from '../visuals/PersistenceVisual'
@@ -11,8 +11,8 @@ import { TerminalAnimation } from './TerminalAnimation'
 import { registerDefaultComponent } from './ComponentRegistry'
 
 /** TerminalAnimationのラッパー（デフォルトlogTextを注入） */
-function DefaultTerminalAnimation() {
-  return <TerminalAnimation logText={logText} />
+function DefaultTerminalAnimation(props: { logTextUrl?: string }) {
+  return <TerminalAnimation logText={logText} {...props} />
 }
 
 /** デフォルトコンポーネントをレジストリに登録する */

@@ -22,12 +22,33 @@ function isCommandLine(line: string): boolean {
 }
 
 type Props = {
-  logText: string
+  logText?: string
+  logTextUrl?: string
   title?: string
 }
 
-export function TerminalAnimation({ logText, title = 'Terminal' }: Props) {
-  const lines = logText.split('\n')
+export function TerminalAnimation({ logText, logTextUrl, title = 'Terminal' }: Props) {
+  const [resolvedText, setResolvedText] = useState(logText ?? '')
+
+  useEffect(() => {
+    if (logTextUrl) {
+      fetch(logTextUrl)
+        .then((res) => {
+          if (!res.ok) throw new Error(`${res.status}`)
+          const ct = res.headers.get('content-type') ?? ''
+          if (ct.includes('text/html')) throw new Error('unexpected html response')
+          return res.text()
+        })
+        .then(setResolvedText)
+        .catch(() => {
+          if (logText) setResolvedText(logText)
+        })
+    } else if (logText) {
+      setResolvedText(logText)
+    }
+  }, [logText, logTextUrl])
+
+  const lines = resolvedText.split('\n')
   const terminalBodyRef = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
   const [lineIndex, setLineIndex] = useState(0)

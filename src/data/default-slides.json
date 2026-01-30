@@ -168,7 +168,7 @@
           {"text": "$ /task_breakdown", "color": "var(--theme-primary)"},
           {"text": "$ /implement", "color": "var(--theme-text-heading)"}
         ],
-        "component": {"name": "TerminalAnimation"}
+        "component": {"name": "TerminalAnimation", "props": {"logTextUrl": "/demo-log.txt"}}
       }
     },
     {
