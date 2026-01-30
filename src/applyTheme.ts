@@ -19,6 +19,7 @@ const keyToCssVar: Record<string, string> = {
   border: '--theme-border',
   borderLight: '--theme-border-light',
   codeText: '--theme-code-text',
+  success: '--theme-success',
 }
 
 export async function applyTheme() {
