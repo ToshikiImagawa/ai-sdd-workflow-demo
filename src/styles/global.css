@@ -22,6 +22,11 @@
   --theme-border-light-rgb: 74, 69, 67;
   --theme-code-text: #fb923c;
   --theme-code-text-rgb: 251, 146, 60;
+
+  /* Font theme variables (overridden by applyThemeData) */
+  --theme-font-heading: 'Roboto', sans-serif;
+  --theme-font-body: 'Roboto', sans-serif;
+  --theme-font-code: 'Roboto Mono', monospace;
 }
 
 /* 0. KEYFRAMES */

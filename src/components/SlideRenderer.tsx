@@ -58,7 +58,7 @@ function renderIcon(iconName: string): ReactNode {
 function renderTitleSlide(slide: SlideData): ReactNode {
   const { content } = slide
   return (
-    <TitleLayout id={slide.id}>
+    <TitleLayout id={slide.id} meta={slide.meta}>
       <SlideHeading title={content.title ?? ''} variant="h1" sx={{ color: 'var(--theme-text-heading)' }} />
       {content.subtitle && <SubtitleText>{renderWithLineBreaks(content.subtitle)}</SubtitleText>}
     </TitleLayout>
@@ -72,7 +72,7 @@ function renderTwoColumnSlide(slide: SlideData): ReactNode {
   const rightData = content.right as Record<string, unknown> | undefined
 
   return (
-    <ContentLayout id={slide.id} title={content.title ?? ''}>
+    <ContentLayout id={slide.id} title={content.title ?? ''} meta={slide.meta}>
       <TwoColumnGrid left={renderColumnContent(leftData)} right={renderColumnContent(rightData)} />
     </ContentLayout>
   )
@@ -176,7 +176,7 @@ function renderWorkflowSlide(slide: SlideData): ReactNode {
   const steps = content.steps as Array<{ number: number; title: string; description: string; command: string }>
 
   return (
-    <ContentLayout id={slide.id} title={content.title ?? ''}>
+    <ContentLayout id={slide.id} title={content.title ?? ''} meta={slide.meta}>
       <Timeline
         items={steps.map((step) => (
           <TimelineNode key={step.number} number={step.number} title={step.title}>
@@ -203,7 +203,7 @@ function renderFeaturesSlide(slide: SlideData): ReactNode {
   const tiles = content.tiles as Array<{ icon: string; title: string; description: string }>
 
   return (
-    <ContentLayout id={slide.id} title={content.title ?? ''}>
+    <ContentLayout id={slide.id} title={content.title ?? ''} meta={slide.meta}>
       <FeatureTileGrid
         tiles={tiles.map((tile) => ({
           icon: renderIcon(tile.icon),
@@ -230,14 +230,14 @@ function renderDemoSlide(slide: SlideData): ReactNode {
   const terminalRef = content.component as { name: string; props?: Record<string, unknown> } | undefined
   const rightContent = terminalRef ? renderComponent(terminalRef) : null
 
-  return <BleedLayout id={slide.id} left={leftContent} right={rightContent} />
+  return <BleedLayout id={slide.id} meta={slide.meta} left={leftContent} right={rightContent} />
 }
 
 /** サマリースライドをレンダリング */
 function renderSummarySlide(slide: SlideData): ReactNode {
   const { content } = slide
   return (
-    <SectionLayout id={slide.id}>
+    <SectionLayout id={slide.id} meta={slide.meta}>
       <UnderlinedHeading sx={{ mb: '30px' }}>{content.title}</UnderlinedHeading>
       {content.body && (
         <Typography variant="body1" sx={{ fontSize: '24px', maxWidth: '800px', mb: '40px' }}>

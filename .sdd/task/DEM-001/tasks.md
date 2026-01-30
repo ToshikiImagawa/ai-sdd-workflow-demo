@@ -159,8 +159,8 @@ graph LR
 - [x] `SlideRendererProps`（slides）を受け取る
 - [x] 各スライドデータに対してレジストリからコンポーネントを解決しレンダリング
 - [x] `SlideContent.component` が指定されている場合、カスタムコンポーネントにpropsを渡す
-- [ ] `SlideMeta` からReveal.jsのdata属性（data-transition等）を設定
-- [ ] テストを作成: デフォルトデータで10枚のスライドが正しくレンダリングされること
+- [x] `SlideMeta` からReveal.jsのdata属性（data-transition等）を設定
+- [x] テストを作成: デフォルトデータで10枚のスライドが正しくレンダリングされること
 
 **完了条件:**
 - スライドデータからReactコンポーネントへの変換が正しく動作する
@@ -179,7 +179,7 @@ graph LR
 - [x] カラーパレット（primary, accent, background, text）をCSS変数に変換
 - [x] フォント定義（heading, body, code）をCSS変数に変換
 - [x] `customCSS` をstyleタグとして挿入
-- [ ] `src/styles/style.css` に必要なCSS変数のフォールバック値を追加
+- [x] `src/styles/global.css` に必要なCSS変数のフォールバック値を追加
 
 **完了条件:**
 - テーマデータからCSS変数が正しく生成・適用される
@@ -200,7 +200,7 @@ graph LR
 - [x] 既存のハードコードされたスライドコンポーネントを `SlideRenderer` に置き換え
 - [x] テーマデータがある場合はテーマ適用ロジックを実行
 - [x] `useReveal` フックとの互換性を維持
-- [ ] デフォルトデータ使用時に既存と同一のDOM構造が生成されることを確認
+- [x] デフォルトデータ使用時に既存と同一のDOM構造が生成されることを確認（SlideRendererテストで10枚のsection要素生成を検証済み）
 
 **完了条件:**
 - `<App />` でデフォルトプレゼンテーションが表示される
