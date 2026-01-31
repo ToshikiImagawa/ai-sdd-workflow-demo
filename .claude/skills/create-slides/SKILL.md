@@ -31,7 +31,7 @@ allowed-tools: Read, Write, Glob, Grep, Bash(npm run typecheck), Bash(npm run te
     "colors": { "primary": "#6c63ff" }
   },
   "slides": [
-    { "id": "slide1", "layout": "center", "content": { "title": "..." } }
+    { "id": "intro", "layout": "center", "content": { "title": "..." } }
   ]
 }
 ```
@@ -53,7 +53,7 @@ allowed-tools: Read, Write, Glob, Grep, Bash(npm run typecheck), Bash(npm run te
 
 ## 設計原則
 
-- スライドIDは `slide1`, `slide2`, ... のように連番で命名する
+- スライドIDは内容を表す英語のケバブケースで命名する（例: `intro`, `about`, `vibe-coding-problem`, `demo`, `closing`）
 - 最初のスライドは `center` レイアウト（表紙）にする
 - 最後のスライドは `center` + `variant: "section"`（まとめ）を検討する
 - スライド枚数は内容に応じて適切に調整する（通常5〜15枚程度）
