@@ -91,9 +91,9 @@ graph TD
 |---|---|---|---|
 | `useReveal` (拡張) | Reveal.js 初期化、スライド変更イベントのコールバック通知 | Reveal.js | `src/hooks/useReveal.ts` |
 | `usePresenterView` | 発表者ビューウィンドウの管理、BroadcastChannel による同期 | useReveal | `src/hooks/usePresenterView.ts` |
-| `PresenterViewButton` | 発表者ビューを開くUIボタン | usePresenterView | `src/components/PresenterViewButton.tsx` |
+| `PresenterViewButton` | 発表者ビューを開くUIボタン（CSS Modules、ホバー展開） | usePresenterView | `src/components/PresenterViewButton.tsx` |
 | `PresenterViewWindow` | 発表者ビューウィンドウのルートコンポーネント | BroadcastChannel | `src/components/PresenterViewWindow.tsx` |
-| `presenter-view.html` | 発表者ビューウィンドウ用のHTMLエントリーポイント | - | `public/presenter-view.html` |
+| `presenter-view.html` | 発表者ビューウィンドウ用のHTMLエントリーポイント | - | `presenter-view.html`（プロジェクトルート） |
 | `presenterViewEntry.tsx` | 発表者ビューウィンドウの React エントリーポイント | PresenterViewWindow | `src/presenterViewEntry.tsx` |
 | 型定義拡張 | `SlideNotes` 型、`SlideMeta.notes` の型拡張 | - | `src/data/types.ts` |
 | バリデーション拡張 | notes フィールドのバリデーション | - | `src/data/loader.ts` |
@@ -154,13 +154,15 @@ interface UseRevealOptions {
 
 /** 戻り値を拡張 */
 interface UseRevealReturn {
-  deckRef: React.RefObject<HTMLDivElement>
+  deckRef: React.RefObject<HTMLDivElement | null>
   /** 現在のスライドインデックスを取得 */
   getCurrentSlide: () => { indexh: number; indexv: number } | null
 }
 
 function useReveal(options?: UseRevealOptions): UseRevealReturn {}
 ```
+
+**実装上の注意:** `onSlideChanged` コールバックは `useRef` で最新値を保持し、`useEffect` 内のイベントハンドラから ref 経由で呼び出す（stale closure 回避パターン）。Reveal.js の `useEffect` は `[]` 依存で一度しか実行されないため、直接 `options.onSlideChanged` を参照するとクロージャが古い参照を保持し続ける問題がある。
 
 ## 6.2. usePresenterView フック
 
@@ -172,11 +174,32 @@ interface UsePresenterViewOptions {
 interface UsePresenterViewReturn {
   openPresenterView: () => void
   isOpen: boolean
+  /** スライド変更時にメインウィンドウから呼び出す */
+  sendSlideState: (currentIndex: number) => void
 }
 
-function usePresenterView(options: UsePresenterViewOptions): UsePresenterViewReturn {
+function usePresenterView(options: UsePresenterViewOptions): UsePresenterViewReturn {}
+```
+
+## 6.3. PresenterViewButton コンポーネント
+
+```typescript
+interface PresenterViewButtonProps {
+  onClick: () => void
+  isOpen: boolean
+}
+
+function PresenterViewButton(props: PresenterViewButtonProps): JSX.Element {
 }
 ```
+
+**UIの振る舞い:**
+
+- 画面右上に固定配置（`position: fixed; top: 12px; right: 12px`）
+- 通常時: モニターアイコンのみ表示（`opacity: 0.15`、半透明）
+- ホバー時: `opacity: 1` に変化し、ラベルテキスト「発表者ビュー」が展開表示。角丸が円形からラウンド角に CSS transition で遷移する
+- 発表者ビュー表示中: グレー背景でラベル「表示中」を表示、ボタン無効化
+- CSS Modules（`PresenterViewButton.module.css`）でスタイル管理
 
 ---
 
@@ -213,11 +236,15 @@ function usePresenterView(options: UsePresenterViewOptions): UsePresenterViewRet
 | 発表者ビューのレンダリング方式 | (1) 別エントリーポイント (2) 同一アプリ内の別ルート (3) iframe | 別エントリーポイント | 発表者ビューはメインプレゼンテーションと異なるUIを持つ。別エントリーポイントにすることでメインバンドルサイズへの影響を回避 |
 | notes フィールドの型拡張 | (1) `string \| SlideNotes` ユニオン型 (2) 新しい別フィールド追加 (3) `SlideNotes` のみに変更 | `string \| SlideNotes` ユニオン型 | 既存の `notes?: string` との後方互換性を維持しつつ、構造化データも対応可能 |
 | 次スライドプレビューの実装 | (1) スライドデータからHTMLを再レンダリング (2) スライドのサムネイル画像を生成 (3) スライドのテキスト情報のみ表示 | スライドデータからHTMLを再レンダリング | データ駆動型アーキテクチャ（A-003）と整合。SlideRenderer を縮小表示で再利用可能 |
+| useReveal コールバックの stale closure 対策 | (1) useRef で最新コールバックを保持 (2) useEffect の依存配列にコールバックを追加 (3) useCallback + useMemo で安定参照を作成 | useRef パターン | Reveal.js の初期化は一度だけ実行すべきであり、依存配列にコールバックを追加すると deck の再生成が発生する。ref パターンは依存配列を変えずに最新のコールバックを呼べるため最適 |
+| 起動ボタンのUI | (1) 常時テキストボタン表示 (2) アイコン + ホバー展開 (3) キーボードショートカットのみ | アイコン + ホバー展開 | プレゼンテーション中に常時表示されるボタンはスライドの視認性を損なう。半透明アイコンとホバー展開により、必要時のみ視認可能にする |
 
-## 9.2. 未解決の課題
+## 9.2. 解決済みの課題
 
-| 課題 | 影響度 | 対応方針 |
+| 課題 | 影響度 | 対応結果 |
 |---|---|---|
-| Vite のマルチエントリーポイント設定 | 中 | `vite.config.ts` で `build.rollupOptions.input` に発表者ビュー用エントリーを追加 |
-| Reveal.js 型定義の拡張 | 低 | `reveal.d.ts` に `on()`, `getIndices()`, `getSlides()` メソッドの型を追加 |
-| ポップアップブロッカーへの対応 | 中 | ユーザー操作（クリック）起点で `window.open()` を呼び出すことでブロックを回避。ブロック時はガイダンスを表示 |
+| Vite のマルチエントリーポイント設定 | 中 | `vite.config.ts` の `build.rollupOptions.input` に `presenter-view.html` を追加。プロジェクトルートに HTML を配置 |
+| Reveal.js 型定義の拡張 | 低 | `reveal.d.ts` に `on()`, `off()`, `getIndices()` メソッドの型を追加 |
+| ポップアップブロッカーへの対応 | 中 | ユーザー操作（クリック）起点で `window.open()` を呼び出すことでブロックを回避。ブロック時は `console.warn` でガイダンスを出力 |
+| useReveal の stale closure | 高 | `onSlideChangedRef` で最新のコールバックを保持し、`useEffect` 内のイベントハンドラから ref 経由で呼び出す |
+| ナビゲーションとの重なり | 中 | ボタンを右下から右上に移動し、半透明アイコン + ホバー展開のUI に変更 |

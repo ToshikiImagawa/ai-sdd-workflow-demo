@@ -30,7 +30,7 @@
 
 | ID | 要件 | 優先度 | PRD参照 |
 |---|---|---|---|
-| FR-001 | 発表者がUI操作により別ウィンドウで発表者ビューを開ける | Must | FR-PV-001 |
+| FR-001 | 発表者がUI操作（画面右上のホバー展開ボタン）により別ウィンドウで発表者ビューを開ける | Must | FR-PV-001 |
 | FR-002 | メインウィンドウでのスライド遷移が発表者ビューにリアルタイムで同期される | Must | FR-PV-002 |
 | FR-003 | 現在のスライドに紐づくスピーカーノートが発表者ビューに表示される | Must | FR-PV-003 |
 | FR-004 | 次のスライドのプレビューが発表者ビューに表示される | Should | FR-PV-004 |
@@ -80,6 +80,8 @@ interface UsePresenterViewReturn {
   openPresenterView: () => void
   /** 発表者ビューが開いているか */
   isOpen: boolean
+  /** スライド変更時にメインウィンドウから呼び出し、発表者ビューに状態を送信する */
+  sendSlideState: (currentIndex: number) => void
 }
 ```
 
@@ -120,18 +122,27 @@ interface UsePresenterViewReturn {
 }
 ```
 
-## 6.2. 発表者ビューの起動
+## 6.2. 発表者ビューの起動と同期
 
 ```tsx
 import { usePresenterView } from '../hooks/usePresenterView'
+import { useReveal } from '../hooks/useReveal'
+import { PresenterViewButton } from '../components/PresenterViewButton'
 
-function PresentationControls() {
-  const { openPresenterView, isOpen } = usePresenterView()
+function Presentation({ slides }) {
+  const { openPresenterView, isOpen, sendSlideState } = usePresenterView({ slides })
+
+  const handleSlideChanged = useCallback(
+    (event: { indexh: number }) => sendSlideState(event.indexh),
+    [sendSlideState],
+  )
+  const { deckRef } = useReveal({ onSlideChanged: handleSlideChanged })
 
   return (
-    <button onClick={openPresenterView} disabled={isOpen}>
-      発表者ビューを開く
-    </button>
+    <>
+      <div className="reveal" ref={deckRef}>...</div>
+      <PresenterViewButton onClick={openPresenterView} isOpen={isOpen} />
+    </>
   )
 }
 ```
