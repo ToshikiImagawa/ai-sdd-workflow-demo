@@ -75,11 +75,11 @@ function PreviewSlide({ slide }: { slide: SlideData }) {
 
   return (
     <div ref={containerRef} className={styles.previewScaler} style={{ transform: `scale(${scale})` }}>
-      <section className="reveal" style={{ width: 1280, height: 720 }}>
+      <div className={`reveal ${styles.previewReveal}`}>
         <div className="slides">
           <SlideRenderer.Slide slide={slide} />
         </div>
-      </section>
+      </div>
     </div>
   )
 }

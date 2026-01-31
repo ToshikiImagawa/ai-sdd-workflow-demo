@@ -1,6 +1,7 @@
 import DescriptionIcon from '@mui/icons-material/Description'
 import MemoryIcon from '@mui/icons-material/Memory'
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck'
+import FactCheckIcon from '@mui/icons-material/FactCheck'
 import SearchIcon from '@mui/icons-material/Search'
 import TrafficIcon from '@mui/icons-material/Traffic'
 import logText from '../data/default-log.txt?raw'
@@ -28,6 +29,7 @@ export function registerDefaultComponents(): void {
   registerDefaultComponent('Icon:Description', () => <DescriptionIcon sx={{ fontSize: 32 }} />)
   registerDefaultComponent('Icon:PlaylistAddCheck', () => <PlaylistAddCheckIcon sx={{ fontSize: 32 }} />)
   registerDefaultComponent('Icon:Traffic', () => <TrafficIcon sx={{ fontSize: 32 }} />)
+  registerDefaultComponent('Icon:FactCheck', () => <FactCheckIcon sx={{ fontSize: 32 }} />)
   registerDefaultComponent('Icon:Memory', () => <MemoryIcon sx={{ fontSize: 32 }} />)
   registerDefaultComponent('Icon:Search', () => <SearchIcon sx={{ fontSize: 32 }} />)
 }
