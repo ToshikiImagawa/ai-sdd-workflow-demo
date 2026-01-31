@@ -22,6 +22,12 @@ declare module 'reveal.js' {
     initialize(): Promise<void>
 
     destroy(): void
+
+    on(event: string, callback: (...args: unknown[]) => void): void
+
+    off(event: string, callback: (...args: unknown[]) => void): void
+
+    getIndices(): { h: number; v: number }
   }
 
   export default Reveal

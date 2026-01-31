@@ -54,13 +54,32 @@ export interface ComponentReference {
   style?: Record<string, string | number>
 }
 
+/** スライドのノート情報 */
+export interface SlideNotes {
+  /** スピーカーノート（発表者メモ・台本） */
+  speakerNotes?: string
+  /** 要点サマリー（箇条書き用の配列） */
+  summary?: string[]
+}
+
 /** スライドのメタ情報 */
 export interface SlideMeta {
   transition?: string
-  notes?: string
+  notes?: string | SlideNotes
   backgroundImage?: string
   backgroundColor?: string
 }
+
+/** 発表者ビューに同期されるスライド状態 */
+export interface PresenterSlideState {
+  currentIndex: number
+  currentSlide: SlideData
+  nextSlide: SlideData | null
+  totalSlides: number
+}
+
+/** BroadcastChannel で送受信するメッセージ */
+export type PresenterViewMessage = { type: 'slideChanged'; payload: { currentIndex: number; slides: SlideData[] } } | { type: 'presenterViewReady' } | { type: 'presenterViewClosed' }
 
 /** テーマデータ */
 export interface ThemeData {

@@ -14,7 +14,7 @@ export const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: "var(--theme-font-body)",
+    fontFamily: 'var(--theme-font-body)',
     h1: {
       fontSize: 'var(--theme-font-size-h1)',
       fontWeight: 700,

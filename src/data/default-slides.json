@@ -10,6 +10,15 @@
       "content": {
         "title": "Slide Template Guide",
         "subtitle": "利用可能なレイアウトとコンポーネントの紹介\n<code>public/slides.json</code> を配置してカスタマイズできます"
+      },
+      "meta": {
+        "notes": {
+          "speakerNotes": "このプレゼンテーションでは、スライドテンプレートの使い方を紹介します。\npublic/slides.json を配置することで、自由にスライド内容をカスタマイズできます。",
+          "summary": [
+            "スライドテンプレートガイドの紹介",
+            "slides.json でカスタマイズ可能"
+          ]
+        }
       }
     },
     {
@@ -48,6 +57,9 @@
           },
           "accentText": "→ accentText: プライマリカラーで強調表示"
         }
+      },
+      "meta": {
+        "notes": "two-column レイアウトの基本構成を説明するスライドです。左カラムには heading, paragraphs, items を、右カラムには codeBlock, titledBulletList, accentText を配置しています。"
       }
     },
     {
@@ -94,6 +106,17 @@
           {"number": 4, "title": "Step Title", "description": "最後のステップ"}
         ],
         "footer": "footer: タイムライン下部に補足テキストを表示"
+      },
+      "meta": {
+        "notes": {
+          "speakerNotes": "content レイアウトで steps を指定すると、タイムライン形式で表示されます。各ステップには number, title, description が必須で、command はオプションです。",
+          "summary": [
+            "steps でタイムライン表示",
+            "number, title, description が必須",
+            "command はオプション",
+            "footer で補足テキスト表示可能"
+          ]
+        }
       }
     },
     {
@@ -253,7 +276,10 @@
               "\u00a0\u00a0\"transition\": \"slide\",",
               "\u00a0\u00a0\"backgroundColor\": \"#1a1a2e\",",
               "\u00a0\u00a0\"backgroundImage\": \"/bg.png\",",
-              "\u00a0\u00a0\"notes\": \"スピーカーノート\"",
+              "\u00a0\u00a0\"notes\": \"文字列\" or {",
+              "\u00a0\u00a0\u00a0\u00a0\"speakerNotes\": \"発表者メモ\",",
+              "\u00a0\u00a0\u00a0\u00a0\"summary\": [\"要点1\", ...]",
+              "\u00a0\u00a0}",
               "}"
             ]
           }

@@ -12,6 +12,21 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
 }
 
+function validateSlideNotes(notes: unknown, prefix: string, errors: ValidationError[]): void {
+  if (notes === undefined || notes === null) return
+  if (typeof notes === 'string') return
+  if (!isRecord(notes)) {
+    addError(errors, `${prefix}.meta.notes`, 'notesはstring, SlideNotesオブジェクト, またはundefinedである必要があります', 'string | SlideNotes | undefined', typeof notes)
+    return
+  }
+  if (notes.speakerNotes !== undefined && typeof notes.speakerNotes !== 'string') {
+    addError(errors, `${prefix}.meta.notes.speakerNotes`, 'speakerNotesはstringである必要があります', 'string', typeof notes.speakerNotes)
+  }
+  if (notes.summary !== undefined && !Array.isArray(notes.summary)) {
+    addError(errors, `${prefix}.meta.notes.summary`, 'summaryはstring[]である必要があります', 'string[]', typeof notes.summary)
+  }
+}
+
 function validateSlide(slide: unknown, index: number, errors: ValidationError[]): void {
   const prefix = `slides[${index}]`
   if (!isRecord(slide)) {
@@ -26,6 +41,9 @@ function validateSlide(slide: unknown, index: number, errors: ValidationError[])
   }
   if (!isRecord(slide.content)) {
     addError(errors, `${prefix}.content`, 'contentはオブジェクトである必要があります', 'object', typeof slide.content)
+  }
+  if (isRecord(slide.meta)) {
+    validateSlideNotes(slide.meta.notes, prefix, errors)
   }
 }
 

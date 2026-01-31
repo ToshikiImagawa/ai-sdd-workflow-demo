@@ -18,6 +18,14 @@ function copyAddonsPlugin(): Plugin {
 
 export default defineConfig({
   plugins: [react(), copyAddonsPlugin()],
+  build: {
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html'),
+        'presenter-view': resolve(__dirname, 'presenter-view.html'),
+      },
+    },
+  },
   server: {
     fs: {
       allow: ['.', resolve(__dirname, 'addons')],

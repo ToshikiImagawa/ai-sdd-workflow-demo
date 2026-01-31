@@ -1,8 +1,24 @@
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import Reveal from 'reveal.js'
 
-export function useReveal() {
+export interface UseRevealOptions {
+  onSlideChanged?: (event: { indexh: number; indexv: number }) => void
+}
+
+export interface UseRevealReturn {
+  deckRef: React.RefObject<HTMLDivElement | null>
+  getCurrentSlide: () => { indexh: number; indexv: number } | null
+}
+
+export function useReveal(options?: UseRevealOptions): UseRevealReturn {
   const deckRef = useRef<HTMLDivElement>(null)
+  const deckInstanceRef = useRef<InstanceType<typeof Reveal> | null>(null)
+  const onSlideChangedRef = useRef(options?.onSlideChanged)
+
+  // コールバックの最新値を ref に保持（stale closure 回避）
+  useEffect(() => {
+    onSlideChangedRef.current = options?.onSlideChanged
+  }, [options?.onSlideChanged])
 
   useEffect(() => {
     if (!deckRef.current) return
@@ -25,11 +41,29 @@ export function useReveal() {
     })
 
     deck.initialize()
+    deckInstanceRef.current = deck
+
+    const handleSlideChanged = () => {
+      if (onSlideChangedRef.current) {
+        const indices = deck.getIndices()
+        onSlideChangedRef.current({ indexh: indices.h, indexv: indices.v })
+      }
+    }
+
+    deck.on('slidechanged', handleSlideChanged)
 
     return () => {
+      deck.off('slidechanged', handleSlideChanged)
       deck.destroy()
+      deckInstanceRef.current = null
     }
   }, [])
 
-  return deckRef
+  const getCurrentSlide = useCallback((): { indexh: number; indexv: number } | null => {
+    if (!deckInstanceRef.current) return null
+    const indices = deckInstanceRef.current.getIndices()
+    return { indexh: indices.h, indexv: indices.v }
+  }, [])
+
+  return { deckRef, getCurrentSlide }
 }

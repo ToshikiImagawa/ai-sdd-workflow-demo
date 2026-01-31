@@ -1,0 +1,84 @@
+.wrapper {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 9999;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 6px;
+  border: none;
+  border-radius: 50%;
+  background-color: var(--theme-primary);
+  color: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: var(--theme-font-body), serif;
+  white-space: nowrap;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    opacity 0.25s ease,
+    border-radius 0.25s ease,
+    padding 0.25s ease,
+    gap 0.25s ease;
+}
+
+.wrapper:hover .button,
+.button:focus-visible {
+  opacity: 1;
+  border-radius: 6px;
+  padding: 6px 14px;
+  gap: 6px;
+}
+
+/* マウスカーソルが近づいたときにアイコンだけ薄く見せる */
+.wrapper:hover .button,
+.wrapper .button {
+  /* wrapper 全体にホバー領域を広げるためのパディング */
+}
+
+.wrapper {
+  padding: 12px;
+  margin: -12px;
+}
+
+/* アイコンだけ見せる中間状態 */
+.button {
+  opacity: 0.15;
+}
+
+.button:hover,
+.button:focus-visible {
+  opacity: 1;
+}
+
+.label {
+  max-width: 0;
+  overflow: hidden;
+  transition: max-width 0.25s ease;
+}
+
+.wrapper:hover .label,
+.button:focus-visible .label {
+  max-width: 120px;
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* 発表者ビュー表示中 */
+.buttonOpen {
+  background-color: var(--theme-text-muted);
+  cursor: default;
+}
+
+.buttonOpen:hover {
+  opacity: 0.7;
+}

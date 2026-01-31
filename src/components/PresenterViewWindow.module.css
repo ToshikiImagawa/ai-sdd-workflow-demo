@@ -1,0 +1,121 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr auto;
+  gap: 16px;
+  height: 100vh;
+  padding: 16px;
+  box-sizing: border-box;
+  background-color: var(--theme-background);
+  color: var(--theme-text-body);
+  font-family: var(--theme-font-body), serif;
+}
+
+.notesPanel {
+  grid-column: 1;
+  grid-row: 1;
+  overflow-y: auto;
+  padding: 20px;
+  background-color: var(--theme-background-alt);
+  border: 1px solid var(--theme-border);
+  border-radius: 8px;
+}
+
+.notesPanel h2 {
+  margin: 0 0 16px;
+  font-size: 18px;
+  font-family: var(--theme-font-heading), serif;
+  color: var(--theme-text-heading);
+}
+
+.notesText {
+  font-size: 20px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  color: var(--theme-text-body);
+}
+
+.notesEmpty {
+  font-size: 16px;
+  color: var(--theme-text-muted);
+  font-style: italic;
+}
+
+.previewPanel {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+}
+
+.previewPanel h2 {
+  margin: 0;
+  font-size: 18px;
+  font-family: var(--theme-font-heading), serif;
+  color: var(--theme-text-heading);
+}
+
+.previewFrame {
+  flex: 1;
+  border: 1px solid var(--theme-border);
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--theme-background-alt);
+  position: relative;
+}
+
+.previewScaler {
+  width: 1280px;
+  height: 720px;
+  transform-origin: top left;
+  pointer-events: none;
+}
+
+.lastSlideMessage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 18px;
+  color: var(--theme-text-muted);
+  font-style: italic;
+}
+
+.summaryPanel {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  padding: 16px 20px;
+  background-color: var(--theme-background-alt);
+  border: 1px solid var(--theme-border);
+  border-radius: 8px;
+}
+
+.summaryPanel h2 {
+  margin: 0 0 12px;
+  font-size: 16px;
+  font-family: var(--theme-font-heading), serif;
+  color: var(--theme-text-heading);
+}
+
+.summaryList {
+  margin: 0;
+  padding-left: 24px;
+  list-style-type: disc;
+}
+
+.summaryList li {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--theme-text-body);
+}
+
+.slideInfo {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 14px;
+  color: var(--theme-text-muted);
+  font-family: var(--theme-font-body), serif;
+}
