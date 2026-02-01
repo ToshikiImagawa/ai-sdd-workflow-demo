@@ -1,8 +1,62 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { SlideData, PresenterControlState } from '../data'
 import { getSpeakerNotes, getSlideSummary } from '../data'
 import { SlideRenderer } from './SlideRenderer'
 import styles from './PresenterViewWindow.module.css'
+
+const ASPECT_RATIO = 16 / 9
+const PREVIEW_GAP = 12
+const HEADING_HEIGHT = 30 // h2 の高さ + gap の概算
+
+/** コンテナサイズから16:9制約付きプレビューレイアウトを計算する */
+function usePreviewLayout(containerRef: React.RefObject<HTMLDivElement | null>, controlBarRef: React.RefObject<HTMLDivElement | null>) {
+  const [layout, setLayout] = useState({ mainContentHeight: 0, rightColumnWidth: 0, previewHeight: 0 })
+
+  const calculate = useCallback(() => {
+    const container = containerRef.current
+    const controlBar = controlBarRef.current
+    if (!container || !controlBar) return
+
+    const containerWidth = container.clientWidth
+    const containerHeight = container.clientHeight
+    const controlBarHeight = controlBar.offsetHeight
+    const padding = 12
+    const gap = 12
+
+    // コンテナ内の利用可能スペース
+    const availableWidth = containerWidth - padding * 2
+    const availableHeight = containerHeight - padding * 2 - controlBarHeight - gap * 2 // controlBar + mainContent + summaryPanel の gap
+
+    // プレビュー2つ分の最大高さ（利用可能高さの60%を上限として mainContent に割り当て）
+    const maxMainContentHeight = availableHeight * 0.8
+    // 各プレビューの最大高さ: (mainContent高さ - gap - 見出し2つ分) / 2
+    let previewHeight = (maxMainContentHeight - PREVIEW_GAP - HEADING_HEIGHT * 2) / 2
+    let previewWidth = previewHeight * ASPECT_RATIO
+
+    // 幅が利用可能幅の半分を超える場合は幅で制約
+    const maxPreviewWidth = availableWidth * 0.5
+    if (previewWidth > maxPreviewWidth) {
+      previewWidth = maxPreviewWidth
+      previewHeight = previewWidth / ASPECT_RATIO
+    }
+
+    const mainContentHeight = previewHeight * 2 + PREVIEW_GAP + HEADING_HEIGHT * 2
+    const rightColumnWidth = previewWidth
+
+    setLayout({ mainContentHeight, rightColumnWidth, previewHeight })
+  }, [containerRef, controlBarRef])
+
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+    calculate()
+    const observer = new ResizeObserver(calculate)
+    observer.observe(container)
+    return () => observer.disconnect()
+  }, [containerRef, calculate])
+
+  return layout
+}
 
 type PresenterViewWindowProps = {
   slides: SlideData[]
@@ -24,6 +78,10 @@ export function PresenterViewWindow({ slides, currentIndex, controlState, onNavi
   const isFirst = currentIndex === 0
   const isLast = currentIndex >= slides.length - 1
 
+  const containerRef = useRef<HTMLDivElement>(null)
+  const controlBarRef = useRef<HTMLDivElement>(null)
+  const { mainContentHeight, rightColumnWidth, previewHeight } = usePreviewLayout(containerRef, controlBarRef)
+
   // キーボード操作
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -40,9 +98,9 @@ export function PresenterViewWindow({ slides, currentIndex, controlState, onNavi
   }, [onNavigate])
 
   return (
-    <div className={styles.container}>
+    <div ref={containerRef} className={styles.container}>
       {/* 上部コントロールバー */}
-      <div className={styles.controlBar}>
+      <div ref={controlBarRef} className={styles.controlBar}>
         <div className={styles.navControls}>
           <button className={styles.navButton} onClick={() => onNavigate('prev')} disabled={isFirst} title="前のスライド (←)">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -88,23 +146,30 @@ export function PresenterViewWindow({ slides, currentIndex, controlState, onNavi
       </div>
 
       {/* メインコンテンツ */}
-      <div className={styles.mainContent}>
-        {/* 左: スピーカーノート（縦全体） */}
+      <div className={styles.mainContent} style={{ height: mainContentHeight > 0 ? mainContentHeight : undefined }}>
+        {/* 左: スピーカーノート */}
         <div className={styles.notesPanel}>
           <h2>スピーカーノート</h2>
           {speakerNotes ? <div className={styles.notesText}>{speakerNotes}</div> : <div className={styles.notesEmpty}>ノートはありません</div>}
         </div>
 
-        {/* 右上: 次スライドプレビュー */}
-        <div className={styles.previewPanel}>
-          <h2>次のスライド</h2>
-          <div className={styles.previewFrame}>{nextSlide ? <PreviewSlide slide={nextSlide} /> : <div className={styles.boundaryMessage}>最後のスライドです</div>}</div>
-        </div>
+        {/* 右: プレビューカラム */}
+        <div className={styles.rightColumn} style={{ width: rightColumnWidth > 0 ? rightColumnWidth : undefined }}>
+          {/* 次スライドプレビュー */}
+          <div className={styles.previewPanel}>
+            <h2>次のスライド</h2>
+            <div className={styles.previewFrame} style={{ height: previewHeight > 0 ? previewHeight : undefined, aspectRatio: '16 / 9' }}>
+              {nextSlide ? <PreviewSlide slide={nextSlide} /> : <div className={styles.boundaryMessage}>最後のスライドです</div>}
+            </div>
+          </div>
 
-        {/* 右下: 前スライドプレビュー */}
-        <div className={styles.previewPanel}>
-          <h2>前のスライド</h2>
-          <div className={styles.previewFrame}>{previousSlide ? <PreviewSlide slide={previousSlide} /> : <div className={styles.boundaryMessage}>最初のスライドです</div>}</div>
+          {/* 前スライドプレビュー */}
+          <div className={styles.previewPanel}>
+            <h2>前のスライド</h2>
+            <div className={styles.previewFrame} style={{ height: previewHeight > 0 ? previewHeight : undefined, aspectRatio: '16 / 9' }}>
+              {previousSlide ? <PreviewSlide slide={previousSlide} /> : <div className={styles.boundaryMessage}>最初のスライドです</div>}
+            </div>
+          </div>
         </div>
       </div>
 
