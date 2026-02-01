@@ -105,7 +105,7 @@ export function usePresenterView({ slides, onNavigate, onAudioToggle, onAutoPlay
       return
     }
 
-    const newWindow = window.open('/presenter-view.html', 'presenterView', 'width=960,height=700')
+    const newWindow = window.open('/presenter-view.html', 'presenterView')
     if (newWindow) {
       windowRef.current = newWindow
     } else {
