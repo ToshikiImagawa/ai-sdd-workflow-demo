@@ -28,19 +28,16 @@ beforeEach(() => {
     removeEventListener: vi.fn(),
   }
 
-  vi.stubGlobal(
-    'Audio',
-    function MockAudio(this: typeof mockAudioInstance) {
-      Object.assign(this, mockAudioInstance)
-      // addEventListener/removeEventListener を正しく動作させるため、thisに直接バインド
-      this.addEventListener = mockAudioInstance.addEventListener
-      this.removeEventListener = mockAudioInstance.removeEventListener
-      this.play = mockAudioInstance.play
-      this.pause = mockAudioInstance.pause
-      // audioRef.current に this が代入されるので mockAudioInstance を更新
-      mockAudioInstance = this
-    },
-  )
+  vi.stubGlobal('Audio', function MockAudio(this: typeof mockAudioInstance) {
+    Object.assign(this, mockAudioInstance)
+    // addEventListener/removeEventListener を正しく動作させるため、thisに直接バインド
+    this.addEventListener = mockAudioInstance.addEventListener
+    this.removeEventListener = mockAudioInstance.removeEventListener
+    this.play = mockAudioInstance.play
+    this.pause = mockAudioInstance.pause
+    // audioRef.current に this が代入されるので mockAudioInstance を更新
+    mockAudioInstance = this
+  })
 })
 
 function fireEvent(event: string) {

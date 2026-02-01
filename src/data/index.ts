@@ -8,6 +8,7 @@ export type {
   SlideMeta,
   SlideNotes,
   PresenterSlideState,
+  PresenterControlState,
   PresenterViewMessage,
   ThemeData,
   ColorPalette,

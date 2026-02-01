@@ -14,7 +14,7 @@ import { usePresenterView } from './hooks/usePresenterView'
 import { useReveal } from './hooks/useReveal'
 import { theme } from './theme'
 import { applyThemeData } from './applyTheme'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 // デフォルトコンポーネントを登録
 registerDefaultComponents()
@@ -25,8 +25,53 @@ type AppProps = {
 
 export function App({ presentationData }: AppProps) {
   const data = loadPresentationData(presentationData, defaultPresentationData)
-  const { openPresenterView, isOpen, sendSlideState } = usePresenterView({ slides: data.slides })
   const [currentIndex, setCurrentIndex] = useState(0)
+
+  const audioPlayer = useAudioPlayer()
+
+  // ref で最新値を保持（コールバックからの stale closure 回避）
+  const goToNextRef = useRef<() => void>(() => {})
+  const goToPrevRef = useRef<() => void>(() => {})
+  const currentIndexRef = useRef(currentIndex)
+  const audioPlayerRef = useRef(audioPlayer)
+  const autoPlayRef = useRef(false)
+  const autoSlideshowRef = useRef(false)
+  const setAutoPlayRef = useRef<(enabled: boolean) => void>(() => {})
+  const setAutoSlideshowRef = useRef<(enabled: boolean) => void>(() => {})
+
+  currentIndexRef.current = currentIndex
+  audioPlayerRef.current = audioPlayer
+
+  const handleNavigate = useCallback((direction: 'prev' | 'next') => {
+    if (direction === 'next') goToNextRef.current()
+    else goToPrevRef.current()
+  }, [])
+
+  const handleAudioToggle = useCallback(() => {
+    const voicePath = getVoicePath(data.slides[currentIndexRef.current])
+    if (!voicePath) return
+    if (audioPlayerRef.current.isPlaying) {
+      audioPlayerRef.current.stop()
+    } else {
+      audioPlayerRef.current.play(voicePath)
+    }
+  }, [data.slides])
+
+  const handleAutoPlayToggle = useCallback(() => {
+    setAutoPlayRef.current(!autoPlayRef.current)
+  }, [])
+
+  const handleAutoSlideshowToggle = useCallback(() => {
+    setAutoSlideshowRef.current(!autoSlideshowRef.current)
+  }, [])
+
+  const { openPresenterView, isOpen, sendSlideState, sendControlState } = usePresenterView({
+    slides: data.slides,
+    onNavigate: handleNavigate,
+    onAudioToggle: handleAudioToggle,
+    onAutoPlayToggle: handleAutoPlayToggle,
+    onAutoSlideshowToggle: handleAutoSlideshowToggle,
+  })
 
   const handleSlideChanged = useCallback(
     (event: { indexh: number }) => {
@@ -36,9 +81,12 @@ export function App({ presentationData }: AppProps) {
     [sendSlideState],
   )
 
-  const { deckRef, goToNext } = useReveal({ onSlideChanged: handleSlideChanged })
+  const { deckRef, goToNext, goToPrev } = useReveal({ onSlideChanged: handleSlideChanged })
 
-  const audioPlayer = useAudioPlayer()
+  // ref を最新値に更新
+  goToNextRef.current = goToNext
+  goToPrevRef.current = goToPrev
+
   const { autoPlay, setAutoPlay, autoSlideshow, setAutoSlideshow } = useAutoSlideshow({
     slides: data.slides,
     currentIndex,
@@ -46,9 +94,24 @@ export function App({ presentationData }: AppProps) {
     goToNext,
   })
 
-  const currentVoicePath = getVoicePath(data.slides[currentIndex])
+  // setter と値の ref を更新
+  autoPlayRef.current = autoPlay
+  autoSlideshowRef.current = autoSlideshow
+  setAutoPlayRef.current = setAutoPlay
+  setAutoSlideshowRef.current = setAutoSlideshow
 
-  const handleAudioToggle = useCallback(() => {
+  // 制御状態を発表者ビューに同期
+  const currentVoicePath = getVoicePath(data.slides[currentIndex])
+  useEffect(() => {
+    sendControlState({
+      isPlaying: audioPlayer.isPlaying,
+      autoPlay,
+      autoSlideshow,
+      hasVoice: !!currentVoicePath,
+    })
+  }, [audioPlayer.isPlaying, autoPlay, autoSlideshow, currentVoicePath, sendControlState])
+
+  const handleAudioToggleLocal = useCallback(() => {
     if (!currentVoicePath) return
     if (audioPlayer.isPlaying) {
       audioPlayer.stop()
@@ -78,7 +141,7 @@ export function App({ presentationData }: AppProps) {
         </div>
       )}
       <div className="toolbar">
-        {currentVoicePath && <AudioPlayButton playbackState={audioPlayer.playbackState} onToggle={handleAudioToggle} />}
+        {currentVoicePath && <AudioPlayButton playbackState={audioPlayer.playbackState} onToggle={handleAudioToggleLocal} />}
         <AudioControlBar autoPlay={autoPlay} onAutoPlayChange={setAutoPlay} autoSlideshow={autoSlideshow} onAutoSlideshowChange={setAutoSlideshow} />
         <PresenterViewButton onClick={openPresenterView} isOpen={isOpen} />
       </div>

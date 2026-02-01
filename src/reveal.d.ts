@@ -30,6 +30,8 @@ declare module 'reveal.js' {
     getIndices(): { h: number; v: number }
 
     next(): void
+
+    prev(): void
   }
 
   export default Reveal

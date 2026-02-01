@@ -10,28 +10,28 @@
 
 # 1. 実装ステータス
 
-**ステータス:** 🟡 部分実装
+**ステータス:** 🟢 実装完了
 
 ## 1.1. 実装進捗
 
 | モジュール/機能 | ステータス | 備考 |
 |---|---|---|
 | notes フィールド型拡張 | 🟢 完了 | `SlideMeta.notes` を `string \| SlideNotes` に拡張。後方互換性維持 |
-| useReveal フック拡張 | 🟢 完了 | `onSlideChanged` コールバック、`getCurrentSlide` メソッド追加 |
-| ウィンドウ間通信（単方向） | 🟢 完了 | `usePresenterView` フック（BroadcastChannel、メイン→発表者ビュー） |
-| 発表者ビューUI（基本） | 🟢 完了 | `PresenterViewWindow` コンポーネント（3パネル構成、CSS Modules） |
+| useReveal フック拡張 | 🟢 完了 | `onSlideChanged` コールバック、`getCurrentSlide`、`goToNext`、`goToPrev` メソッド追加 |
+| ウィンドウ間通信（双方向） | 🟢 完了 | `usePresenterView` フック（BroadcastChannel、双方向同期、コマンド受信コールバック） |
+| 発表者ビューUI | 🟢 完了 | `PresenterViewWindow` コンポーネント（コントロールバー＋2x2パネル構成、CSS Modules） |
 | 発表者ビュー起動ボタン | 🟢 完了 | `PresenterViewButton` コンポーネント |
 | バリデーション拡張 | 🟢 完了 | `validateSlideNotes()` を `loader.ts` に追加 |
 | notes ヘルパー関数 | 🟢 完了 | `normalizeNotes`, `getSpeakerNotes`, `getSlideSummary` |
-| エントリーポイント | 🟢 完了 | `presenter-view.html` + `presenterViewEntry.tsx` |
+| エントリーポイント | 🟢 完了 | `presenter-view.html` + `presenterViewEntry.tsx`（コマンド送信対応） |
 | Vite マルチエントリー | 🟢 完了 | `vite.config.ts` に `rollupOptions.input` 追加 |
-| 前スライドプレビュー | 🔴 未実装 | FR-PV-007 対応。前スライドの縮小表示 |
-| 双方向ウィンドウ間通信 | 🔴 未実装 | DC-PV-003 対応。発表者ビュー→メインウィンドウのコマンド送信 |
-| スライド移動操作 | 🔴 未実装 | FR-PV-008 対応。ナビゲーションボタン＋キーボード操作 |
-| 音声再生制御 | 🔴 未実装 | FR-PV-009 対応。音声再生/停止ボタン |
-| 自動音声再生制御 | 🔴 未実装 | FR-PV-010 対応。自動再生ON/OFFボタン |
-| 自動スライドショー制御 | 🔴 未実装 | FR-PV-011 対応。自動スライドショーON/OFFボタン |
-| 制御状態の同期 | 🔴 未実装 | メインウィンドウから発表者ビューへの制御状態同期 |
+| 前スライドプレビュー | 🟢 完了 | FR-PV-007 対応。前スライドの縮小表示、最初のスライドではメッセージ表示 |
+| 双方向ウィンドウ間通信 | 🟢 完了 | DC-PV-003 対応。同一BroadcastChannelで双方向通信、コマンドパターン採用 |
+| スライド移動操作 | 🟢 完了 | FR-PV-008 対応。ナビゲーションボタン＋キーボード操作（ArrowRight/Space/ArrowLeft） |
+| 音声再生制御 | 🟢 完了 | FR-PV-009 対応。音声再生/停止ボタン（hasVoiceに基づく無効化） |
+| 自動音声再生制御 | 🟢 完了 | FR-PV-010 対応。自動再生ON/OFFトグルボタン |
+| 自動スライドショー制御 | 🟢 完了 | FR-PV-011 対応。自動スライドショーON/OFFトグルボタン |
+| 制御状態の同期 | 🟢 完了 | `PresenterControlState` による状態同期、`presenterViewReady` 時の初期同期 |
 
 ---
 

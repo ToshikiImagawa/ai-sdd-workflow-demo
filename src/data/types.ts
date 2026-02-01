@@ -80,12 +80,32 @@ export interface SlideMeta {
 export interface PresenterSlideState {
   currentIndex: number
   currentSlide: SlideData
+  previousSlide: SlideData | null
   nextSlide: SlideData | null
   totalSlides: number
 }
 
-/** BroadcastChannel で送受信するメッセージ */
-export type PresenterViewMessage = { type: 'slideChanged'; payload: { currentIndex: number; slides: SlideData[] } } | { type: 'presenterViewReady' } | { type: 'presenterViewClosed' }
+/** 音声・スライドショーの制御状態 */
+export interface PresenterControlState {
+  isPlaying: boolean
+  autoPlay: boolean
+  autoSlideshow: boolean
+  hasVoice: boolean
+}
+
+/** BroadcastChannel で送受信するメッセージ（双方向） */
+export type PresenterViewMessage =
+  // メインウィンドウ → 発表者ビュー
+  | { type: 'slideChanged'; payload: { currentIndex: number; slides: SlideData[] } }
+  | { type: 'controlStateChanged'; payload: PresenterControlState }
+  // 発表者ビュー → メインウィンドウ
+  | { type: 'navigate'; payload: { direction: 'prev' | 'next' } }
+  | { type: 'audioToggle' }
+  | { type: 'autoPlayToggle' }
+  | { type: 'autoSlideshowToggle' }
+  // 双方向
+  | { type: 'presenterViewReady' }
+  | { type: 'presenterViewClosed' }
 
 /** テーマデータ */
 export interface ThemeData {

@@ -1,35 +1,74 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import type { SlideData, PresenterViewMessage } from '../data'
+import type { SlideData, PresenterViewMessage, PresenterControlState } from '../data'
 
 const CHANNEL_NAME = 'presenter-view'
 
 export interface UsePresenterViewOptions {
   slides: SlideData[]
+  onNavigate?: (direction: 'prev' | 'next') => void
+  onAudioToggle?: () => void
+  onAutoPlayToggle?: () => void
+  onAutoSlideshowToggle?: () => void
 }
 
 export interface UsePresenterViewReturn {
   openPresenterView: () => void
   isOpen: boolean
   sendSlideState: (currentIndex: number) => void
+  sendControlState: (state: PresenterControlState) => void
 }
 
-export function usePresenterView({ slides }: UsePresenterViewOptions): UsePresenterViewReturn {
+export function usePresenterView({ slides, onNavigate, onAudioToggle, onAutoPlayToggle, onAutoSlideshowToggle }: UsePresenterViewOptions): UsePresenterViewReturn {
   const [isOpen, setIsOpen] = useState(false)
   const channelRef = useRef<BroadcastChannel | null>(null)
   const windowRef = useRef<Window | null>(null)
+
+  // コールバックを useRef で保持（stale closure 回避）
+  const onNavigateRef = useRef(onNavigate)
+  const onAudioToggleRef = useRef(onAudioToggle)
+  const onAutoPlayToggleRef = useRef(onAutoPlayToggle)
+  const onAutoSlideshowToggleRef = useRef(onAutoSlideshowToggle)
+  const latestControlStateRef = useRef<PresenterControlState | null>(null)
+
+  useEffect(() => {
+    onNavigateRef.current = onNavigate
+  }, [onNavigate])
+  useEffect(() => {
+    onAudioToggleRef.current = onAudioToggle
+  }, [onAudioToggle])
+  useEffect(() => {
+    onAutoPlayToggleRef.current = onAutoPlayToggle
+  }, [onAutoPlayToggle])
+  useEffect(() => {
+    onAutoSlideshowToggleRef.current = onAutoSlideshowToggle
+  }, [onAutoSlideshowToggle])
 
   useEffect(() => {
     const channel = new BroadcastChannel(CHANNEL_NAME)
     channelRef.current = channel
 
     channel.onmessage = (event: MessageEvent<PresenterViewMessage>) => {
-      if (event.data.type === 'presenterViewReady') {
+      const msg = event.data
+      if (msg.type === 'presenterViewReady') {
         setIsOpen(true)
         const message: PresenterViewMessage = { type: 'slideChanged', payload: { currentIndex: 0, slides } }
         channel.postMessage(message)
-      } else if (event.data.type === 'presenterViewClosed') {
+        // 初期制御状態を送信
+        if (latestControlStateRef.current) {
+          const controlMessage: PresenterViewMessage = { type: 'controlStateChanged', payload: latestControlStateRef.current }
+          channel.postMessage(controlMessage)
+        }
+      } else if (msg.type === 'presenterViewClosed') {
         setIsOpen(false)
         windowRef.current = null
+      } else if (msg.type === 'navigate') {
+        onNavigateRef.current?.(msg.payload.direction)
+      } else if (msg.type === 'audioToggle') {
+        onAudioToggleRef.current?.()
+      } else if (msg.type === 'autoPlayToggle') {
+        onAutoPlayToggleRef.current?.()
+      } else if (msg.type === 'autoSlideshowToggle') {
+        onAutoSlideshowToggleRef.current?.()
       }
     }
 
@@ -49,6 +88,17 @@ export function usePresenterView({ slides }: UsePresenterViewOptions): UsePresen
     [isOpen, slides],
   )
 
+  const sendControlState = useCallback(
+    (state: PresenterControlState) => {
+      latestControlStateRef.current = state
+      if (channelRef.current && isOpen) {
+        const message: PresenterViewMessage = { type: 'controlStateChanged', payload: state }
+        channelRef.current.postMessage(message)
+      }
+    },
+    [isOpen],
+  )
+
   const openPresenterView = useCallback(() => {
     if (isOpen && windowRef.current && !windowRef.current.closed) {
       windowRef.current.focus()
@@ -63,5 +113,5 @@ export function usePresenterView({ slides }: UsePresenterViewOptions): UsePresen
     }
   }, [isOpen])
 
-  return { openPresenterView, isOpen, sendSlideState }
+  return { openPresenterView, isOpen, sendSlideState, sendControlState }
 }

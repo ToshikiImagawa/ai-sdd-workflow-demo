@@ -33,7 +33,7 @@ graph LR
 
 **作業内容:**
 
-- [ ] `PresenterControlState` インターフェースを追加
+- [x] `PresenterControlState` インターフェースを追加
   ```typescript
   interface PresenterControlState {
     isPlaying: boolean
@@ -42,13 +42,13 @@ graph LR
     hasVoice: boolean
   }
   ```
-- [ ] `PresenterViewMessage` 型に新しいメッセージタイプを追加
+- [x] `PresenterViewMessage` 型に新しいメッセージタイプを追加
   - `{ type: 'controlStateChanged'; payload: PresenterControlState }` （メイン→発表者ビュー）
   - `{ type: 'navigate'; payload: { direction: 'prev' | 'next' } }` （発表者ビュー→メイン）
   - `{ type: 'audioToggle' }` （発表者ビュー→メイン）
   - `{ type: 'autoPlayToggle' }` （発表者ビュー→メイン）
   - `{ type: 'autoSlideshowToggle' }` （発表者ビュー→メイン）
-- [ ] `PresenterSlideState` に `previousSlide: SlideData | null` フィールドを追加
+- [x] `PresenterSlideState` に `previousSlide: SlideData | null` フィールドを追加
 
 **完了条件:**
 
@@ -66,20 +66,20 @@ graph LR
 
 **作業内容:**
 
-- [ ] `UsePresenterViewOptions` にコマンド受信コールバックを追加
+- [x] `UsePresenterViewOptions` にコマンド受信コールバックを追加
   - `onNavigate?: (direction: 'prev' | 'next') => void`
   - `onAudioToggle?: () => void`
   - `onAutoPlayToggle?: () => void`
   - `onAutoSlideshowToggle?: () => void`
-- [ ] `UsePresenterViewReturn` に `sendControlState` メソッドを追加
+- [x] `UsePresenterViewReturn` に `sendControlState` メソッドを追加
   - `sendControlState: (state: PresenterControlState) => void`
-- [ ] BroadcastChannel の `onmessage` ハンドラを拡張し、発表者ビューからのコマンドメッセージを受信
+- [x] BroadcastChannel の `onmessage` ハンドラを拡張し、発表者ビューからのコマンドメッセージを受信
   - `navigate` → `onNavigate` コールバック呼び出し
   - `audioToggle` → `onAudioToggle` コールバック呼び出し
   - `autoPlayToggle` → `onAutoPlayToggle` コールバック呼び出し
   - `autoSlideshowToggle` → `onAutoSlideshowToggle` コールバック呼び出し
-- [ ] `presenterViewReady` 受信時に現在の制御状態を送信する初期同期処理を追加
-- [ ] コールバックを `useRef` で保持し、stale closure を回避
+- [x] `presenterViewReady` 受信時に現在の制御状態を送信する初期同期処理を追加
+- [x] コールバックを `useRef` で保持し、stale closure を回避
 
 **完了条件:**
 
@@ -99,11 +99,11 @@ graph LR
 
 **作業内容:**
 
-- [ ] `UseRevealReturn` に `goToNext()` メソッドを追加
+- [x] `UseRevealReturn` に `goToNext()` メソッドを追加
   - `deck.next()` を呼び出してスライドを次に進める
-- [ ] `UseRevealReturn` に `goToPrev()` メソッドを追加
+- [x] `UseRevealReturn` に `goToPrev()` メソッドを追加
   - `deck.prev()` を呼び出してスライドを前に戻す
-- [ ] `deck` がまだ初期化されていない場合のガード処理
+- [x] `deck` がまだ初期化されていない場合のガード処理
 
 **完了条件:**
 
@@ -123,14 +123,14 @@ graph LR
 
 **作業内容:**
 
-- [ ] BroadcastChannel からの `controlStateChanged` メッセージ受信を追加
-- [ ] 受信した `PresenterControlState` を state として管理
-- [ ] `PresenterViewWindow` にコマンド送信用のコールバック props を渡す
+- [x] BroadcastChannel からの `controlStateChanged` メッセージ受信を追加
+- [x] 受信した `PresenterControlState` を state として管理
+- [x] `PresenterViewWindow` にコマンド送信用のコールバック props を渡す
   - `onNavigate`: `navigate` メッセージを BroadcastChannel に送信
   - `onAudioToggle`: `audioToggle` メッセージを送信
   - `onAutoPlayToggle`: `autoPlayToggle` メッセージを送信
   - `onAutoSlideshowToggle`: `autoSlideshowToggle` メッセージを送信
-- [ ] `controlState` props を `PresenterViewWindow` に渡す
+- [x] `controlState` props を `PresenterViewWindow` に渡す
 
 **完了条件:**
 
@@ -149,12 +149,12 @@ graph LR
 
 **作業内容:**
 
-- [ ] `usePresenterView` の呼び出しにコマンド受信コールバックを接続
+- [x] `usePresenterView` の呼び出しにコマンド受信コールバックを接続
   - `onNavigate`: `useReveal` の `goToNext()` / `goToPrev()` を呼び出す
   - `onAudioToggle`: 音声再生/停止を切り替える（`useAudioPlayer` 連携）
   - `onAutoPlayToggle`: 自動音声再生を切り替える（`useAutoSlideshow` 連携）
   - `onAutoSlideshowToggle`: 自動スライドショーを切り替える（`useAutoSlideshow` 連携）
-- [ ] 音声・制御状態が変更されたタイミングで `sendControlState` を呼び出す
+- [x] 音声・制御状態が変更されたタイミングで `sendControlState` を呼び出す
   - 音声再生状態（`isPlaying`）の変更時
   - 自動音声再生（`autoPlay`）の変更時
   - 自動スライドショー（`autoSlideshow`）の変更時
@@ -178,35 +178,35 @@ graph LR
 
 **作業内容:**
 
-- [ ] **前スライドプレビュー**の追加
+- [x] **前スライドプレビュー**の追加
   - 前スライドを `PreviewSlide` で縮小表示
   - 最初のスライドでは「最初のスライドです」メッセージを表示
-- [ ] **レイアウト変更**: 3パネルから以下の構成に変更
+- [x] **レイアウト変更**: 3パネルから以下の構成に変更
   - 上部: スライド進捗（`N / total`）+ ナビゲーションボタン + 音声制御ボタン群
   - 左上: 前スライドプレビュー
   - 右上: 次スライドプレビュー
   - 左下: スピーカーノート
   - 右下: 要点サマリー
-- [ ] **ナビゲーションボタン**の追加
+- [x] **ナビゲーションボタン**の追加
   - 前へボタン（左矢印アイコン）→ `onNavigate('prev')` を呼び出す
   - 次へボタン（右矢印アイコン）→ `onNavigate('next')` を呼び出す
   - 最初/最終スライド時のボタン無効化
-- [ ] **音声再生ボタン**の追加
+- [x] **音声再生ボタン**の追加
   - 再生/停止切り替えアイコンボタン → `onAudioToggle()` を呼び出す
   - `controlState.isPlaying` に基づいてアイコン切り替え
   - `controlState.hasVoice` が `false` の場合はボタン無効化
-- [ ] **自動音声再生ボタン**の追加
+- [x] **自動音声再生ボタン**の追加
   - ON/OFFトグルアイコンボタン → `onAutoPlayToggle()` を呼び出す
   - `controlState.autoPlay` に基づいてアイコン状態を表示
-- [ ] **自動スライドショーボタン**の追加
+- [x] **自動スライドショーボタン**の追加
   - ON/OFFトグルアイコンボタン → `onAutoSlideshowToggle()` を呼び出す
   - `controlState.autoSlideshow` に基づいてアイコン状態を表示
-- [ ] **キーボード操作**の追加
+- [x] **キーボード操作**の追加
   - `ArrowRight` / `Space`: `onNavigate('next')` を呼び出す
   - `ArrowLeft`: `onNavigate('prev')` を呼び出す
   - `keydown` イベントリスナーの登録と `useEffect` でのクリーンアップ
   - `preventDefault()` でブラウザデフォルト動作を抑制
-- [ ] CSS Modules のレイアウト更新
+- [x] CSS Modules のレイアウト更新
 
 **完了条件:**
 
@@ -235,10 +235,10 @@ graph LR
   - 発表者ビュー → メインウィンドウの音声制御
 - [ ] 発表者ビューのキーボード操作を確認
 - [ ] 前スライドプレビューの表示を確認（最初・中間・最終スライド）
-- [ ] `npm run build` でビルド成功を確認
-- [ ] `npm run typecheck` でエラーなしを確認
-- [ ] `npm run test` でテスト全件パスを確認
-- [ ] `presenter-view_design.md` の実装ステータスを更新（🔴→🟢）
+- [x] `npm run build` でビルド成功を確認
+- [x] `npm run typecheck` でエラーなしを確認
+- [x] `npm run test` でテスト全件パスを確認
+- [x] `presenter-view_design.md` の実装ステータスを更新（🔴→🟢）
 
 **完了条件:**
 

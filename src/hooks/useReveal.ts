@@ -9,6 +9,7 @@ export interface UseRevealReturn {
   deckRef: React.RefObject<HTMLDivElement | null>
   getCurrentSlide: () => { indexh: number; indexv: number } | null
   goToNext: () => void
+  goToPrev: () => void
 }
 
 export function useReveal(options?: UseRevealOptions): UseRevealReturn {
@@ -70,5 +71,9 @@ export function useReveal(options?: UseRevealOptions): UseRevealReturn {
     deckInstanceRef.current?.next()
   }, [])
 
-  return { deckRef, getCurrentSlide, goToNext }
+  const goToPrev = useCallback(() => {
+    deckInstanceRef.current?.prev()
+  }, [])
+
+  return { deckRef, getCurrentSlide, goToNext, goToPrev }
 }

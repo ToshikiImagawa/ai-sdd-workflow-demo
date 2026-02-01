@@ -10,12 +10,7 @@ export function AudioPlayButton({ playbackState, onToggle }: AudioPlayButtonProp
   const isPlaying = playbackState === 'playing'
 
   return (
-    <button
-      onClick={onToggle}
-      title={isPlaying ? '音声を停止' : '音声を再生'}
-      className={`${styles.button} ${isPlaying ? styles.playing : ''}`}
-      aria-label={isPlaying ? '音声を停止' : '音声を再生'}
-    >
+    <button onClick={onToggle} title={isPlaying ? '音声を停止' : '音声を再生'} className={`${styles.button} ${isPlaying ? styles.playing : ''}`} aria-label={isPlaying ? '音声を停止' : '音声を再生'}>
       <svg className={styles.icon} viewBox="0 0 24 24" fill="currentColor">
         {isPlaying ? (
           <>
