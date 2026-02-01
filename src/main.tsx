@@ -33,21 +33,21 @@ async function loadAddons(): Promise<void> {
   }
 }
 
-applyTheme().then()
-
 const root = createRoot(document.getElementById('root')!)
 
-// アドオンをロードしてからアプリをレンダリングする
+// アドオンをロードし、slides.json を読み込んでからテーマを適用してレンダリングする
 loadAddons().then(() => {
   fetch('/slides.json')
     .then((res) => {
       if (!res.ok) throw new Error(`${res.status}`)
       return res.json() as Promise<PresentationData>
     })
-    .then((data) => {
+    .then(async (data) => {
+      await applyTheme(data.meta?.themeColors)
       root.render(<App presentationData={data} />)
     })
-    .catch(() => {
+    .catch(async () => {
+      await applyTheme()
       root.render(<App />)
     })
 })

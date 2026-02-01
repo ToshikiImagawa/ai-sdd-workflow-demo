@@ -4,7 +4,6 @@ dist/
 .idea/
 .envrc
 
-assets/*
 public/*
 addons/src/
 addons/dist/

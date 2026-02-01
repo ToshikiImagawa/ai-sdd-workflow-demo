@@ -78,13 +78,14 @@ function PresenterViewApp() {
         if (!res.ok) throw new Error(`${res.status}`)
         return res.json() as Promise<PresentationData>
       })
-      .then((data) => {
+      .then(async (data) => {
+        await applyTheme(data.meta?.themeColors)
         if (data.theme) {
           applyThemeData(data.theme)
         }
       })
-      .catch(() => {
-        // テーマデータが取得できない場合はデフォルトを使用
+      .catch(async () => {
+        await applyTheme()
       })
   }, [])
 
@@ -98,8 +99,6 @@ function PresenterViewApp() {
     </ThemeProvider>
   )
 }
-
-applyTheme().then()
 
 const root = createRoot(document.getElementById('root')!)
 

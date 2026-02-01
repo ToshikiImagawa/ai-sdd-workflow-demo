@@ -22,10 +22,10 @@ const keyToCssVar: Record<string, string> = {
   success: '--theme-success',
 }
 
-export async function applyTheme() {
+export async function applyTheme(path?: string) {
   let theme: Record<string, string>
   try {
-    const res = await fetch('/theme-colors.json')
+    const res = await fetch(path ?? '/theme-colors.json')
     if (!res.ok) return
     theme = await res.json()
   } catch {

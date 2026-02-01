@@ -11,6 +11,7 @@ export interface PresentationMeta {
   description?: string
   author?: string
   logo?: LogoConfig
+  themeColors?: string
 }
 
 /** ロゴ設定 */
