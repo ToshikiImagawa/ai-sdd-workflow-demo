@@ -59,7 +59,14 @@
         }
       },
       "meta": {
-        "notes": "two-column レイアウトの基本構成を説明するスライドです。左カラムには heading, paragraphs, items を、右カラムには codeBlock, titledBulletList, accentText を配置しています。"
+        "notes": {
+          "speakerNotes": "two-column レイアウトの基本構成を説明するスライドです。左カラムには heading, paragraphs, items を、右カラムには codeBlock, titledBulletList, accentText を配置しています。",
+          "summary": [
+            "two-column レイアウトの基本構成",
+            "左: heading, paragraphs, items",
+            "右: codeBlock, titledBulletList, accentText"
+          ]
+        }
       }
     },
     {
@@ -91,6 +98,16 @@
             "props": { "logTextUrl": "/demo-log.txt" },
             "style": { "height": "400px", "width": "90%", "margin": "auto" }
           }
+        }
+      },
+      "meta": {
+        "notes": {
+          "speakerNotes": "two-column レイアウトの左右カラムに component フィールドを指定することで、登録済みコンポーネントを埋め込むことができます。",
+          "summary": [
+            "left / right に component を指定可能",
+            "登録済みコンポーネントを埋め込み表示",
+            "name, props, style で設定"
+          ]
         }
       }
     },
@@ -141,6 +158,39 @@
             "description": "タイルは 3列グリッドで表示されます。2つでも3つでも配置可能です。"
           }
         ]
+      },
+      "meta": {
+        "notes": {
+          "speakerNotes": "content レイアウトで tiles を指定すると、タイルグリッド形式で表示されます。各タイルには icon, title, description を設定します。",
+          "summary": [
+            "tiles でタイルグリッド表示",
+            "icon, title, description を設定",
+            "3列グリッドで配置"
+          ]
+        }
+      }
+    },
+    {
+      "id": "guide-content-component",
+      "layout": "content",
+      "content": {
+        "title": "layout: \"content\" — コンポーネント (component)",
+        "component": {
+          "name": "TerminalAnimation",
+          "props": { "logTextUrl": "/demo-log.txt" },
+          "style": { "height": "400px", "width": "90%", "margin": "auto" }
+        },
+        "footer": "content レイアウトの component はタイトルバー付きのラッパー内に描画されます"
+      },
+      "meta": {
+        "notes": {
+          "speakerNotes": "content レイアウトで component を指定すると、タイトルバー付きの ContentLayout ラッパー内にコンポーネントが描画されます。steps や tiles と同様に content レイアウトの子要素として扱われます。",
+          "summary": [
+            "content レイアウトで component を指定",
+            "ContentLayout ラッパー内に描画",
+            "タイトルバーが自動で表示される"
+          ]
+        }
       }
     },
     {
@@ -158,6 +208,37 @@
           "name": "TerminalAnimation",
           "props": { "logTextUrl": "/demo-log.txt" },
           "style": { "height": "400px", "width": "90%", "margin": "auto" }
+        }
+      },
+      "meta": {
+        "notes": {
+          "speakerNotes": "bleed レイアウトは2カラム全幅で表示されます。左カラムに title, titleDescription, commands を、右カラムに component を配置します。",
+          "summary": [
+            "bleed レイアウトで2カラム全幅表示",
+            "左: title, titleDescription, commands",
+            "右: component で任意のコンポーネント配置"
+          ]
+        }
+      }
+    },
+    {
+      "id": "guide-custom-layout",
+      "layout": "custom",
+      "content": {
+        "component": {
+          "name": "TerminalAnimation",
+          "props": { "logTextUrl": "/demo-log.txt" },
+          "style": { "height": "100%", "width": "100%" }
+        }
+      },
+      "meta": {
+        "notes": {
+          "speakerNotes": "custom レイアウトは component で指定したコンポーネントを直接描画します。content レイアウトとの違いは、タイトルバーなどのラッパーが一切なく、コンポーネントがスライド全体を占有する点です。",
+          "summary": [
+            "layout: \"custom\" でコンポーネントを直接描画",
+            "タイトルバーなどのラッパーなし",
+            "content レイアウトとの違いを理解する"
+          ]
         }
       }
     },
@@ -196,6 +277,16 @@
             "style": { "display": "flex", "justifyContent": "center", "alignItems": "center", "height": "100%" }
           }
         }
+      },
+      "meta": {
+        "notes": {
+          "speakerNotes": "Image コンポーネントは FallbackImage をラップしており、画像の読み込みエラー時にフォールバック UI を表示します。src, width, height を props で指定します。",
+          "summary": [
+            "Image コンポーネントで画像を表示",
+            "FallbackImage によるフォールバック対応",
+            "src, width, height を props で指定"
+          ]
+        }
       }
     },
     {
@@ -225,6 +316,16 @@
             ]
           },
           "accentText": "→ content レイアウトの tiles の icon に名前を指定して使用"
+        }
+      },
+      "meta": {
+        "notes": {
+          "speakerNotes": "デフォルトで登録されているコンポーネントの一覧です。TerminalAnimation と5つの MUI アイコンが利用可能です。",
+          "summary": [
+            "TerminalAnimation: アニメーション付きターミナル",
+            "MUI アイコン5種が登録済み",
+            "tiles の icon フィールドで使用"
+          ]
         }
       }
     },
@@ -261,6 +362,16 @@
           },
           "accentText": "→ addons/ は gitignore 対象のためローカル環境でのみ動作"
         }
+      },
+      "meta": {
+        "notes": {
+          "speakerNotes": "アドオンシステムにより、独自のコンポーネントを追加できます。addons/src/ にエントリファイルを配置し、window.__ADDON_REGISTER__ で登録します。",
+          "summary": [
+            "addons/src/{名前}/entry.ts でコンポーネントを追加",
+            "window.__ADDON_REGISTER__ で登録",
+            "npm run build:addons でビルド"
+          ]
+        }
       }
     },
     {
@@ -296,7 +407,74 @@
               "}"
             ]
           },
-          "accentText": "→ 詳細は src/data/types.ts を参照"
+          "accentText": "→ 詳細は次のスライドで紹介"
+        }
+      },
+      "meta": {
+        "notes": {
+          "speakerNotes": "meta フィールドでは各スライドのトランジション、背景色、背景画像、発表者ノートを設定できます。theme フィールドではプレゼン全体の色やフォントを設定します。",
+          "summary": [
+            "meta: transition, backgroundColor, backgroundImage, notes",
+            "theme: colors, fonts でプレゼン全体を設定",
+            "notes は文字列またはオブジェクト形式"
+          ]
+        }
+      }
+    },
+    {
+      "id": "guide-theme-detail",
+      "layout": "two-column",
+      "content": {
+        "title": "テーマ設定の詳細",
+        "left": {
+          "heading": "theme.colors 全キー",
+          "codeBlock": {
+            "header": "> slides.json 内の theme.colors",
+            "items": [
+              "\"colors\": {",
+              "\u00a0\u00a0\"primary\": \"#6c63ff\",",
+              "\u00a0\u00a0\"background\": \"#0f0e17\",",
+              "\u00a0\u00a0\"surface\": \"#1a1a2e\",",
+              "\u00a0\u00a0\"textHeading\": \"#ffffff\",",
+              "\u00a0\u00a0\"textBody\": \"#a0a0b0\",",
+              "\u00a0\u00a0\"accent\": \"#ff6b6b\",",
+              "\u00a0\u00a0\"success\": \"#4ecdc4\",",
+              "\u00a0\u00a0\"border\": \"#2a2a4a\"",
+              "}",
+              "",
+              "\"customCSS\": \".reveal { ... }\""
+            ]
+          }
+        },
+        "right": {
+          "heading": "テーマ設定の2つの方法",
+          "items": [
+            {"text": "方法1:", "emphasis": true, "description": " slides.json の theme フィールド（色・フォント・customCSS）"},
+            {"text": "方法2:", "emphasis": true, "description": " public/theme-colors.json（色のみ）"},
+            {"text": "meta.themeColors:", "emphasis": true, "description": " slides.json の meta 内で色を指定（方法1と同等）"}
+          ],
+          "codeBlock": {
+            "header": "> theme-colors.json（方法2）",
+            "items": [
+              "{",
+              "\u00a0\u00a0\"primary\": \"#6c63ff\",",
+              "\u00a0\u00a0\"background\": \"#0f0e17\",",
+              "\u00a0\u00a0\"surface\": \"#1a1a2e\"",
+              "}"
+            ]
+          },
+          "accentText": "→ すべての色に -rgb 変数あり（rgba() で使用可能）"
+        }
+      },
+      "meta": {
+        "notes": {
+          "speakerNotes": "テーマの色は slides.json の theme.colors か public/theme-colors.json で設定できます。customCSS でカスタム CSS も指定可能です。すべての色に -rgb 変数が自動生成されます。",
+          "summary": [
+            "theme.colors で8種類の色を設定可能",
+            "customCSS でカスタム CSS を追加",
+            "theme-colors.json で色のみ設定も可能",
+            "すべての色に -rgb 変数が自動生成"
+          ]
         }
       }
     },
@@ -336,7 +514,11 @@
               "\u00a0\u00a0\"fonts\": {",
               "\u00a0\u00a0\u00a0\u00a0\"heading\": \"'Noto Sans JP'\",",
               "\u00a0\u00a0\u00a0\u00a0\"body\": \"'Noto Sans JP'\",",
-              "\u00a0\u00a0\u00a0\u00a0\"code\": \"'Fira Code'\"",
+              "\u00a0\u00a0\u00a0\u00a0\"code\": \"'Fira Code'\",",
+              "\u00a0\u00a0\u00a0\u00a0\"baseFontSize\": \"24px\",",
+              "\u00a0\u00a0\u00a0\u00a0\"sources\": [",
+              "\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"https://fonts...\"",
+              "\u00a0\u00a0\u00a0\u00a0]",
               "\u00a0\u00a0}",
               "}"
             ]
@@ -344,17 +526,20 @@
           "items": [
             {"text": "heading:", "emphasis": true, "description": " 見出し用フォント"},
             {"text": "body:", "emphasis": true, "description": " 本文用フォント"},
-            {"text": "code:", "emphasis": true, "description": " コードブロック用フォント"}
+            {"text": "code:", "emphasis": true, "description": " コードブロック用フォント"},
+            {"text": "baseFontSize:", "emphasis": true, "description": " 基本フォントサイズ（デフォルト: 24px）"},
+            {"text": "sources:", "emphasis": true, "description": " Google Fonts 等の外部フォント URL 配列"}
           ]
         }
       },
       "meta": {
         "notes": {
-          "speakerNotes": "meta.logo でロゴ画像を設定し、theme.fonts でフォントファミリーをカスタマイズできます。ロゴは meta.logo を省略するとは表示されません。",
+          "speakerNotes": "meta.logo でロゴ画像を設定し、theme.fonts でフォントファミリーをカスタマイズできます。ロゴは meta.logo を省略すると表示されません。",
           "summary": [
             "meta.logo でロゴ画像を設定",
             "theme.fonts でフォントをカスタマイズ",
-            "heading / body / code の3種類を指定可能"
+            "heading / body / code の3種類を指定可能",
+            "baseFontSize と sources も設定可能"
           ]
         }
       }
@@ -368,7 +553,7 @@
           "heading": "概要",
           "paragraphs": [
             "画面右上の「発表者ビュー」ボタンをクリックすると、別ウィンドウで発表者専用の画面が開きます。",
-            "メインウィンドウでスライドを操作すると、発表者ビューの表示がリアルタイムで同期されます。"
+            "メインウィンドウと発表者ビューは双方向に同期されます。どちらからでもスライドを操作できます。"
           ],
           "codeBlock": {
             "header": "> notes の設定例",
@@ -383,22 +568,31 @@
           }
         },
         "right": {
-          "heading": "3つのパネル",
+          "heading": "4つのパネル",
           "items": [
             {"text": "スピーカーノート:", "emphasis": true, "description": " 現在のスライドの発表者メモ（speakerNotes）を表示"},
-            {"text": "次のスライド:", "emphasis": true, "description": " 次のスライドの縮小プレビューを表示"},
+            {"text": "前スライドプレビュー:", "emphasis": true, "description": " 前のスライドの縮小プレビューを表示"},
+            {"text": "次スライドプレビュー:", "emphasis": true, "description": " 次のスライドの縮小プレビューを表示"},
             {"text": "要点サマリー:", "emphasis": true, "description": " 現在のスライドの要点（summary）を箇条書き表示"}
           ],
+          "titledBulletList": {
+            "title": "キーボード操作",
+            "items": [
+              "<strong>← / →</strong>: 前後のスライドへ移動",
+              "<strong>Space</strong>: 次のスライドへ移動"
+            ]
+          },
           "accentText": "→ meta.notes に speakerNotes と summary を設定して活用しましょう"
         }
       },
       "meta": {
         "notes": {
-          "speakerNotes": "発表者ビューは別ウィンドウで開き、スピーカーノート・次スライド・要点サマリーの3パネルを表示します。メインウィンドウとリアルタイムで同期されます。",
+          "speakerNotes": "発表者ビューは別ウィンドウで開き、スピーカーノート・前後スライドプレビュー・要点サマリーの4パネルを表示します。メインウィンドウと双方向に同期されます。",
           "summary": [
             "右上ボタンで別ウィンドウに表示",
-            "スピーカーノート・次スライド・要点サマリーの3パネル",
-            "メインウィンドウとリアルタイム同期"
+            "スピーカーノート・前後プレビュー・要点サマリーの4パネル",
+            "メインウィンドウと双方向同期",
+            "←/→/Space でスライド操作"
           ]
         }
       }
@@ -457,6 +651,16 @@
         "body": "大きなタイトルと本文テキスト。\nQR コードと GitHub リンクを表示できます。",
         "qrCode": "https://github.com/ToshikiImagawa/ai-sdd-workflow-demo",
         "githubRepo": "ToshikiImagawa/ai-sdd-workflow-demo"
+      },
+      "meta": {
+        "notes": {
+          "speakerNotes": "center レイアウトの variant: section は、セクション区切りやまとめスライドに適した大きなタイトル表示です。QR コードと GitHub リンクも配置できます。",
+          "summary": [
+            "center + variant: section でまとめスライド",
+            "QR コードと GitHub リンクを配置可能",
+            "セクション区切りにも使用可能"
+          ]
+        }
       }
     }
   ]

@@ -280,7 +280,12 @@ function renderSlide(slide: SlideData): ReactNode {
       return renderBleedSlide(slide)
     case 'custom': {
       const ref = slide.content.component
-      if (ref) return renderComponent(ref)
+      if (ref)
+        return (
+          <section className="slide-container" id={slide.id} data-transition={slide.meta?.transition} data-background-image={slide.meta?.backgroundImage} data-background-color={slide.meta?.backgroundColor}>
+            {renderComponent(ref)}
+          </section>
+        )
       return null
     }
     default:
