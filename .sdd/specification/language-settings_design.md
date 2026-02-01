@@ -45,9 +45,9 @@
 |-----------|----------------------------------|--------------------------------------------------------------------------------|
 | 状態管理      | React Context API                | アプリ全体で言語状態を共有する必要があり、既存プロジェクトに外部状態管理ライブラリがないため、Contextが最適。言語切り替え時の再レンダリングも許容範囲 |
 | 永続化       | localStorage                     | 後述の設計判断（9.1）参照。シンプルなキー・バリュー保存に適しており、セッション跨ぎの永続性がある                             |
-| 言語リソース形式  | JSON                             | PRDの制約に準拠。Viteの `import.meta.glob` でビルド時に自動取得可能                                |
-| UIコンポーネント | MUI (Select, IconButton, Dialog) | 既存プロジェクトがMUIを使用しており、一貫性を維持                                                     |
-| スタイリング    | CSS Modules + MUI sx prop        | A-002に準拠。設定ウィンドウの複雑なレイアウトにはCSS Modules、微調整にはsx prop                            |
+| 言語リソース形式  | JSON                             | PRDの制約に準拠。`manifest.json` による動的検出でビルド不要の言語追加を実現                                |
+| UIコンポーネント | カスタムHTML + CSS Modules            | 既存UIコンポーネント（PresenterViewButton, AudioPlayButton等）がMUIコンポーネントを使わずカスタムHTML + CSS Modulesで実装されており、一貫性を維持 |
+| スタイリング    | CSS Modules                      | A-002に準拠。CSS変数（`--theme-*`）を使用し、テーマシステムとの統合を維持                                 |
 
 ---
 
@@ -119,12 +119,12 @@ graph TD
 
 ```
 main.tsx
-├── loadLocales()              # Vite import.meta.glob で言語JSONを取得
-│   ├── 各JSONファイルを読み込み
-│   ├── 構造バリデーション（D-002準拠）
-│   ├── 欠落キーをen-USから補完
-│   └── LocaleResource[] を返却
-├── loadAddons()               # 既存のアドオン読み込み
+├── Promise.all([loadAddons(), loadLocales()])  # アドオンと言語リソースを並列ロード
+│   └── loadLocales()
+│       ├── fetch('/assets/locales/manifest.json')  # マニフェストから言語ファイル一覧を取得
+│       ├── 各JSONファイルを fetch で読み込み
+│       ├── 構造バリデーション（D-002準拠）
+│       └── LocaleResource[] を返却
 ├── fetch('/slides.json')      # 既存のスライドデータ読み込み
 └── <I18nProvider locales={locales}>
       <App presentationData={data} />
@@ -172,6 +172,7 @@ interface LocaleResource {
 // I18nProvider の props
 interface I18nProviderProps {
   locales: LocaleResource[]
+  defaultLocale?: string        // 初期言語の明示指定（省略時はlocalStorage → ブラウザ言語 → en-US の優先順で決定）
   children: React.ReactNode
 }
 
@@ -203,7 +204,7 @@ interface LocaleValidationResult {
 | 要件                     | 実現方針                                                                                         |
 |------------------------|----------------------------------------------------------------------------------------------|
 | NFR-001: 言語切り替え500ms以内 | React Context の状態更新により即座に再レンダリング。言語リソースはアプリ起動時にすべてメモリに読み込み済みのため、切り替え時のI/Oなし                  |
-| Reveal.js非干渉           | 設定ウィンドウのオープン時にReveal.jsのキーボードショートカットを一時無効化（`Reveal.configure({ keyboard: false })`）、クローズ時に復元 |
+| Reveal.js非干渉           | 設定ウィンドウのオーバーレイ要素に `onKeyDown` ハンドラで `stopPropagation()` を設定し、キーボードイベントがReveal.jsに伝播するのを防止。`useReveal` フックの変更が不要でシンプル |
 
 ---
 
@@ -226,10 +227,10 @@ interface LocaleValidationResult {
 | 決定事項       | 選択肢                                                      | 決定内容                          | 理由                                                                                                                                                   |
 |------------|----------------------------------------------------------|-------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 永続化ストレージ   | A) localStorage B) Cookie C) sessionStorage D) IndexedDB | **A) localStorage**           | 保存するデータは言語コード（文字列1つ）のみでシンプル。localStorageはセッション跨ぎで永続化され、同期的にアクセス可能。Cookieはサーバーに毎回送信されるためクライアント専用アプリには不適切。sessionStorageはタブ閉じで消失する。IndexedDBは少量データには過剰 |
-| 言語リソース配置場所 | A) public/assets/locales/ B) src/i18n/locales/           | **A) public/assets/locales/** | PRDの要求（FR-LANG-008）でコード変更なしの言語追加が必須。publicディレクトリに配置することでビルド不要で追加可能。ただし、Viteの `import.meta.glob` を使用してビルド時にマニフェストを生成し、ランタイムでの動的fetchと組み合わせる           |
+| 言語リソース配置場所 | A) public/assets/locales/ B) src/i18n/locales/           | **A) public/assets/locales/** | PRDの要求（FR-LANG-008）でコード変更なしの言語追加が必須。publicディレクトリに配置することでビルド不要で追加可能。`manifest.json` にファイル一覧を記載し、ランタイムで `fetch` により動的に読み込む方式を採用                         |
 | 状態管理方式     | A) React Context B) Zustand C) グローバル変数                   | **A) React Context**          | 既存プロジェクトに外部状態管理ライブラリがなく、言語状態はアプリ全体で共有するためContextが適切。Zustandは新規依存の追加になる。グローバル変数はReactの再レンダリングと統合できない                                                  |
 | 翻訳関数の実装    | A) 自前実装 B) react-i18next C) react-intl                   | **A) 自前実装**                   | このアプリのUI翻訳は限定的（設定ウィンドウ、発表者ビューボタン等の少数テキスト）であり、ライブラリ追加のオーバーヘッドに見合わない。ドット記法のキー解決（`t('settings.title')`）程度の簡易実装で十分                                       |
-| 設定ウィンドウの実装 | A) MUI Dialog B) カスタムモーダル                                | **A) MUI Dialog**             | 既存プロジェクトがMUIを使用しているため一貫性を維持。Dialogはオーバーレイ、閉じるボタン、外部クリック閉じの機能を標準提供                                                                                    |
+| 設定ウィンドウの実装 | A) MUI Dialog B) カスタムモーダル                                | **B) カスタムモーダル**               | 既存UIコンポーネント（PresenterViewButton, AudioPlayButton, AudioControlBar）がMUIコンポーネントを使わずカスタムHTML + CSS Modulesで実装されているため、一貫性を維持。オーバーレイ、閉じるボタン、外部クリック閉じをCSS Modulesで実装 |
 
 ## 9.2. 永続化ストレージ詳細比較
 
@@ -253,6 +254,17 @@ interface LocaleValidationResult {
 ---
 
 # 10. 変更履歴
+
+## v1.1.0 (2026-02-01)
+
+**実装完了に伴う設計書更新:**
+
+- 実装ステータスを 🟢 実装完了 に更新
+- 設定ウィンドウの実装方式を MUI Dialog からカスタムモーダル（CSS Modules）に変更（既存コンポーネントとの一貫性）
+- 言語リソース読み込み方式を `import.meta.glob` から `fetch` + `manifest.json` に変更
+- Reveal.js非干渉の実現方式を `Reveal.configure()` から `stopPropagation()` に変更
+- I18nProviderProps に `defaultLocale` オプショナルプロパティを追記
+- 技術スタックのUIコンポーネント・スタイリング欄を実装に合わせて修正
 
 ## v1.0.0 (2026-02-01)
 
