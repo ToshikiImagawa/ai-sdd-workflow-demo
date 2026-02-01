@@ -309,9 +309,74 @@ npm install
 }
 ```
 
+## 多言語対応（i18n）
+
+UI の表示言語を切り替えることができます。初期表示はブラウザの言語設定から自動判定され、設定ウィンドウから手動で切り替えることも可能です。選択した言語は `localStorage` に保存され、次回以降も維持されます。
+
+### 対応言語
+
+| 言語コード  | 言語名      |
+|--------|----------|
+| `en-US` | English  |
+| `ja-JP` | 日本語     |
+
+### 設定ウィンドウ
+
+画面右上の歯車アイコン（設定ボタン）をクリックすると設定ウィンドウが開き、言語を選択できます。発表者ビューでも同じ言語設定が適用されます。
+
+### 言語リソースの構造
+
+言語リソースは `assets/locales/` ディレクトリに配置されます。
+
+```
+assets/locales/
+├── manifest.json    # ロード対象のファイル一覧
+├── en-US.json       # 英語リソース
+└── ja-JP.json       # 日本語リソース
+```
+
+`manifest.json` でロード対象の言語ファイルを指定します。
+
+```json
+{
+  "locales": ["en-US.json", "ja-JP.json"]
+}
+```
+
+各言語リソースは以下の構造です。
+
+```json
+{
+  "languageCode": "en-US",
+  "languageName": "English",
+  "ui": {
+    "settings": {
+      "title": "Settings",
+      "language": "Language",
+      "close": "Close",
+      "open": "Settings"
+    },
+    "presenterView": {
+      "open": "Presenter View",
+      "navPrev": "Previous slide (←)",
+      "navNext": "Next slide (→ / Space)",
+      "notesTitle": "Speaker Notes",
+      "nextSlide": "Next Slide",
+      "previousSlide": "Previous Slide"
+    },
+    "audio": {
+      "play": "Play audio",
+      "stop": "Stop audio"
+    }
+  }
+}
+```
+
+`ui` 内のキーは最大2段のネスト（`セクション.キー`）で構成されます。
+
 ## 発表者ビュー
 
-プレゼンテーション画面の右上にある「発表者ビュー」ボタンをクリックすると、別ウィンドウで発表者ビューが開きます。
+プレゼンテーション画面の右上にある「発表者ビュー」ボタンをクリックすると、別ウィンドウで発表者ビューが開きます。発表者ビューの UI ラベルは多言語対応セクションで説明した言語設定に従って表示されます。
 
 ### パネル構成
 
@@ -343,7 +408,7 @@ npm install
 | 前のスライド   | 前のスライドの縮小プレビュー                   |
 | 要点サマリー   | 現在のスライドの `summary`（箇条書き、画面下部に表示） |
 
-最初のスライドでは前スライドプレビューに「最初のスライドです」、最終スライドでは次スライドプレビューに「最後のスライドです」と表示されます。
+最初のスライドでは前スライドプレビューに境界メッセージ（日本語: 「最初のスライドです」）、最終スライドでは次スライドプレビューに境界メッセージ（日本語: 「最後のスライドです」）が表示されます。これらのメッセージは言語設定に応じて翻訳されます。
 
 ### 双方向同期
 
@@ -453,12 +518,14 @@ npm run build:addons
 
 `public/` ディレクトリに配置したファイルは、ビルド後にそのままルートパスでアクセスできます。
 
-| ファイル                        | URL                   |
-|-----------------------------|-----------------------|
-| `public/slides.json`        | `/slides.json`        |
-| `public/theme-colors.json`  | `/theme-colors.json`  |
-| `public/images/logo.png`    | `/images/logo.png`    |
-| `public/voice/slide-01.wav` | `/voice/slide-01.wav` |
+| ファイル                                 | URL                              |
+|--------------------------------------|----------------------------------|
+| `public/slides.json`                 | `/slides.json`                   |
+| `public/theme-colors.json`           | `/theme-colors.json`             |
+| `public/images/logo.png`             | `/images/logo.png`               |
+| `public/voice/slide-01.wav`          | `/voice/slide-01.wav`            |
+| `public/assets/locales/manifest.json` | `/assets/locales/manifest.json`  |
+| `public/assets/locales/en-US.json`   | `/assets/locales/en-US.json`     |
 
 ## スライドパッケージ
 
