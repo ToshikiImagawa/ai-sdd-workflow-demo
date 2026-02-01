@@ -5,6 +5,8 @@ import './addon-bridge'
 import { App } from './App'
 import { applyTheme } from './applyTheme'
 import type { PresentationData } from './data'
+import { I18nProvider, loadLocales } from './i18n'
+import type { LocaleResource } from './i18n'
 
 type AddonManifest = {
   addons: Array<{ name: string; bundle: string }>
@@ -35,8 +37,17 @@ async function loadAddons(): Promise<void> {
 
 const root = createRoot(document.getElementById('root')!)
 
-// アドオンをロードし、slides.json を読み込んでからテーマを適用してレンダリングする
-loadAddons().then(() => {
+/** I18nProvider でラップしてレンダリングする */
+function renderApp(presentationData?: PresentationData, locales: LocaleResource[] = []) {
+  root.render(
+    <I18nProvider locales={locales}>
+      <App presentationData={presentationData} />
+    </I18nProvider>,
+  )
+}
+
+// アドオン・言語リソースをロードし、slides.json を読み込んでからテーマを適用してレンダリングする
+Promise.all([loadAddons(), loadLocales()]).then(([, locales]) => {
   fetch(import.meta.env.VITE_SLIDES_PATH || '/slides.json')
     .then((res) => {
       if (!res.ok) throw new Error(`${res.status}`)
@@ -44,10 +55,10 @@ loadAddons().then(() => {
     })
     .then(async (data) => {
       await applyTheme(data.meta?.themeColors)
-      root.render(<App presentationData={data} />)
+      renderApp(data, locales)
     })
     .catch(async () => {
       await applyTheme()
-      root.render(<App />)
+      renderApp(undefined, locales)
     })
 })

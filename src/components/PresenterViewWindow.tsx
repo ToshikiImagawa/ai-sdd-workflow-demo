@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { SlideData, PresenterControlState } from '../data'
 import { getSpeakerNotes, getSlideSummary } from '../data'
+import { useTranslation } from '../i18n'
 import { SlideRenderer } from './SlideRenderer'
 import styles from './PresenterViewWindow.module.css'
 
@@ -69,6 +70,7 @@ type PresenterViewWindowProps = {
 }
 
 export function PresenterViewWindow({ slides, currentIndex, controlState, onNavigate, onAudioToggle, onAutoPlayToggle, onAutoSlideshowToggle }: PresenterViewWindowProps) {
+  const { t } = useTranslation()
   const currentSlide = slides[currentIndex]
   const previousSlide = currentIndex > 0 ? slides[currentIndex - 1] : null
   const nextSlide = currentIndex < slides.length - 1 ? slides[currentIndex + 1] : null
@@ -102,7 +104,7 @@ export function PresenterViewWindow({ slides, currentIndex, controlState, onNavi
       {/* 上部コントロールバー */}
       <div ref={controlBarRef} className={styles.controlBar}>
         <div className={styles.navControls}>
-          <button className={styles.navButton} onClick={() => onNavigate('prev')} disabled={isFirst} title="前のスライド (←)">
+          <button className={styles.navButton} onClick={() => onNavigate('prev')} disabled={isFirst} title={t('presenterView.navPrev')}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
               <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
             </svg>
@@ -110,14 +112,14 @@ export function PresenterViewWindow({ slides, currentIndex, controlState, onNavi
           <span className={styles.slideProgress}>
             {currentIndex + 1} / {slides.length}
           </span>
-          <button className={styles.navButton} onClick={() => onNavigate('next')} disabled={isLast} title="次のスライド (→ / Space)">
+          <button className={styles.navButton} onClick={() => onNavigate('next')} disabled={isLast} title={t('presenterView.navNext')}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
               <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
             </svg>
           </button>
         </div>
         <div className={styles.audioControls}>
-          <button className={`${styles.audioButton} ${controlState?.isPlaying ? styles.active : ''}`} onClick={onAudioToggle} disabled={!controlState?.hasVoice} title={controlState?.isPlaying ? '音声を停止' : '音声を再生'}>
+          <button className={`${styles.audioButton} ${controlState?.isPlaying ? styles.active : ''}`} onClick={onAudioToggle} disabled={!controlState?.hasVoice} title={controlState?.isPlaying ? t('audio.stop') : t('audio.play')}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
               {controlState?.isPlaying ? (
                 <>
@@ -130,13 +132,13 @@ export function PresenterViewWindow({ slides, currentIndex, controlState, onNavi
               )}
             </svg>
           </button>
-          <button className={`${styles.audioButton} ${controlState?.autoPlay ? styles.active : ''}`} onClick={onAutoPlayToggle} title="自動音声再生">
+          <button className={`${styles.audioButton} ${controlState?.autoPlay ? styles.active : ''}`} onClick={onAutoPlayToggle} title={t('presenterView.autoPlay')}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
               <path d="M8 5v14l11-7z" />
             </svg>
             <span className={styles.autoLabel}>A</span>
           </button>
-          <button className={`${styles.audioButton} ${controlState?.autoSlideshow ? styles.active : ''}`} onClick={onAutoSlideshowToggle} title="自動スライドショー">
+          <button className={`${styles.audioButton} ${controlState?.autoSlideshow ? styles.active : ''}`} onClick={onAutoSlideshowToggle} title={t('presenterView.autoSlideshow')}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
               <path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z" />
             </svg>
@@ -149,25 +151,25 @@ export function PresenterViewWindow({ slides, currentIndex, controlState, onNavi
       <div className={styles.mainContent} style={{ height: mainContentHeight > 0 ? mainContentHeight : undefined }}>
         {/* 左: スピーカーノート */}
         <div className={styles.notesPanel}>
-          <h2>スピーカーノート</h2>
-          {speakerNotes ? <div className={styles.notesText}>{speakerNotes}</div> : <div className={styles.notesEmpty}>ノートはありません</div>}
+          <h2>{t('presenterView.notesTitle')}</h2>
+          {speakerNotes ? <div className={styles.notesText}>{speakerNotes}</div> : <div className={styles.notesEmpty}>{t('presenterView.notesEmpty')}</div>}
         </div>
 
         {/* 右: プレビューカラム */}
         <div className={styles.rightColumn} style={{ width: rightColumnWidth > 0 ? rightColumnWidth : undefined }}>
           {/* 次スライドプレビュー */}
           <div className={styles.previewPanel}>
-            <h2>次のスライド</h2>
+            <h2>{t('presenterView.nextSlide')}</h2>
             <div className={styles.previewFrame} style={{ height: previewHeight > 0 ? previewHeight : undefined, aspectRatio: '16 / 9' }}>
-              {nextSlide ? <PreviewSlide slide={nextSlide} /> : <div className={styles.boundaryMessage}>最後のスライドです</div>}
+              {nextSlide ? <PreviewSlide slide={nextSlide} /> : <div className={styles.boundaryMessage}>{t('presenterView.lastSlide')}</div>}
             </div>
           </div>
 
           {/* 前スライドプレビュー */}
           <div className={styles.previewPanel}>
-            <h2>前のスライド</h2>
+            <h2>{t('presenterView.previousSlide')}</h2>
             <div className={styles.previewFrame} style={{ height: previewHeight > 0 ? previewHeight : undefined, aspectRatio: '16 / 9' }}>
-              {previousSlide ? <PreviewSlide slide={previousSlide} /> : <div className={styles.boundaryMessage}>最初のスライドです</div>}
+              {previousSlide ? <PreviewSlide slide={previousSlide} /> : <div className={styles.boundaryMessage}>{t('presenterView.firstSlide')}</div>}
             </div>
           </div>
         </div>
@@ -175,7 +177,7 @@ export function PresenterViewWindow({ slides, currentIndex, controlState, onNavi
 
       {/* フッター: 要点サマリー */}
       <div className={styles.summaryPanel}>
-        <h2>要点サマリー</h2>
+        <h2>{t('presenterView.summaryTitle')}</h2>
         {summary.length > 0 ? (
           <ul className={styles.summaryList}>
             {summary.map((item, i) => (
@@ -183,7 +185,7 @@ export function PresenterViewWindow({ slides, currentIndex, controlState, onNavi
             ))}
           </ul>
         ) : (
-          <div className={styles.notesEmpty}>サマリーはありません</div>
+          <div className={styles.notesEmpty}>{t('presenterView.summaryEmpty')}</div>
         )}
       </div>
     </div>

@@ -3,6 +3,8 @@ import { AudioControlBar } from './components/AudioControlBar'
 import { AudioPlayButton } from './components/AudioPlayButton'
 import { FallbackImage } from './components/FallbackImage'
 import { PresenterViewButton } from './components/PresenterViewButton'
+import { SettingsButton } from './components/SettingsButton'
+import { SettingsWindow } from './components/SettingsWindow'
 import { SlideRenderer } from './components/SlideRenderer'
 import { registerDefaultComponents } from './components/registerDefaults'
 import { defaultPresentationData, loadPresentationData } from './data'
@@ -26,6 +28,7 @@ type AppProps = {
 export function App({ presentationData }: AppProps) {
   const data = loadPresentationData(presentationData, defaultPresentationData)
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [settingsOpen, setSettingsOpen] = useState(false)
 
   const audioPlayer = useAudioPlayer()
 
@@ -140,11 +143,15 @@ export function App({ presentationData }: AppProps) {
           <FallbackImage src={logo.src} width={logo.width ?? 120} height={logo.height ?? 40} alt="Logo" />
         </div>
       )}
+      <div className="toolbar toolbar-left">
+        <SettingsButton onClick={() => setSettingsOpen(true)} />
+      </div>
       <div className="toolbar">
         {currentVoicePath && <AudioPlayButton playbackState={audioPlayer.playbackState} onToggle={handleAudioToggleLocal} />}
         <AudioControlBar autoPlay={autoPlay} onAutoPlayChange={setAutoPlay} autoSlideshow={autoSlideshow} onAutoSlideshowChange={setAutoSlideshow} />
         <PresenterViewButton onClick={openPresenterView} isOpen={isOpen} />
       </div>
+      <SettingsWindow open={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </ThemeProvider>
   )
 }

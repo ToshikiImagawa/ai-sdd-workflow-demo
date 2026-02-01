@@ -1,3 +1,4 @@
+import { useTranslation } from '../i18n'
 import styles from './AudioControlBar.module.css'
 
 type AudioControlBarProps = {
@@ -8,13 +9,15 @@ type AudioControlBarProps = {
 }
 
 export function AudioControlBar({ autoPlay, onAutoPlayChange, autoSlideshow, onAutoSlideshowChange }: AudioControlBarProps) {
+  const { t } = useTranslation()
+
   return (
     <div className={styles.wrapper}>
       <button
         onClick={() => onAutoPlayChange(!autoPlay)}
-        title={autoPlay ? '自動再生をOFFにする' : '自動再生をONにする'}
+        title={autoPlay ? t('audio.autoPlayOn') : t('audio.autoPlayOff')}
         className={`${styles.button} ${autoPlay ? styles.active : ''}`}
-        aria-label={autoPlay ? '自動再生をOFFにする' : '自動再生をONにする'}
+        aria-label={autoPlay ? t('audio.autoPlayOn') : t('audio.autoPlayOff')}
         aria-pressed={autoPlay}
       >
         <svg className={styles.icon} viewBox="0 0 24 24" fill="currentColor">
@@ -23,9 +26,9 @@ export function AudioControlBar({ autoPlay, onAutoPlayChange, autoSlideshow, onA
       </button>
       <button
         onClick={() => onAutoSlideshowChange(!autoSlideshow)}
-        title={autoSlideshow ? '自動スライドショーをOFFにする' : '自動スライドショーをONにする'}
+        title={autoSlideshow ? t('audio.autoSlideshowOn') : t('audio.autoSlideshowOff')}
         className={`${styles.button} ${autoSlideshow ? styles.active : ''}`}
-        aria-label={autoSlideshow ? '自動スライドショーをOFFにする' : '自動スライドショーをONにする'}
+        aria-label={autoSlideshow ? t('audio.autoSlideshowOn') : t('audio.autoSlideshowOff')}
         aria-pressed={autoSlideshow}
       >
         <svg className={styles.icon} viewBox="0 0 24 24" fill="currentColor">

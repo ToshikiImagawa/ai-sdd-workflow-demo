@@ -1,4 +1,5 @@
 import type { AudioPlaybackState } from '../data/types'
+import { useTranslation } from '../i18n'
 import styles from './AudioPlayButton.module.css'
 
 type AudioPlayButtonProps = {
@@ -7,10 +8,11 @@ type AudioPlayButtonProps = {
 }
 
 export function AudioPlayButton({ playbackState, onToggle }: AudioPlayButtonProps) {
+  const { t } = useTranslation()
   const isPlaying = playbackState === 'playing'
 
   return (
-    <button onClick={onToggle} title={isPlaying ? '音声を停止' : '音声を再生'} className={`${styles.button} ${isPlaying ? styles.playing : ''}`} aria-label={isPlaying ? '音声を停止' : '音声を再生'}>
+    <button onClick={onToggle} title={isPlaying ? t('audio.stop') : t('audio.play')} className={`${styles.button} ${isPlaying ? styles.playing : ''}`} aria-label={isPlaying ? t('audio.stop') : t('audio.play')}>
       <svg className={styles.icon} viewBox="0 0 24 24" fill="currentColor">
         {isPlaying ? (
           <>

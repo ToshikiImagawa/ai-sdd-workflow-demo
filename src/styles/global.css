@@ -137,6 +137,11 @@ body {
   opacity: 1;
 }
 
+.toolbar-left {
+  left: 12px;
+  right: auto;
+}
+
 .slide-container > * {
   position: relative;
   z-index: 1;

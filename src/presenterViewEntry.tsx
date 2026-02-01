@@ -7,6 +7,7 @@ import './addon-bridge'
 import { applyTheme, applyThemeData } from './applyTheme'
 import { registerDefaultComponents } from './components/registerDefaults'
 import { PresenterViewWindow } from './components/PresenterViewWindow'
+import { I18nProvider, loadLocales, useTranslation } from './i18n'
 import { theme } from './theme'
 import type { SlideData, PresentationData, PresenterViewMessage, PresenterControlState } from './data'
 
@@ -119,7 +120,7 @@ function PresenterViewApp() {
   }, [sendMessage])
 
   if (slides.length === 0) {
-    return <div style={{ color: 'var(--theme-text-body)', padding: '40px', fontFamily: 'var(--theme-font-body)' }}>メインウィンドウからの接続を待機中...</div>
+    return <WaitingMessage />
   }
 
   return (
@@ -137,9 +138,18 @@ function PresenterViewApp() {
   )
 }
 
+function WaitingMessage() {
+  const { t } = useTranslation()
+  return <div style={{ color: 'var(--theme-text-body)', padding: '40px', fontFamily: 'var(--theme-font-body)' }}>{t('presenterView.waitingForConnection')}</div>
+}
+
 const root = createRoot(document.getElementById('root')!)
 
-// アドオンをロードしてからレンダリングする
-loadAddons().then(() => {
-  root.render(<PresenterViewApp />)
+// アドオン・言語リソースをロードしてからレンダリングする
+Promise.all([loadAddons(), loadLocales()]).then(([, locales]) => {
+  root.render(
+    <I18nProvider locales={locales}>
+      <PresenterViewApp />
+    </I18nProvider>,
+  )
 })
