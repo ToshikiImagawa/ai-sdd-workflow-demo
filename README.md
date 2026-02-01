@@ -54,40 +54,41 @@ npm install
 
 `meta.logo` フィールドでプレゼンテーションのロゴをカスタマイズできます。
 
-| フィールド  | 型       | デフォルト       | 説明          |
-|---------|---------|-------------|-------------|
-| `src`   | string  | `/logo.png` | ロゴ画像のパス     |
-| `width` | number  | `120`       | ロゴの幅（px）    |
-| `height`| number  | `40`        | ロゴの高さ（px）   |
+| フィールド    | 型      | デフォルト       | 説明        |
+|----------|--------|-------------|-----------|
+| `src`    | string | `/logo.png` | ロゴ画像のパス   |
+| `width`  | number | `120`       | ロゴの幅（px）  |
+| `height` | number | `40`        | ロゴの高さ（px） |
 
-`meta.logo` を省略した場合、ロゴは表示されません。`width` と `height` を省略した場合はそれぞれ `120`、`40` がデフォルト値として使用されます。
+`meta.logo` を省略した場合、ロゴは表示されません。`width` と `height` を省略した場合はそれぞれ `120`、`40`
+がデフォルト値として使用されます。
 
 ### レイアウト一覧
 
 各スライドの `layout` フィールドで、以下のレイアウトを指定できます。
 
-| layout       | 用途              | 主なフィールド                            |
-|--------------|-----------------|--------------------------------------|
-| `center`     | 表紙・タイトル・まとめ | `title`, `subtitle`, `variant`       |
-| `content`    | コンテンツ表示      | `title`, `steps[]` / `tiles[]` / `component` |
-| `two-column` | 左右2カラム        | `title`, `left`, `right`             |
-| `bleed`      | 2カラム全幅        | `title`, `commands[]`, `component`   |
-| `custom`     | カスタムコンポーネント  | `component`                          |
+| layout       | 用途          | 主なフィールド                                      |
+|--------------|-------------|----------------------------------------------|
+| `center`     | 表紙・タイトル・まとめ | `title`, `subtitle`, `variant`               |
+| `content`    | コンテンツ表示     | `title`, `steps[]` / `tiles[]` / `component` |
+| `two-column` | 左右2カラム      | `title`, `left`, `right`                     |
+| `bleed`      | 2カラム全幅      | `title`, `commands[]`, `component`           |
+| `custom`     | カスタムコンポーネント | `component`                                  |
 
 `center` レイアウトは `variant` フィールドで表示を切り替えます。
 
-| variant     | 説明                                   |
-|-------------|--------------------------------------|
-| （未指定）      | TitleLayout（タイトル・サブタイトル表示）           |
+| variant     | 説明                                         |
+|-------------|--------------------------------------------|
+| （未指定）       | TitleLayout（タイトル・サブタイトル表示）                 |
 | `"section"` | SectionLayout（まとめ表示。`body`, `qrCode` 等を使用） |
 
 `content` レイアウトは子要素のフィールドで描画内容が決まります。
 
-| フィールド     | 描画内容         |
-|-----------|--------------|
-| `steps`   | Timeline     |
-| `tiles`   | FeatureTileGrid |
-| `component` | カスタムコンポーネント |
+| フィールド       | 描画内容            |
+|-------------|-----------------|
+| `steps`     | Timeline        |
+| `tiles`     | FeatureTileGrid |
+| `component` | カスタムコンポーネント     |
 
 ### two-column レイアウトの詳細
 
@@ -152,7 +153,7 @@ npm install
 }
 ```
 
-**オブジェクト形式（スピーカーノート + 要点サマリー）:**
+**オブジェクト形式（スピーカーノート + 要点サマリー + 音声）:**
 
 ```json
 {
@@ -162,32 +163,77 @@ npm install
       "summary": [
         "要点1: このスライドの重要ポイント",
         "要点2: 聴衆に伝えたいこと"
-      ]
+      ],
+      "voice": "/voice/slide-01.wav"
     }
   }
 }
 ```
 
-| フィールド | 型 | 説明 |
-|---|---|---|
-| `speakerNotes` | string | 発表者メモ・台本 |
-| `summary` | string[] | 要点サマリー（箇条書き） |
+| フィールド          | 型        | 説明                            |
+|----------------|----------|-------------------------------|
+| `speakerNotes` | string   | 発表者メモ・台本                      |
+| `summary`      | string[] | 要点サマリー（箇条書き）                  |
+| `voice`        | string   | 音声ファイルへのパス（`public/` 配下の相対パス） |
 
 `notes` を省略したスライドでは、発表者ビューのノート欄は空欄で表示されます。
 
 ## 発表者ビュー
 
-プレゼンテーション画面の右下にある「発表者ビュー」ボタンをクリックすると、別ウィンドウで発表者ビューが開きます。
+プレゼンテーション画面の右上にある「発表者ビュー」ボタンをクリックすると、別ウィンドウで発表者ビューが開きます。
 
 発表者ビューには以下の3つのパネルが表示されます。
 
-| パネル | 内容 |
-|---|---|
-| スピーカーノート | 現在のスライドの `notes`（発表者メモ） |
-| 次のスライド | 次のスライドの縮小プレビュー |
-| 要点サマリー | 現在のスライドの `summary`（箇条書き） |
+| パネル      | 内容                       |
+|----------|--------------------------|
+| スピーカーノート | 現在のスライドの `notes`（発表者メモ）  |
+| 次のスライド   | 次のスライドの縮小プレビュー           |
+| 要点サマリー   | 現在のスライドの `summary`（箇条書き） |
 
 メインウィンドウでスライドを操作すると、発表者ビューの表示がリアルタイムで同期されます。最終スライドでは、次スライドプレビューに「最後のスライドです」と表示されます。
+
+## 音声再生
+
+スライドの `meta.notes.voice` フィールドに音声ファイルのパスを指定すると、スライドごとの音声再生機能が有効になります。
+
+```json
+{
+  "meta": {
+    "notes": {
+      "voice": "/voice/slide-01.wav",
+      "speakerNotes": "発表者メモ"
+    }
+  }
+}
+```
+
+音声ファイルは `public/` 配下に配置してください（例: `public/voice/slide-01.wav`）。
+
+### ツールバー
+
+`voice` が定義されたスライドでは、画面右上のツールバーに以下のボタンが表示されます。
+
+| ボタン       | アイコン  | 機能                         |
+|-----------|-------|----------------------------|
+| 再生/停止     | スピーカー | 現在のスライドの音声を手動で再生・停止する      |
+| 自動再生      | ▶     | スライド遷移時に音声を自動再生する ON/OFF   |
+| 自動スライドショー | ▶▶    | 音声終了時に次のスライドへ自動遷移する ON/OFF |
+
+ツールバーは通常時は薄く表示され、マウスホバーで完全に表示されます。
+
+### 手動再生
+
+スピーカーアイコンをクリックすると、現在のスライドの音声を再生します。再生中にもう一度クリックすると停止します。`voice`
+が定義されていないスライドではアイコンは表示されません。
+
+### 自動再生
+
+自動再生ボタン（▶）を ON にすると、スライドを切り替えるたびに、そのスライドに `voice` が定義されていれば自動的に音声が再生されます。
+
+### 自動スライドショー
+
+自動スライドショーボタン（▶▶）を ON
+にすると、音声の再生が終了したタイミングで自動的に次のスライドへ遷移します。最終スライドでは自動遷移しません。自動再生と組み合わせることで、全スライドを通した自動プレゼンテーションが可能です。
 
 ### コンポーネントの参照
 
@@ -275,8 +321,8 @@ addons/src/{アドオン名}/
 // addons/src/my-addon/MyComponent.tsx
 const React = window.React;
 
-export function MyComponent({message}: { message: string }) {
-    return React.createElement('div', null, message);
+export function MyComponent({ message }: { message: string }) {
+  return React.createElement('div', null, message);
 }
 ```
 
@@ -284,10 +330,10 @@ export function MyComponent({message}: { message: string }) {
 
 ```ts
 // addons/src/my-addon/entry.ts
-import {MyComponent} from './MyComponent';
+import { MyComponent } from './MyComponent';
 
 window.__ADDON_REGISTER__([
-    {name: 'MyComponent', component: MyComponent},
+  { name: 'MyComponent', component: MyComponent },
 ]);
 ```
 
@@ -318,11 +364,12 @@ npm run build:addons
 
 `public/` ディレクトリに配置したファイルは、ビルド後にそのままルートパスでアクセスできます。
 
-| ファイル                       | URL                  |
-|----------------------------|----------------------|
-| `public/slides.json`       | `/slides.json`       |
-| `public/theme-colors.json` | `/theme-colors.json` |
-| `public/images/logo.png`   | `/images/logo.png`   |
+| ファイル                        | URL                   |
+|-----------------------------|-----------------------|
+| `public/slides.json`        | `/slides.json`        |
+| `public/theme-colors.json`  | `/theme-colors.json`  |
+| `public/images/logo.png`    | `/images/logo.png`    |
+| `public/voice/slide-01.wav` | `/voice/slide-01.wav` |
 
 ## ライセンス
 
