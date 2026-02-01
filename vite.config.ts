@@ -1,5 +1,5 @@
 /// <reference types="vitest/config" />
-import { defineConfig, type Plugin } from 'vite'
+import { defineConfig, loadEnv, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import { resolve, extname, dirname } from 'path'
 import { cpSync, existsSync, createReadStream, statSync, readFileSync, readdirSync, mkdirSync, rmSync } from 'fs'
@@ -112,6 +112,13 @@ function slideContentPlugin(): Plugin {
 
   return {
     name: 'slide-content',
+    config(_, env) {
+      // Vite が .env.local を読み込む前に config() が呼ばれるため、手動で loadEnv する
+      const envVars = loadEnv(env.mode, __dirname, 'VITE_')
+      if (envVars.VITE_SLIDE_PACKAGE && !process.env.VITE_SLIDE_PACKAGE) {
+        process.env.VITE_SLIDE_PACKAGE = envVars.VITE_SLIDE_PACKAGE
+      }
+    },
     configResolved() {
       packageDir = findSlidePackageDir()
       if (packageDir) {
