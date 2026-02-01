@@ -11,16 +11,17 @@ npm install
 
 ## コマンド
 
-| コマンド                   | 説明                                       |
-|------------------------|------------------------------------------|
-| `npm run dev`          | 開発サーバー起動（アドオンビルド + Vite HMR）             |
-| `npm run build`        | プロダクションビルド（アドオンビルド + `dist/` に出力）        |
-| `npm run build:addons` | アドオンのみビルド                                |
-| `npm run preview`      | ビルド済みファイルのプレビュー                          |
-| `npm run format`       | Prettier でコード整形（`src/**/*.{ts,tsx,css}`） |
-| `npm run typecheck`    | TypeScript 型チェック                         |
-| `npm run test`         | テスト実行（Vitest）                            |
-| `npm run test:watch`   | テスト監視モード                                 |
+| コマンド                    | 説明                                       |
+|-------------------------|------------------------------------------|
+| `npm run dev`           | 開発サーバー起動（アドオンビルド + Vite HMR）             |
+| `npm run build`         | プロダクションビルド（アドオンビルド + `dist/` に出力）        |
+| `npm run build:addons`  | アドオンのみビルド                                |
+| `npm run preview`       | ビルド済みファイルのプレビュー                          |
+| `npm run format`        | Prettier でコード整形（`src/**/*.{ts,tsx,css}`） |
+| `npm run typecheck`     | TypeScript 型チェック                         |
+| `npm run test`          | テスト実行（Vitest）                            |
+| `npm run test:watch`    | テスト監視モード                                 |
+| `npm run export:slides` | スライドコンテンツを npm パッケージ（.tgz）にエクスポート        |
 
 ## スライドの定義
 
@@ -458,6 +459,47 @@ npm run build:addons
 | `public/theme-colors.json`  | `/theme-colors.json`  |
 | `public/images/logo.png`    | `/images/logo.png`    |
 | `public/voice/slide-01.wav` | `/voice/slide-01.wav` |
+
+## スライドパッケージ
+
+スライドコンテンツ（slides.json + 画像・音声・テーマ・フォント等のアセット）を npm パッケージとしてエクスポート・配布できます。
+
+### エクスポート（パッケージ作成）
+
+```bash
+npm run export:slides -- --name my-presentation --slides slides.json
+```
+
+| オプション       | 必須 | 説明                                |
+|-------------|:--:|-----------------------------------|
+| `--name`    | ○  | パッケージ名（`@slides/{name}` として生成される） |
+| `--slides`  | ○  | `public/` 配下のスライド JSON ファイル名      |
+| `--version` |    | バージョン（デフォルト: `1.0.0`）             |
+
+実行すると `dist-slides/` に `.tgz` ファイルが生成されます。slides.json 内で参照されているアセットパス（`image/`,
+`voice/`, `theme/`, `font/`）が自動検出され、パッケージに含まれます。
+
+### インポート（パッケージ利用）
+
+```bash
+# .tgz をインストール
+npm install ./dist-slides/slides-my-presentation-1.0.0.tgz
+
+# 環境変数でパッケージを指定して開発サーバー起動
+VITE_SLIDE_PACKAGE=@slides/my-presentation npm run dev
+```
+
+または `.env.local` に設定を記述できます。
+
+```
+VITE_SLIDE_PACKAGE=@slides/my-presentation
+```
+
+### 動作仕様
+
+- `VITE_SLIDE_PACKAGE` 環境変数が未指定の場合、`node_modules/@slides/` 配下の `slidePresentation` フィールドを持つパッケージを自動検出します
+- `public/` に同名のファイルが存在する場合は `public/` のファイルが優先されます（パッケージはフォールバック）
+- `npm run build` 時はパッケージ内のアセットが `dist/` にコピーされます（既存ファイルは上書きしません）
 
 ## ライセンス
 
