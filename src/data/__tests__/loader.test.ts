@@ -94,6 +94,30 @@ describe('getValidationErrors', () => {
     })
     expect(errors.some((e) => e.path === 'meta.title')).toBe(true)
   })
+
+  it('notes.voiceがstringの場合エラーを返さない', () => {
+    const errors = getValidationErrors({
+      meta: { title: 'Test' },
+      slides: [{ id: 'a', layout: 'b', content: {}, meta: { notes: { speakerNotes: 'ノート', voice: '/audio/test.mp3' } } }],
+    })
+    expect(errors.some((e) => e.path.includes('voice'))).toBe(false)
+  })
+
+  it('notes.voiceがundefinedの場合エラーを返さない', () => {
+    const errors = getValidationErrors({
+      meta: { title: 'Test' },
+      slides: [{ id: 'a', layout: 'b', content: {}, meta: { notes: { speakerNotes: 'ノート' } } }],
+    })
+    expect(errors.some((e) => e.path.includes('voice'))).toBe(false)
+  })
+
+  it('notes.voiceがstring以外の場合エラーを返す', () => {
+    const errors = getValidationErrors({
+      meta: { title: 'Test' },
+      slides: [{ id: 'a', layout: 'b', content: {}, meta: { notes: { voice: 123 } } }],
+    })
+    expect(errors.some((e) => e.path === 'slides[0].meta.notes.voice')).toBe(true)
+  })
 })
 
 describe('loadPresentationData', () => {

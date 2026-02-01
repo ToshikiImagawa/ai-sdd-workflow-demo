@@ -28,6 +28,8 @@ declare module 'reveal.js' {
     off(event: string, callback: (...args: unknown[]) => void): void
 
     getIndices(): { h: number; v: number }
+
+    next(): void
   }
 
   export default Reveal

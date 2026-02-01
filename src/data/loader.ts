@@ -25,6 +25,9 @@ function validateSlideNotes(notes: unknown, prefix: string, errors: ValidationEr
   if (notes.summary !== undefined && !Array.isArray(notes.summary)) {
     addError(errors, `${prefix}.meta.notes.summary`, 'summaryはstring[]である必要があります', 'string[]', typeof notes.summary)
   }
+  if (notes.voice !== undefined && typeof notes.voice !== 'string') {
+    addError(errors, `${prefix}.meta.notes.voice`, 'voiceはstringである必要があります', 'string', typeof notes.voice)
+  }
 }
 
 function validateSlide(slide: unknown, index: number, errors: ValidationError[]): void {

@@ -1,8 +1,4 @@
 .wrapper {
-  position: fixed;
-  top: 12px;
-  right: 12px;
-  z-index: 9999;
 }
 
 .button {
@@ -19,9 +15,7 @@
   font-family: var(--theme-font-body), serif;
   white-space: nowrap;
   overflow: hidden;
-  opacity: 0;
   transition:
-    opacity 0.25s ease,
     border-radius 0.25s ease,
     padding 0.25s ease,
     gap 0.25s ease;
@@ -29,31 +23,9 @@
 
 .wrapper:hover .button,
 .button:focus-visible {
-  opacity: 1;
   border-radius: 6px;
   padding: 6px 14px;
   gap: 6px;
-}
-
-/* マウスカーソルが近づいたときにアイコンだけ薄く見せる */
-.wrapper:hover .button,
-.wrapper .button {
-  /* wrapper 全体にホバー領域を広げるためのパディング */
-}
-
-.wrapper {
-  padding: 12px;
-  margin: -12px;
-}
-
-/* アイコンだけ見せる中間状態 */
-.button {
-  opacity: 0.15;
-}
-
-.button:hover,
-.button:focus-visible {
-  opacity: 1;
 }
 
 .label {
@@ -77,8 +49,4 @@
 .buttonOpen {
   background-color: var(--theme-text-muted);
   cursor: default;
-}
-
-.buttonOpen:hover {
-  opacity: 0.7;
 }

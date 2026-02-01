@@ -60,7 +60,12 @@ export interface SlideNotes {
   speakerNotes?: string
   /** 要点サマリー（箇条書き用の配列） */
   summary?: string[]
+  /** 音声ファイルへの相対パス */
+  voice?: string
 }
+
+/** 音声再生の状態 */
+export type AudioPlaybackState = 'idle' | 'playing' | 'paused'
 
 /** スライドのメタ情報 */
 export interface SlideMeta {
