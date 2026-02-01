@@ -2,7 +2,8 @@
 import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import { resolve, extname, dirname } from 'path'
-import { cpSync, existsSync, createReadStream, statSync, readFileSync, readdirSync } from 'fs'
+import { cpSync, existsSync, createReadStream, statSync, readFileSync, readdirSync, mkdirSync, rmSync } from 'fs'
+import { execSync } from 'child_process'
 import { createRequire } from 'module'
 
 /** addons dist to dist/addons copy plugin */
@@ -46,11 +47,42 @@ function slideContentPlugin(): Plugin {
   const publicDir = resolve(__dirname, 'public')
   const servedPaths = ['/slides.json', '/image/', '/voice/', '/theme/', '/font/']
 
+  function resolveLocalPath(value: string): string | null {
+    const absPath = resolve(__dirname, value)
+    if (!existsSync(absPath)) return null
+
+    // .tgz の場合は展開して使用
+    if (absPath.endsWith('.tgz')) {
+      const extractDir = resolve(__dirname, 'node_modules/.slide-content-cache')
+      if (existsSync(extractDir)) rmSync(extractDir, { recursive: true })
+      mkdirSync(extractDir, { recursive: true })
+      execSync(`tar -xzf "${absPath}" -C "${extractDir}"`)
+      const packageDir = resolve(extractDir, 'package')
+      if (existsSync(packageDir)) return packageDir
+      return extractDir
+    }
+
+    // ディレクトリの場合は slides.json の存在を確認
+    if (statSync(absPath).isDirectory()) {
+      if (existsSync(resolve(absPath, 'slides.json'))) return absPath
+    }
+    return null
+  }
+
   function findSlidePackageDir(): string | null {
-    const packageName = process.env.VITE_SLIDE_PACKAGE
-    if (packageName) {
+    const packageValue = process.env.VITE_SLIDE_PACKAGE
+    if (packageValue) {
+      // ローカルパス（相対 or 絶対）の場合
+      if (packageValue.startsWith('.') || packageValue.startsWith('/')) {
+        const dir = resolveLocalPath(packageValue)
+        if (dir) return dir
+        console.warn(`[slide-content] Warning: local path not found: ${packageValue}`)
+        return null
+      }
+
+      // npm パッケージ名の場合
       try {
-        const pkgJsonPath = require.resolve(`${packageName}/package.json`)
+        const pkgJsonPath = require.resolve(`${packageValue}/package.json`)
         const pkg = JSON.parse(readFileSync(pkgJsonPath, 'utf-8'))
         if (pkg.slidePresentation) return dirname(pkgJsonPath)
       } catch {
