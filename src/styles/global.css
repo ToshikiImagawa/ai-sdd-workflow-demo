@@ -5,25 +5,15 @@
   --theme-background: #1c1917;
   --theme-background-rgb: 28, 25, 23;
   --theme-background-alt: #292524;
-  --theme-background-alt-rgb: 41, 37, 36;
   --theme-background-grid: #33302e;
-  --theme-background-grid-rgb: 51, 48, 46;
   --theme-text-heading: #faf8f5;
-  --theme-text-heading-rgb: 250, 248, 245;
   --theme-text-body: #a8a29e;
-  --theme-text-body-rgb: 168, 162, 158;
   --theme-text-subtitle: #d6d3d1;
-  --theme-text-subtitle-rgb: 214, 211, 209;
   --theme-text-muted: #78716c;
-  --theme-text-muted-rgb: 120, 113, 108;
   --theme-border: #3d3835;
-  --theme-border-rgb: 61, 56, 53;
   --theme-border-light: #4a4543;
-  --theme-border-light-rgb: 74, 69, 67;
   --theme-success: #4ade80;
-  --theme-success-rgb: 74, 222, 128;
   --theme-code-text: #fb923c;
-  --theme-code-text-rgb: 251, 146, 60;
 
   /* Font theme variables (overridden by applyThemeData) */
   --theme-font-heading: 'Noto Sans JP', 'Inter', sans-serif;

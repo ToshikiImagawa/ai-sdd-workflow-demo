@@ -507,12 +507,12 @@ VITE_SLIDE_PACKAGE=@slides/my-presentation
 
 #### `VITE_SLIDE_PACKAGE` の指定方法一覧
 
-| 値の形式                                    | 動作                             |
-|-----------------------------------------|--------------------------------|
-| `./dist-slides/xxx-1.0.0.tgz`          | .tgz を自動展開してローカル利用（npm install 不要） |
-| `./dist-slides/xxx/`                    | 展開済みディレクトリから直接読み込み（npm install 不要） |
-| `@slides/xxx`                           | npm パッケージから読み込み                |
-| 未指定                                     | `@slides/*` パッケージを自動検出         |
+| 値の形式                          | 動作                                 |
+|-------------------------------|------------------------------------|
+| `./dist-slides/xxx-1.0.0.tgz` | .tgz を自動展開してローカル利用（npm install 不要） |
+| `./dist-slides/xxx/`          | 展開済みディレクトリから直接読み込み（npm install 不要） |
+| `@slides/xxx`                 | npm パッケージから読み込み                    |
+| 未指定                           | `@slides/*` パッケージを自動検出             |
 
 ### 動作仕様
 
