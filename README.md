@@ -481,23 +481,41 @@ npm run export:slides -- --name my-presentation --slides slides.json
 
 ### インポート（パッケージ利用）
 
+`VITE_SLIDE_PACKAGE` 環境変数でスライドパッケージを指定します。ローカルパスと npm パッケージの両方に対応しています。
+
+#### ローカルパスで利用（npm install 不要）
+
+`.env.local` に `.tgz` ファイルまたは展開済みディレクトリのパスを指定します。
+
+```bash
+# .tgz を直接指定
+VITE_SLIDE_PACKAGE=./dist-slides/slides-my-presentation-1.0.0.tgz
+
+# 展開済みディレクトリを指定
+VITE_SLIDE_PACKAGE=./dist-slides/my-presentation
+```
+
+#### npm パッケージとして利用
+
 ```bash
 # .tgz をインストール
 npm install ./dist-slides/slides-my-presentation-1.0.0.tgz
 
-# 環境変数でパッケージを指定して開発サーバー起動
-VITE_SLIDE_PACKAGE=@slides/my-presentation npm run dev
-```
-
-または `.env.local` に設定を記述できます。
-
-```
+# .env.local にパッケージ名を指定
 VITE_SLIDE_PACKAGE=@slides/my-presentation
 ```
 
+#### `VITE_SLIDE_PACKAGE` の指定方法一覧
+
+| 値の形式                                    | 動作                             |
+|-----------------------------------------|--------------------------------|
+| `./dist-slides/xxx-1.0.0.tgz`          | .tgz を自動展開してローカル利用（npm install 不要） |
+| `./dist-slides/xxx/`                    | 展開済みディレクトリから直接読み込み（npm install 不要） |
+| `@slides/xxx`                           | npm パッケージから読み込み                |
+| 未指定                                     | `@slides/*` パッケージを自動検出         |
+
 ### 動作仕様
 
-- `VITE_SLIDE_PACKAGE` 環境変数が未指定の場合、`node_modules/@slides/` 配下の `slidePresentation` フィールドを持つパッケージを自動検出します
 - `public/` に同名のファイルが存在する場合は `public/` のファイルが優先されます（パッケージはフォールバック）
 - `npm run build` 時はパッケージ内のアセットが `dist/` にコピーされます（既存ファイルは上書きしません）
 
