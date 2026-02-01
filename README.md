@@ -274,7 +274,12 @@ npm install
     "fonts": {
       "heading": "'Noto Sans JP', sans-serif",
       "body": "'Noto Sans JP', sans-serif",
-      "code": "'Fira Code', monospace"
+      "code": "'Fira Code', monospace",
+      "baseFontSize": 24,
+      "sources": [
+        { "family": "MyFont", "src": "/fonts/MyFont.woff2" },
+        { "family": "Fira Code", "url": "https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" }
+      ]
     },
     "customCSS": ".reveal h1 { text-shadow: none; }"
   },
@@ -282,9 +287,50 @@ npm install
 }
 ```
 
+#### フォント設定の詳細
+
+`theme.fonts` には以下のフィールドを指定できます。
+
+| フィールド        | 型             | デフォルト                                  | 説明                                       |
+|--------------|---------------|----------------------------------------|------------------------------------------|
+| `heading`    | string        | `'Noto Sans JP', 'Inter', sans-serif`  | 見出し用フォント                                 |
+| `body`       | string        | `'Noto Sans JP', 'Inter', sans-serif`  | 本文用フォント                                  |
+| `code`       | string        | `'Roboto Mono', monospace`             | コードブロック用フォント                             |
+| `baseFontSize` | number      | `20`                                   | 基本フォントサイズ（px）。全フォントサイズが比率で自動スケーリングされる |
+| `sources`    | FontSource[]  | —                                      | フォントソースの配列                               |
+
+`baseFontSize` を変更すると、H1〜Body2 のすべてのフォントサイズが基準値からの比率で自動計算されます。
+
+`sources` でローカルフォントや外部フォントを読み込めます。
+
+```json
+{
+  "sources": [
+    { "family": "MyFont", "src": "/fonts/MyFont.woff2" },
+    { "family": "Fira Code", "url": "https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" }
+  ]
+}
+```
+
+| フィールド   | 型      | 説明                                                  |
+|---------|--------|-----------------------------------------------------|
+| `family` | string | フォント名                                               |
+| `src`   | string | ローカルフォントファイルのパス（`@font-face` で登録される）                |
+| `url`   | string | 外部フォント URL（`<link>` タグで読み込まれる。Google Fonts 等に対応）    |
+
 ### 方法 2: theme-colors.json で色のみ変更
 
 `public/theme-colors.json` を作成すると、色の設定だけを上書きできます。
+`meta.themeColors` フィールドで、デフォルトの `/theme-colors.json` 以外のパスを指定することも可能です。
+
+```json
+{
+  "meta": {
+    "title": "プレゼンタイトル",
+    "themeColors": "/theme/custom-colors.json"
+  }
+}
+```
 
 ```json
 {
