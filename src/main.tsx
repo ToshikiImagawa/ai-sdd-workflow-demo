@@ -37,7 +37,7 @@ const root = createRoot(document.getElementById('root')!)
 
 // アドオンをロードし、slides.json を読み込んでからテーマを適用してレンダリングする
 loadAddons().then(() => {
-  fetch('/slides.json')
+  fetch(import.meta.env.VITE_SLIDES_PATH || '/slides.json')
     .then((res) => {
       if (!res.ok) throw new Error(`${res.status}`)
       return res.json() as Promise<PresentationData>

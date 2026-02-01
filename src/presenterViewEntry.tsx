@@ -79,7 +79,7 @@ function PresenterViewApp() {
 
   // テーマの適用
   useEffect(() => {
-    fetch('/slides.json')
+    fetch(import.meta.env.VITE_SLIDES_PATH || '/slides.json')
       .then((res) => {
         if (!res.ok) throw new Error(`${res.status}`)
         return res.json() as Promise<PresentationData>
