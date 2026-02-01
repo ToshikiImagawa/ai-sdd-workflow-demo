@@ -106,7 +106,7 @@
   line-height: 1;
 }
 
-/* メインコンテンツ（2x2グリッド） */
+/* メインコンテンツ（左:ノート / 右:次・前スライド） */
 .mainContent {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -114,6 +114,10 @@
   gap: 12px;
   flex: 1;
   min-height: 0;
+}
+
+.mainContent > .notesPanel {
+  grid-row: 1 / -1;
 }
 
 .previewPanel {
@@ -257,6 +261,7 @@
   background-color: var(--theme-background-alt);
   border: 1px solid var(--theme-border);
   border-radius: 8px;
+  flex-shrink: 0;
 }
 
 .summaryPanel h2 {

@@ -89,10 +89,10 @@ export function PresenterViewWindow({ slides, currentIndex, controlState, onNavi
 
       {/* メインコンテンツ */}
       <div className={styles.mainContent}>
-        {/* 左上: 前スライドプレビュー */}
-        <div className={styles.previewPanel}>
-          <h2>前のスライド</h2>
-          <div className={styles.previewFrame}>{previousSlide ? <PreviewSlide slide={previousSlide} /> : <div className={styles.boundaryMessage}>最初のスライドです</div>}</div>
+        {/* 左: スピーカーノート（縦全体） */}
+        <div className={styles.notesPanel}>
+          <h2>スピーカーノート</h2>
+          {speakerNotes ? <div className={styles.notesText}>{speakerNotes}</div> : <div className={styles.notesEmpty}>ノートはありません</div>}
         </div>
 
         {/* 右上: 次スライドプレビュー */}
@@ -101,25 +101,25 @@ export function PresenterViewWindow({ slides, currentIndex, controlState, onNavi
           <div className={styles.previewFrame}>{nextSlide ? <PreviewSlide slide={nextSlide} /> : <div className={styles.boundaryMessage}>最後のスライドです</div>}</div>
         </div>
 
-        {/* 左下: スピーカーノート */}
-        <div className={styles.notesPanel}>
-          <h2>スピーカーノート</h2>
-          {speakerNotes ? <div className={styles.notesText}>{speakerNotes}</div> : <div className={styles.notesEmpty}>ノートはありません</div>}
+        {/* 右下: 前スライドプレビュー */}
+        <div className={styles.previewPanel}>
+          <h2>前のスライド</h2>
+          <div className={styles.previewFrame}>{previousSlide ? <PreviewSlide slide={previousSlide} /> : <div className={styles.boundaryMessage}>最初のスライドです</div>}</div>
         </div>
+      </div>
 
-        {/* 右下: 要点サマリー */}
-        <div className={styles.summaryPanel}>
-          <h2>要点サマリー</h2>
-          {summary.length > 0 ? (
-            <ul className={styles.summaryList}>
-              {summary.map((item, i) => (
-                <li key={i}>{item}</li>
-              ))}
-            </ul>
-          ) : (
-            <div className={styles.notesEmpty}>サマリーはありません</div>
-          )}
-        </div>
+      {/* フッター: 要点サマリー */}
+      <div className={styles.summaryPanel}>
+        <h2>要点サマリー</h2>
+        {summary.length > 0 ? (
+          <ul className={styles.summaryList}>
+            {summary.map((item, i) => (
+              <li key={i}>{item}</li>
+            ))}
+          </ul>
+        ) : (
+          <div className={styles.notesEmpty}>サマリーはありません</div>
+        )}
       </div>
     </div>
   )
